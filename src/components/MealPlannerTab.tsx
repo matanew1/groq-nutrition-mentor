@@ -100,15 +100,17 @@ const MealPlannerTab = () => {
 
   return (
     <div className="flex flex-col flex-1 min-h-0 w-full">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0 h-full items-start">
-        <div className="lg:col-span-1 flex flex-col h-full min-h-0 items-start justify-start">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-x-4 sm:gap-x-6 gap-y-0 flex-1 min-h-0 h-full items-start">
+        <div className="lg:col-span-1 flex flex-col h-full min-h-0 items-start justify-start p-0 m-0">
+          {/* Removed extra margin/padding */}
           <PlannerCalendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
         </div>
-        <div className="lg:col-span-2 flex flex-col min-h-0 flex-1 h-full space-y-4 sm:space-y-6 items-start justify-start">
-          <EnhancedCard variant="glass" className="flex flex-col flex-1 min-h-0 h-full">
-            <EnhancedCardHeader>
+        <div className="lg:col-span-2 flex flex-col min-h-0 flex-1 h-full space-y-4 sm:space-y-6 items-start justify-start p-0 m-0">
+          {/* Removed extra margin/padding */}
+          <EnhancedCard variant="glass" className="flex flex-col flex-1 min-h-0 h-full p-0 m-0">
+            <EnhancedCardHeader className="pb-0">
               <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center justify-between">
-                <EnhancedCardTitle className="text-center sm:text-left">
+                <EnhancedCardTitle className="text-center sm:text-left mt-0 pt-0">
                   {selectedDate ? formatDateInHebrew(selectedDate) : t('selectDate')}
                 </EnhancedCardTitle>
                 <div className={`flex items-center justify-center sm:justify-end gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
@@ -126,7 +128,7 @@ const MealPlannerTab = () => {
                 </div>
               </div>
             </EnhancedCardHeader>
-            <EnhancedCardContent className="flex flex-col flex-1 min-h-0 space-y-4 sm:space-y-6">
+            <EnhancedCardContent className="flex flex-col flex-1 min-h-0 space-y-4 sm:space-y-6 pt-0 mt-0">
               <AddMealForm onAddMeal={handleAddMeal} addingMeal={addingMeal} mealTypes={mealTypes} />
               <div className="flex-1 min-h-0 overflow-y-auto">
                 <div className="grid grid-cols-1 gap-4 sm:gap-5">

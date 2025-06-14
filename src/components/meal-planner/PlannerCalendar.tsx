@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Calendar as CalendarIcon } from 'lucide-react';
@@ -15,16 +14,16 @@ export const PlannerCalendar = ({ selectedDate, onSelectDate }: PlannerCalendarP
   const isRTL = language === 'he';
   
   return (
-    <div className="w-full">
-      <EnhancedCard variant="glass" className="h-full">
-        <EnhancedCardHeader>
-          <EnhancedCardTitle className={`flex items-center justify-center sm:justify-start gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+    <div className="w-full p-0 m-0">
+      <EnhancedCard variant="glass" className="h-full p-0 m-0">
+        <EnhancedCardHeader className="pb-0 mb-0 pt-4">
+          <EnhancedCardTitle className={`flex items-center justify-center sm:justify-start gap-3 ${isRTL ? 'flex-row-reverse' : ''} mt-0 pt-0`}>
             <CalendarIcon className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600 dark:text-blue-400" />
             <span className="text-base sm:text-lg">{t('selectDate')}</span>
           </EnhancedCardTitle>
         </EnhancedCardHeader>
-        <EnhancedCardContent>
-          <div className="calendar-enhanced flex justify-center">
+        <EnhancedCardContent className="pt-0 mt-0">
+          <div className="calendar-enhanced flex justify-center pt-0 mt-0">
             <Calendar
               mode="single"
               selected={selectedDate}
