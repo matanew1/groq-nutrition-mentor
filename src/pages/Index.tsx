@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Apple, Heart, Zap, Menu } from 'lucide-react';
+import { Send, Bot, User, Apple, Heart, Zap, LogOut, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -10,30 +10,20 @@ import { useToast } from '@/hooks/use-toast';
 import { callGroqAPI } from '@/utils/groqApi';
 import { searchNutrition } from '@/utils/nutritionixApi';
 import { addEmojisToMessage, isHebrew } from '@/utils/messageFormatter';
+import { useAuth } from '@/contexts/AuthContext';
+import { useMessages } from '@/hooks/useMessages';
+import { useNavigate } from 'react-router-dom';
 import DarkModeToggle from '@/components/DarkModeToggle';
 
-interface Message {
-  id: string;
-  content: string;
-  sender: 'user' | 'bot';
-  timestamp: Date;
-  nutritionData?: any;
-}
-
 const Index = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: '1',
-      content: "Hello! I'm your personal nutrition mentor. I can help you with meal planning, nutritional analysis, calorie counting, and healthy eating advice. Try asking me about the nutrition facts of any food or for meal suggestions!",
-      sender: 'bot',
-      timestamp: new Date()
-    }
-  ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { user, signOut } = useAuth();
+  const { messages, loading: messagesLoading, addMessage, clearMessages } = useMessages();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   // Apply dark mode to document
   useEffect(() => {
@@ -52,17 +42,48 @@ const Index = () => {
     scrollToBottom();
   }, [messages]);
 
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      toast({
+        title: "Signed out",
+        description: "You have been signed out successfully.",
+      });
+      navigate('/auth');
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleClearMessages = async () => {
+    try {
+      await clearMessages();
+      toast({
+        title: "Messages cleared",
+        description: "All your chat history has been cleared.",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
 
-    const userMessage: Message = {
-      id: Date.now().toString(),
+    await addMessage({
       content: inputValue,
-      sender: 'user',
-      timestamp: new Date()
-    };
+      sender: 'user'
+    });
 
-    setMessages(prev => [...prev, userMessage]);
+    const currentInput = inputValue;
     setInputValue('');
     setIsLoading(true);
 
@@ -70,7 +91,7 @@ const Index = () => {
       // Check if the message is asking about specific food nutrition
       const foodKeywords = ['nutrition', 'calories', 'protein', 'carbs', 'fat', 'nutrients', 'food'];
       const isNutritionQuery = foodKeywords.some(keyword => 
-        inputValue.toLowerCase().includes(keyword)
+        currentInput.toLowerCase().includes(keyword)
       );
 
       let nutritionData = null;
@@ -79,7 +100,7 @@ const Index = () => {
       // If it's a nutrition query, try to get nutrition data
       if (isNutritionQuery) {
         try {
-          nutritionData = await searchNutrition(inputValue);
+          nutritionData = await searchNutrition(currentInput);
           if (nutritionData && nutritionData.foods && nutritionData.foods.length > 0) {
             const food = nutritionData.foods[0];
             contextualInfo = `\n\nNutrition data found for ${food.food_name}:
@@ -96,12 +117,12 @@ const Index = () => {
       }
 
       // Detect if user message is in Hebrew
-      const isHebrewMessage = isHebrew(inputValue);
+      const isHebrewMessage = isHebrew(currentInput);
       
       // Get AI response with context
       const aiPrompt = `You are a professional nutrition mentor and health coach. Please provide helpful, accurate nutrition advice. 
       ${isHebrewMessage ? 'Please respond in Hebrew as the user wrote in Hebrew.' : ''}
-      User question: "${inputValue}"
+      User question: "${currentInput}"
       ${contextualInfo ? `Additional nutrition data context: ${contextualInfo}` : ''}
       
       Please provide a helpful, professional response about nutrition, health, or wellness.`;
@@ -109,15 +130,12 @@ const Index = () => {
       const aiResponse = await callGroqAPI(aiPrompt);
       const enhancedResponse = addEmojisToMessage(aiResponse);
 
-      const botMessage: Message = {
-        id: (Date.now() + 1).toString(),
+      await addMessage({
         content: enhancedResponse,
         sender: 'bot',
-        timestamp: new Date(),
         nutritionData: nutritionData
-      };
+      });
 
-      setMessages(prev => [...prev, botMessage]);
     } catch (error) {
       console.error('Error getting response:', error);
       toast({
@@ -126,13 +144,10 @@ const Index = () => {
         variant: "destructive",
       });
       
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
+      await addMessage({
         content: "❌ I apologize, but I'm having trouble connecting right now. Please try again in a moment.",
-        sender: 'bot',
-        timestamp: new Date()
-      };
-      setMessages(prev => [...prev, errorMessage]);
+        sender: 'bot'
+      });
     } finally {
       setIsLoading(false);
     }
@@ -148,6 +163,18 @@ const Index = () => {
   const formatTime = (date: Date) => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
+
+  // Show loading state while checking authentication
+  if (messagesLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-300">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
@@ -174,6 +201,36 @@ const Index = () => {
                 <span className="hidden sm:inline">AI</span>
               </Badge>
               <DarkModeToggle isDark={isDarkMode} onToggle={() => setIsDarkMode(!isDarkMode)} />
+              
+              {user ? (
+                <div className="flex items-center space-x-1">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleClearMessages}
+                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
+                    <Trash2 className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleSignOut}
+                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                  >
+                    <LogOut className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => navigate('/auth')}
+                  className="text-xs px-2 py-1"
+                >
+                  Sign In
+                </Button>
+              )}
             </div>
           </div>
         </div>
@@ -288,7 +345,10 @@ const Index = () => {
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 px-1">
               <span className="sm:hidden">Ask about nutrition, calories, or healthy recipes</span>
-              <span className="hidden sm:inline">Try asking: "What's the nutrition in 1 cup of rice?" or "Give me a healthy breakfast idea" | נסה לשאול: "מה התזונה בכוס אורז?" או "תן לי רעיון לארוחת בוקר בריאה"</span>
+              <span className="hidden sm:inline">
+                {user ? 'Your messages are automatically saved to your account' : 'Sign in to save your chat history'} | 
+                Try asking: "What's the nutrition in 1 cup of rice?" or "Give me a healthy breakfast idea" | נסה לשאול: "מה התזונה בכוס אורז?" או "תן לי רעיון לארוחת בוקר בריאה"
+              </span>
             </p>
           </div>
         </Card>
