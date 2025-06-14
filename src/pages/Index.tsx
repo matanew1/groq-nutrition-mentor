@@ -2,10 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Apple, Heart, Zap, LogOut, Trash2, Calendar, Utensils } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { EnhancedCard, EnhancedCardContent } from '@/components/ui/EnhancedCard';
+import { EnhancedButton } from '@/components/ui/EnhancedButton';
+import { EnhancedInput } from '@/components/ui/EnhancedInput';
+import { EnhancedBadge } from '@/components/ui/EnhancedBadge';
 import { useToast } from '@/hooks/use-toast';
 import { callGroqAPI } from '@/utils/groqApi';
 import { searchNutrition } from '@/utils/nutritionixApi';
@@ -31,14 +34,10 @@ const Index = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Check if current language is Hebrew for RTL layout
   const isRTL = language === 'he';
 
-  // Helper to determine direction per message
   const getDirection = (text: string) => (isHebrew(text) ? 'rtl' : 'ltr');
   const getAlignment = (text: string, sender: 'user' | 'bot') => {
-    // user: align left for LTR/English, align right for RTL/Hebrew
-    // bot: align right for LTR/English, align left for RTL/Hebrew
     const isHebrewMsg = isHebrew(text);
     if (sender === 'user') {
       return isHebrewMsg ? 'justify-end' : 'justify-start';
@@ -47,7 +46,6 @@ const Index = () => {
     }
   };
 
-  // Apply dark mode and RTL direction to document
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
@@ -55,7 +53,6 @@ const Index = () => {
       document.documentElement.classList.remove('dark');
     }
     
-    // Set document direction based on language
     document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
     if (isRTL) {
       document.documentElement.classList.add('font-hebrew');
@@ -118,7 +115,6 @@ const Index = () => {
     setIsLoading(true);
 
     try {
-      // Check if the message is asking about specific food nutrition
       const foodKeywords = ['nutrition', 'calories', 'protein', 'carbs', 'fat', 'nutrients', 'food'];
       const isNutritionQuery = foodKeywords.some(keyword => 
         currentInput.toLowerCase().includes(keyword)
@@ -127,7 +123,6 @@ const Index = () => {
       let nutritionData = null;
       let contextualInfo = '';
 
-      // If it's a nutrition query, try to get nutrition data
       if (isNutritionQuery) {
         try {
           nutritionData = await searchNutrition(currentInput);
@@ -146,10 +141,8 @@ const Index = () => {
         }
       }
 
-      // Detect if user message is in Hebrew
       const isHebrewMessage = isHebrew(currentInput);
       
-      // Get AI response with context
       const aiPrompt = `You are a professional nutrition mentor and health coach. Please provide helpful, accurate nutrition advice. 
       ${isHebrewMessage ? 'Please respond in Hebrew as the user wrote in Hebrew.' : ''}
       User question: "${currentInput}"
@@ -194,51 +187,56 @@ const Index = () => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  // Show loading state while checking authentication
   if (messagesLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-300">{t('loading')}</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 flex items-center justify-center">
+        <EnhancedCard className="p-8 text-center">
+          <div className="loading-enhanced mb-4">
+            <div className="loading-dot"></div>
+            <div className="loading-dot"></div>
+            <div className="loading-dot"></div>
+          </div>
+          <p className="heading-enhanced text-lg">{t('loading')}</p>
+        </EnhancedCard>
       </div>
     );
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300 ${isRTL ? 'hebrew-text' : ''}`}>
-      {/* Header - Mobile Optimized with RTL support */}
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-green-100 dark:border-gray-700 sticky top-0 z-10 transition-colors duration-300">
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-          <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 sm:space-x-3`}>
-            <div className="p-1.5 sm:p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full">
-              <Apple className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+    <div className={`min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 transition-all duration-500 ${isRTL ? 'hebrew-text' : ''}`}>
+      {/* Enhanced Header */}
+      <div className="glass-card-enhanced backdrop-blur-xl border-0 sticky top-0 z-50 transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-4`}>
+            <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-lg">
+              <Apple className="h-6 w-6 text-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent truncate">
+              <h1 className="heading-enhanced text-2xl sm:text-3xl font-bold truncate">
                 {t('nutrimentor')}
               </h1>
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 hidden sm:block">{t('subtitle')}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300 hidden sm:block">
+                {t('subtitle')}
+              </p>
             </div>
-            <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2`}>
-              <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700 text-xs px-1.5 py-0.5 sm:px-2 sm:py-1">
-                <Heart className={`h-2.5 w-2.5 sm:h-3 sm:w-3 ${isRTL ? 'ml-0.5 sm:ml-1' : 'mr-0.5 sm:mr-1'}`} />
+            <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-3`}>
+              <EnhancedBadge variant="success">
+                <Heart className="h-3 w-3" />
                 <span className="hidden sm:inline">Health</span>
-              </Badge>
-              <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700 text-xs px-1.5 py-0.5 sm:px-2 sm:py-1">
-                <Zap className={`h-2.5 w-2.5 sm:h-3 sm:w-3 ${isRTL ? 'ml-0.5 sm:ml-1' : 'mr-0.5 sm:mr-1'}`} />
+              </EnhancedBadge>
+              <EnhancedBadge variant="default">
+                <Zap className="h-3 w-3" />
                 <span className="hidden sm:inline">AI</span>
-              </Badge>
+              </EnhancedBadge>
               
               <LanguageToggle />
               <DarkModeToggle isDark={isDarkMode} onToggle={() => setIsDarkMode(!isDarkMode)} />
               <SettingsDialog />
               
               {user ? (
-                <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1`}>
+                <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
                   {userName && (
-                    <span className="text-sm text-gray-600 dark:text-gray-300 hidden sm:inline">
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden sm:inline">
                       {t('welcome')}, {userName}
                     </span>
                   )}
@@ -247,54 +245,58 @@ const Index = () => {
                       variant="ghost"
                       size="sm"
                       onClick={handleClearMessages}
-                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                      className="p-2 rounded-xl hover:bg-white/20"
                     >
-                      <Trash2 className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   )}
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={handleSignOut}
-                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="p-2 rounded-xl hover:bg-white/20"
                   >
-                    <LogOut className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+                    <LogOut className="h-4 w-4" />
                   </Button>
                 </div>
               ) : (
-                <Button
-                  variant="outline"
+                <EnhancedButton
                   size="sm"
                   onClick={() => navigate('/auth')}
-                  className="text-xs px-2 py-1"
                 >
                   {t('signIn')}
-                </Button>
+                </EnhancedButton>
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Content with Tabs */}
-      <div className="max-w-6xl mx-auto p-2 sm:p-4 h-[calc(100vh-80px)] sm:h-[calc(100vh-120px)]">
+      {/* Enhanced Main Content */}
+      <div className="max-w-7xl mx-auto p-4 h-[calc(100vh-100px)]">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList className="grid w-full grid-cols-2 mb-4">
-            <TabsTrigger value="chat" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
-              <Bot className="h-4 w-4" />
+          <TabsList className="grid w-full grid-cols-2 mb-6 glass-card-enhanced p-2 h-auto">
+            <TabsTrigger 
+              value="chat" 
+              className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 py-3 px-6 rounded-xl font-semibold transition-all`}
+            >
+              <Bot className="h-5 w-5" />
               <span>{t('chat')}</span>
             </TabsTrigger>
-            <TabsTrigger value="meals" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
-              <Utensils className="h-4 w-4" />
+            <TabsTrigger 
+              value="meals" 
+              className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 py-3 px-6 rounded-xl font-semibold transition-all`}
+            >
+              <Utensils className="h-5 w-5" />
               <span>{t('meals')}</span>
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="chat" className="flex-1 flex flex-col space-y-2 sm:space-y-4">
-            {/* Chat Messages */}
-            <Card className="flex-1 border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-colors duration-300">
-              <ScrollArea className="h-full p-2 sm:p-4">
-                <div className="space-y-3 sm:space-y-4">
+          <TabsContent value="chat" className="flex-1 flex flex-col space-y-6">
+            {/* Enhanced Chat Messages */}
+            <EnhancedCard className="flex-1">
+              <ScrollArea className="h-full p-6 scroll-enhanced">
+                <div className="space-y-6">
                   {messages.map((message) => {
                     const direction = getDirection(message.content);
                     const alignment = getAlignment(message.content, message.sender);
@@ -305,55 +307,55 @@ const Index = () => {
                         dir={direction}
                       >
                         <div
-                          className={`flex items-start space-x-2 max-w-[85%] sm:max-w-[80%] ${
+                          className={`flex items-start space-x-3 max-w-[80%] ${
                             message.sender === 'user'
-                              ? (direction === 'rtl' ? 'flex-row-reverse space-x-reverse' : 'flex-row space-x-2')
-                              : (direction === 'rtl' ? 'flex-row space-x-2' : 'flex-row-reverse space-x-reverse')
+                              ? (direction === 'rtl' ? 'flex-row-reverse space-x-reverse' : 'flex-row space-x-3')
+                              : (direction === 'rtl' ? 'flex-row space-x-3' : 'flex-row-reverse space-x-reverse')
                           }`}
                         >
                           <div
-                            className={`p-1.5 sm:p-2 rounded-full shadow-lg flex-shrink-0 ${
+                            className={`p-2 rounded-full shadow-lg flex-shrink-0 ${
                               message.sender === 'user'
-                                ? 'bg-gradient-to-r from-blue-500 to-purple-500'
-                                : 'bg-gradient-to-r from-green-500 to-blue-500'
+                                ? 'bg-gradient-to-br from-blue-500 to-purple-600'
+                                : 'bg-gradient-to-br from-emerald-500 to-blue-500'
                             }`}
                           >
                             {message.sender === 'user' ? (
-                              <User className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                              <User className="h-4 w-4 text-white" />
                             ) : (
-                              <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                              <Bot className="h-4 w-4 text-white" />
                             )}
                           </div>
                           <div
-                            className={`p-3 sm:p-4 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
+                            className={`${
                               message.sender === 'user'
-                                ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
-                                : 'bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100'
-                            } ${direction === 'rtl' ? 'text-right' : 'text-left'}`}
+                                ? 'message-bubble-user'
+                                : 'message-bubble-bot'
+                            }`}
                             dir={direction}
                           >
                             <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium break-words">
                               {message.content}
                             </p>
                             {message.nutritionData && message.nutritionData.foods && (
-                              <div className="mt-3 p-2 sm:p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700" dir={direction}>
-                                <h4 className={`font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center text-sm ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
+                              <div className="mt-4 p-4 bg-emerald-50 dark:bg-emerald-900/30 rounded-xl border border-emerald-200 dark:border-emerald-700" dir={direction}>
+                                <h4 className={`font-semibold text-emerald-800 dark:text-emerald-300 mb-3 flex items-center text-sm ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
                                   🍎 {t('nutritionFacts')}
                                 </h4>
                                 {message.nutritionData.foods.slice(0, 1).map((food: any, index: number) => (
-                                  <div key={index} className="text-xs sm:text-sm text-green-700 dark:text-green-300">
-                                    <p className="font-medium">{food.food_name}</p>
-                                    <div className="grid grid-cols-2 gap-1 sm:gap-2 mt-1">
-                                      <span>🔥 {Math.round(food.nf_calories)} {t('calories')}</span>
-                                      <span>💪 {Math.round(food.nf_protein)}g {t('protein')}</span>
-                                      <span>🌾 {Math.round(food.nf_total_carbohydrate)}g {t('carbs')}</span>
-                                      <span>🧈 {Math.round(food.nf_total_fat)}g {t('fat')}</span>
+                                  <div key={index} className="text-sm text-emerald-700 dark:text-emerald-300">
+                                    <p className="font-medium mb-2">{food.food_name}</p>
+                                    <div className="grid grid-cols-2 gap-2">
+                                      <EnhancedBadge variant="default">🔥 {Math.round(food.nf_calories)} {t('calories')}</EnhancedBadge>
+                                      <EnhancedBadge variant="default">💪 {Math.round(food.nf_protein)}g {t('protein')}</EnhancedBadge>
+                                      <EnhancedBadge variant="default">🌾 {Math.round(food.nf_total_carbohydrate)}g {t('carbs')}</EnhancedBadge>
+                                      <EnhancedBadge variant="default">🧈 {Math.round(food.nf_total_fat)}g {t('fat')}</EnhancedBadge>
                                     </div>
                                   </div>
                                 ))}
                               </div>
                             )}
-                            <p className={`text-xs opacity-60 mt-2 ${direction === 'rtl' ? 'text-left' : 'text-right'}`}>
+                            <p className={`text-xs opacity-60 mt-3 ${direction === 'rtl' ? 'text-left' : 'text-right'}`}>
                               {formatTime(message.timestamp)}
                             </p>
                           </div>
@@ -363,15 +365,15 @@ const Index = () => {
                   })}
                   {isLoading && (
                     <div className={`flex ${isRTL ? 'justify-end' : 'justify-start'}`} dir={isRTL ? 'rtl' : 'ltr'}>
-                      <div className={`flex items-start ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
-                        <div className="p-1.5 sm:p-2 rounded-full bg-gradient-to-r from-green-500 to-blue-500 shadow-lg">
-                          <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                      <div className={`flex items-start ${isRTL ? 'space-x-reverse' : ''} space-x-3`}>
+                        <div className="p-2 rounded-full bg-gradient-to-br from-emerald-500 to-blue-500 shadow-lg">
+                          <Bot className="h-4 w-4 text-white" />
                         </div>
-                        <div className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-3 rounded-xl shadow-md">
-                          <div className="flex space-x-1">
-                            <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" />
-                            <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                            <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                        <div className="message-bubble-bot">
+                          <div className="loading-enhanced">
+                            <div className="loading-dot" />
+                            <div className="loading-dot" />
+                            <div className="loading-dot" />
                           </div>
                         </div>
                       </div>
@@ -380,45 +382,43 @@ const Index = () => {
                 </div>
                 <div ref={messagesEndRef} />
               </ScrollArea>
-            </Card>
+            </EnhancedCard>
 
-            {/* Chat Input */}
-            <Card className="border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-colors duration-300">
-              <div className="p-2 sm:p-4">
-                <div className={`flex ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
-                  <Input
+            {/* Enhanced Chat Input */}
+            <EnhancedCard>
+              <EnhancedCardContent className="p-6">
+                <div className={`flex ${isRTL ? 'space-x-reverse' : ''} space-x-4`}>
+                  <EnhancedInput
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder={t('typeMessage')}
-                    className="flex-1 border-gray-200 dark:border-gray-600 focus:border-green-400 focus:ring-green-400 dark:bg-gray-700 dark:text-white transition-colors duration-200 text-sm sm:text-base"
+                    className="flex-1"
                     disabled={isLoading}
                     dir={isHebrew(inputValue) ? 'rtl' : 'ltr'}
                   />
-                  <Button
+                  <EnhancedButton
                     onClick={handleSendMessage}
                     disabled={!inputValue.trim() || isLoading}
-                    className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 px-3 sm:px-4 min-w-[44px] h-10 sm:h-11"
+                    loading={isLoading}
+                    className="px-6"
                   >
                     <Send className="h-4 w-4" />
-                  </Button>
+                  </EnhancedButton>
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 px-1">
-                  <span className="sm:hidden">Ask about nutrition, calories, or healthy recipes</span>
-                  <span className="hidden sm:inline">
-                    {user ? 'Your messages are automatically saved to your account' : 'Sign in to save your chat history'}
-                  </span>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-3 text-center">
+                  {user ? 'Your messages are automatically saved to your account' : 'Sign in to save your chat history'}
                 </p>
-              </div>
-            </Card>
+              </EnhancedCardContent>
+            </EnhancedCard>
           </TabsContent>
 
           <TabsContent value="meals" className="flex-1">
-            <Card className="h-full border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm overflow-auto">
-              <div className="p-4 sm:p-6">
+            <EnhancedCard className="h-full overflow-auto">
+              <EnhancedCardContent className="p-6">
                 <MealPlannerTab />
-              </div>
-            </Card>
+              </EnhancedCardContent>
+            </EnhancedCard>
           </TabsContent>
         </Tabs>
       </div>
