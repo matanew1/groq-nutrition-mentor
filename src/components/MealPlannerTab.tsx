@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Utensils, Loader2 } from 'lucide-react';
 import { EnhancedCard, EnhancedCardContent, EnhancedCardHeader, EnhancedCardTitle } from '@/components/ui/EnhancedCard';
@@ -80,16 +79,27 @@ const MealPlannerTab = () => {
 
   if (!user) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '400px',
+        textAlign: 'center'
+      }}>
         <EnhancedCard>
-          <div className="flex-center-col">
-            <div className="bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-2xl">
-              <Utensils className="h-10 w-10 sm:h-12 sm:w-12 text-blue-600 dark:text-blue-400" />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <div style={{
+              background: 'linear-gradient(135deg, #dbeafe, #faf5ff)',
+              borderRadius: '16px',
+              padding: '12px'
+            }}>
+              <Utensils style={{ height: '48px', width: '48px', color: '#2563eb' }} />
             </div>
-            <h3 className="heading-enhanced text-lg sm:text-xl">
+            <h3 className="heading-enhanced" style={{ fontSize: '20px', margin: '16px 0 8px 0' }}>
               {t('signInRequired')}
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
+            <p style={{ color: '#6b7280', fontSize: '16px' }}>
               {t('signInToSaveMeals')}
             </p>
           </div>
@@ -99,22 +109,74 @@ const MealPlannerTab = () => {
   }
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 w-full">
-      <div className="grid grid-cols-1 lg:grid-cols-3 flex-1 min-h-0 h-full items-start">
-        <div className="lg:col-span-1 flex flex-col h-full min-h-0 items-start justify-start">
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      flex: '1 1 0%',
+      minHeight: 0,
+      width: '100%'
+    }}>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '300px 1fr',
+        flex: '1 1 0%',
+        minHeight: 0,
+        height: '100%',
+        alignItems: 'flex-start'
+      }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          minHeight: 0,
+          alignItems: 'flex-start',
+          justifyContent: 'flex-start'
+        }}>
           <PlannerCalendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
         </div>
-        <div className="lg:col-span-2 flex flex-col min-h-0 flex-1 h-full items-start justify-start">
-          <EnhancedCard variant="glass" className="flex flex-col flex-1 min-h-0 h-full">
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          minHeight: 0,
+          flex: '1 1 0%',
+          height: '100%',
+          alignItems: 'flex-start',
+          justifyContent: 'flex-start'
+        }}>
+          <EnhancedCard variant="glass" style={{
+            display: 'flex',
+            flexDirection: 'column',
+            flex: '1 1 0%',
+            minHeight: 0,
+            height: '100%'
+          }}>
             <EnhancedCardHeader>
-              <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center justify-between">
-                <EnhancedCardTitle className="text-center sm:text-left">
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+                justifyContent: 'space-between'
+              }}>
+                <EnhancedCardTitle style={{ textAlign: 'center' }}>
                   {selectedDate ? formatDateInHebrew(selectedDate) : t('selectDate')}
                 </EnhancedCardTitle>
-                <div className={`flex items-center justify-center sm:justify-end gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '12px',
+                  flexDirection: isRTL ? 'row-reverse' : 'row'
+                }}>
                   {(loading || addingMeal) && (
-                    <div className={`flex items-center gap-2 text-sm text-gray-500 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      fontSize: '14px',
+                      color: '#6b7280',
+                      flexDirection: isRTL ? 'row-reverse' : 'row'
+                    }}>
+                      <Loader2 style={{ height: '16px', width: '16px' }} className="animate-spin" />
                       <span>{t('loading')}</span>
                     </div>
                   )}
@@ -126,10 +188,19 @@ const MealPlannerTab = () => {
                 </div>
               </div>
             </EnhancedCardHeader>
-            <EnhancedCardContent className="flex flex-col flex-1 min-h-0">
+            <EnhancedCardContent style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flex: '1 1 0%',
+              minHeight: 0
+            }}>
               <AddMealForm onAddMeal={handleAddMeal} addingMeal={addingMeal} mealTypes={mealTypes} />
-              <div className="flex-1 min-h-0 overflow-y-auto">
-                <div className="grid grid-cols-1">
+              <div style={{
+                flex: '1 1 0%',
+                minHeight: 0,
+                overflowY: 'auto'
+              }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr' }}>
                   {mealTypes.map(mealType => (
                     <MealTypeCard
                       key={mealType.key}

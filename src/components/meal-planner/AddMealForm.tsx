@@ -24,15 +24,27 @@ export const AddMealForm = ({ onAddMeal, addingMeal, mealTypes }: AddMealFormPro
   };
 
   return (
-    <div className="glass-card-enhanced w-full">
-      <h4 className="heading-enhanced text-base sm:text-lg text-center sm:text-left">{t('addNewMeal')}</h4>
-      <div className={`flex flex-col ${isRTL ? 'sm:flex-row-reverse' : 'sm:flex-row'}`}>
+    <div className="glass-card-enhanced" style={{ width: '100%' }}>
+      <h4 className="heading-enhanced" style={{
+        fontSize: '18px',
+        textAlign: 'center',
+        marginBottom: '16px'
+      }}>{t('addNewMeal')}</h4>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px'
+      }}>
         <select
           value={newMeal.type}
           onChange={(e) => setNewMeal(prev => ({ ...prev, type: e.target.value as MealTypeKey }))}
-          className="input-enhanced w-full sm:min-w-[140px] sm:w-auto"
+          className="input-enhanced"
           disabled={addingMeal}
-          dir={isRTL ? 'rtl' : 'ltr'}
+          style={{
+            width: '100%',
+            minWidth: '140px',
+            direction: isRTL ? 'rtl' : 'ltr'
+          }}
         >
           {mealTypes.map(type => (
             <option key={type.key} value={type.key}>
@@ -45,7 +57,7 @@ export const AddMealForm = ({ onAddMeal, addingMeal, mealTypes }: AddMealFormPro
           value={newMeal.name}
           onChange={(e) => setNewMeal(prev => ({ ...prev, name: e.target.value }))}
           onKeyPress={(e) => e.key === 'Enter' && !addingMeal && handleAdd()}
-          className="flex-1"
+          style={{ flex: 1 }}
           disabled={addingMeal}
           dir={isRTL ? 'rtl' : 'ltr'}
         />
@@ -53,9 +65,9 @@ export const AddMealForm = ({ onAddMeal, addingMeal, mealTypes }: AddMealFormPro
           onClick={handleAdd} 
           disabled={addingMeal || !newMeal.name.trim()}
           loading={addingMeal}
-          className="w-full sm:w-auto"
+          style={{ width: '100%' }}
         >
-          <Plus className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+          <Plus style={{ height: '16px', width: '16px', marginRight: isRTL ? 0 : '4px', marginLeft: isRTL ? '4px' : 0 }} />
           <span>{t('addMeal')}</span>
         </EnhancedButton>
       </div>

@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Utensils } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -147,46 +146,90 @@ const Index = () => {
 
   if (messagesLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
-        <EnhancedCard className="p-6 sm:p-8 text-center max-w-sm w-full">
-          <div className="loading-enhanced mb-4 flex-center">
+      <div style={{
+        height: '100vh',
+        background: 'linear-gradient(135deg, #f0f9ff, #e0e7ff, #faf5ff)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '16px'
+      }}>
+        <EnhancedCard style={{ padding: '32px', textAlign: 'center', maxWidth: '400px', width: '100%' }}>
+          <div className="loading-enhanced" style={{ marginBottom: '16px', display: 'flex', justifyContent: 'center' }}>
             <div className="loading-dot"></div>
             <div className="loading-dot"></div>
             <div className="loading-dot"></div>
           </div>
-          <p className="heading-enhanced text-base sm:text-lg">{t('loading')}</p>
+          <p className="heading-enhanced" style={{ fontSize: '18px' }}>{t('loading')}</p>
         </EnhancedCard>
       </div>
     );
   }
 
   return (
-    <div className={`h-screen flex flex-col bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 transition-all duration-500 ${isRTL ? 'hebrew-text' : ''}`}>
+    <div style={{
+      height: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      background: 'linear-gradient(135deg, #f0f9ff, #e0e7ff, #faf5ff)',
+      transition: 'all 0.5s ease',
+      direction: isRTL ? 'rtl' : 'ltr'
+    }}>
       <AppHeader
         onClearMessages={handleClearMessages}
         activeTab={activeTab}
       />
 
-      <div className="flex flex-col flex-1 min-h-0 max-w-7xl mx-auto w-full overflow-hidden">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col flex-1 min-h-0">
-          <TabsList className="grid w-full grid-cols-2 glass-card-enhanced h-auto">
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        flex: '1 1 0%',
+        minHeight: 0,
+        maxWidth: '1400px',
+        margin: '0 auto',
+        width: '100%',
+        overflow: 'hidden'
+      }}>
+        <Tabs value={activeTab} onValueChange={setActiveTab} style={{ display: 'flex', flexDirection: 'column', flex: '1 1 0%', minHeight: 0 }}>
+          <TabsList className="glass-card-enhanced" style={{ 
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr',
+            width: '100%',
+            height: 'auto'
+          }}>
             <TabsTrigger 
               value="chat" 
-              className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 rounded-xl font-semibold transition-all`}
+              style={{ 
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                borderRadius: '12px',
+                fontWeight: '600',
+                transition: 'all 0.2s ease',
+                flexDirection: isRTL ? 'row-reverse' : 'row'
+              }}
             >
-              <Bot className="h-4 w-4 sm:h-5 sm:w-5" />
+              <Bot style={{ height: '20px', width: '20px' }} />
               <span>{t('chat')}</span>
             </TabsTrigger>
             <TabsTrigger 
               value="meals" 
-              className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 rounded-xl font-semibold transition-all`}
+              style={{ 
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                borderRadius: '12px',
+                fontWeight: '600',
+                transition: 'all 0.2s ease',
+                flexDirection: isRTL ? 'row-reverse' : 'row'
+              }}
             >
-              <Utensils className="h-4 w-4 sm:h-5 sm:w-5" />
+              <Utensils style={{ height: '20px', width: '20px' }} />
               <span>{t('meals')}</span>
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="chat" className="flex-1 flex flex-col min-h-0">
+          <TabsContent value="chat" style={{ flex: '1 1 0%', display: 'flex', flexDirection: 'column', minHeight: 0 }}>
             <ChatTab
               messages={messages}
               isLoading={isLoading}
@@ -202,8 +245,8 @@ const Index = () => {
             />
           </TabsContent>
 
-          <TabsContent value="meals" className="flex-1 min-h-0 flex flex-col">
-            <div className="flex flex-col flex-1 min-h-0">
+          <TabsContent value="meals" style={{ flex: '1 1 0%', minHeight: 0, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', flex: '1 1 0%', minHeight: 0 }}>
               <MealPlannerTab />
             </div>
           </TabsContent>

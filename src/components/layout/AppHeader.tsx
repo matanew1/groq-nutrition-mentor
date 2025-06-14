@@ -41,37 +41,83 @@ export const AppHeader = ({ onClearMessages, activeTab }: AppHeaderProps) => {
   };
 
   return (
-    <div className="glass-card-enhanced backdrop-blur-xl border-0 sticky top-0 z-50 transition-all duration-300">
-      <div className="max-w-7xl mx-auto px-4 py-4">
-        <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-4`}>
-          <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl shadow-lg">
-            <Apple className="h-6 w-6 text-white" />
+    <div className="glass-card-enhanced" style={{
+      backdropFilter: 'blur(20px)',
+      borderWidth: 0,
+      position: 'sticky',
+      top: 0,
+      zIndex: 50,
+      transition: 'all 0.3s ease'
+    }}>
+      <div style={{
+        maxWidth: '1400px',
+        margin: '0 auto',
+        padding: '16px'
+      }}>
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '16px',
+          flexDirection: isRTL ? 'row-reverse' : 'row'
+        }}>
+          <div style={{
+            padding: '12px',
+            background: 'linear-gradient(135deg, #3b82f6, #9333ea)',
+            borderRadius: '16px',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+          }}>
+            <Apple style={{ height: '24px', width: '24px', color: 'white' }} />
           </div>
-          <div className="flex-1 min-w-0">
-            <h1 className="heading-enhanced text-2xl sm:text-3xl font-bold truncate">
+          <div style={{ flex: '1 1 0%', minWidth: 0 }}>
+            <h1 className="heading-enhanced" style={{
+              fontSize: '32px',
+              fontWeight: 'bold',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap'
+            }}>
               {t('nutrimentor')}
             </h1>
-            <p className="text-sm text-gray-600 dark:text-gray-300 hidden sm:block">
+            <p style={{
+              fontSize: '14px',
+              color: '#6b7280',
+              display: 'block'
+            }}>
               {t('subtitle')}
             </p>
           </div>
-          <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-3`}>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            flexDirection: isRTL ? 'row-reverse' : 'row'
+          }}>
             <EnhancedBadge variant="success">
-              <Heart className="h-3 w-3" />
-              <span className="hidden sm:inline">Health</span>
+              <Heart style={{ height: '12px', width: '12px' }} />
+              <span>Health</span>
             </EnhancedBadge>
             <EnhancedBadge variant="default">
-              <Zap className="h-3 w-3" />
-              <span className="hidden sm:inline">AI</span>
+              <Zap style={{ height: '12px', width: '12px' }} />
+              <span>AI</span>
             </EnhancedBadge>
             
             <LanguageToggle />
             <SettingsDialog />
             
             {user ? (
-              <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                flexDirection: isRTL ? 'row-reverse' : 'row'
+              }}>
                 {userName && (
-                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300 hidden sm:inline">
+                  <span style={{
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    color: '#374151',
+                    display: 'inline'
+                  }}>
                     {t('welcome')}, {userName}
                   </span>
                 )}
@@ -80,18 +126,26 @@ export const AppHeader = ({ onClearMessages, activeTab }: AppHeaderProps) => {
                     variant="ghost"
                     size="sm"
                     onClick={onClearMessages}
-                    className="p-2 rounded-xl hover:bg-white/20"
+                    style={{
+                      padding: '8px',
+                      borderRadius: '12px',
+                      background: 'transparent'
+                    }}
                   >
-                    <Trash2 className="h-4 w-4" />
+                    <Trash2 style={{ height: '16px', width: '16px' }} />
                   </Button>
                 )}
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={handleSignOut}
-                  className="p-2 rounded-xl hover:bg-white/20"
+                  style={{
+                    padding: '8px',
+                    borderRadius: '12px',
+                    background: 'transparent'
+                  }}
                 >
-                  <LogOut className="h-4 w-4" />
+                  <LogOut style={{ height: '16px', width: '16px' }} />
                 </Button>
               </div>
             ) : (
