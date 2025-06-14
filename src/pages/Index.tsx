@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Utensils } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -15,7 +16,6 @@ import { ChatTab } from '@/components/chat/ChatTab';
 const Index = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeTab, setActiveTab] = useState('chat');
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { messages, loading: messagesLoading, addMessage, clearMessages } = useMessages();
@@ -35,19 +35,13 @@ const Index = () => {
   };
 
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    
     document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
     if (isRTL) {
       document.documentElement.classList.add('font-hebrew');
     } else {
       document.documentElement.classList.remove('font-hebrew');
     }
-  }, [isDarkMode, isRTL]);
+  }, [isRTL]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -153,7 +147,7 @@ const Index = () => {
 
   if (messagesLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
         <EnhancedCard className="p-6 sm:p-8 text-center max-w-sm w-full">
           <div className="loading-enhanced mb-4 flex-center">
             <div className="loading-dot"></div>
@@ -167,10 +161,8 @@ const Index = () => {
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 transition-all duration-500 ${isRTL ? 'hebrew-text' : ''}`}>
+    <div className={`min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 transition-all duration-500 ${isRTL ? 'hebrew-text' : ''}`}>
       <AppHeader
-        isDarkMode={isDarkMode}
-        onToggleDarkMode={() => setIsDarkMode(!isDarkMode)}
         onClearMessages={handleClearMessages}
         activeTab={activeTab}
       />

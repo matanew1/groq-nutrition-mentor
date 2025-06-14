@@ -23,25 +23,27 @@ export const ChatInput = ({ inputValue, setInputValue, handleSendMessage, isLoad
   };
 
   return (
-    <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 ${isRTL ? 'sm:space-x-reverse' : ''}`}>
-      <EnhancedInput
-        value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
-        onKeyPress={handleKeyPress}
-        placeholder={t('typeMessage')}
-        className="flex-1"
-        disabled={isLoading}
-        dir={isHebrew(inputValue) ? 'rtl' : 'ltr'}
-      />
-      <EnhancedButton
-        onClick={handleSendMessage}
-        disabled={!inputValue.trim() || isLoading}
-        loading={isLoading}
-        className="sm:px-6"
-      >
-        <Send className="h-4 w-4" />
-        <span className="sm:hidden">Send</span>
-      </EnhancedButton>
+    <div className="w-full">
+      <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 ${isRTL ? 'sm:space-x-reverse' : ''}`}>
+        <EnhancedInput
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          onKeyPress={handleKeyPress}
+          placeholder={t('typeMessage')}
+          className="w-full flex-1"
+          disabled={isLoading}
+          dir={isHebrew(inputValue) ? 'rtl' : 'ltr'}
+        />
+        <EnhancedButton
+          onClick={handleSendMessage}
+          disabled={!inputValue.trim() || isLoading}
+          loading={isLoading}
+          className="sm:px-6 w-full sm:w-auto"
+        >
+          <Send className="h-4 w-4" />
+          <span className="sm:hidden ml-2">Send</span>
+        </EnhancedButton>
+      </div>
     </div>
   );
 };

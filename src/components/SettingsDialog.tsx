@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import {
   Dialog,
@@ -11,20 +12,10 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { Settings, Sun, Moon, Trash2, Bot, Zap, Globe2 } from 'lucide-react';
+import { Settings, Trash2, Globe2, Zap } from 'lucide-react';
 import { useSettings } from '@/contexts/SettingsContext';
 import { useToast } from '@/hooks/use-toast';
 import { useMessages } from '@/hooks/useMessages';
-
-const getInitialDarkMode = () => {
-  if (typeof window !== 'undefined') {
-    const stored = window.localStorage.getItem('theme');
-    if (stored === 'dark') return true;
-    if (stored === 'light') return false;
-    return document.documentElement.classList.contains('dark');
-  }
-  return false;
-};
 
 const SettingsDialog = () => {
   const {
@@ -41,22 +32,11 @@ const SettingsDialog = () => {
 
   const [tempUserName, setTempUserName] = useState(userName);
   const [open, setOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(getInitialDarkMode());
   const dir = language === 'he' ? 'rtl' : 'ltr';
   const isRTL = dir === 'rtl';
 
-  // Animate pulse for dark mode/clear/chat toggles
+  // Animate pulse for toggles
   const [actionPulse, setActionPulse] = useState(false);
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-      window.localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      window.localStorage.setItem('theme', 'light');
-    }
-  }, [isDarkMode]);
 
   useEffect(() => {
     if (language === 'he') {
@@ -72,25 +52,10 @@ const SettingsDialog = () => {
     setTempUserName(userName);
   }, [userName]);
 
-  useEffect(() => {
-    if (open) {
-      setIsDarkMode(getInitialDarkMode());
-    }
-  }, [open]);
-
   // Animated pulse trigger
   const triggerPulse = () => {
     setActionPulse(true);
     setTimeout(() => setActionPulse(false), 500);
-  };
-
-  const handleDarkModeToggle = () => {
-    setIsDarkMode((prev) => !prev);
-    triggerPulse();
-    toast({
-      title: t('success'),
-      description: t(isDarkMode ? 'lightModeOn' : 'darkModeOn') || (isDarkMode ? 'Light mode enabled' : 'Dark mode enabled'),
-    });
   };
 
   const handleLanguageToggle = () => {
@@ -142,44 +107,27 @@ const SettingsDialog = () => {
         </FancyButton>
       </DialogTrigger>
       <DialogContent
-        className={`glass-card-dialog bg-gradient-to-br from-white/60 via-white/45 to-blue-200/30 dark:from-gray-900/80 dark:via-gray-800/85 dark:to-blue-900/40 rounded-2xl shadow-2xl border border-white/20 dark:border-gray-800 animate-fade-in`}
+        className="glass-card-dialog bg-gradient-to-br from-white/60 via-white/45 to-blue-200/30 rounded-2xl shadow-2xl border border-white/20 animate-fade-in"
         dir={dir}
       >
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold px-6 pt-6 flex items-center gap-2 bg-gradient-to-r from-green-400/30 to-blue-100/40 dark:from-green-900/50 dark:to-blue-900/40 rounded-t-2xl">
+          <DialogTitle className="text-2xl font-bold px-6 pt-6 flex items-center gap-2 bg-gradient-to-r from-green-400/30 to-blue-100/40 rounded-t-2xl">
             <Settings className="h-6 w-6 text-primary animate-spin-slow" />
             {t('settings')}
           </DialogTitle>
         </DialogHeader>
 
         {/* Quick Actions */}
-        <div className={`flex flex-wrap gap-4 justify-between items-center px-6 py-3 border-b border-muted/40 dark:border-muted/20 bg-white/10 dark:bg-gray-900/10 rounded-2xl animate-fade-in`}>
+        <div className="flex flex-wrap gap-4 justify-between items-center px-6 py-3 border-b border-muted/40 bg-white/10 rounded-2xl animate-fade-in">
           <span className="font-semibold text-muted-foreground text-xs sm:text-sm">{t('quickActions') || "Quick Actions"}</span>
-          <div className={`flex gap-2`}>
-            <FancyButton
-              type="button"
-              variant="ghost"
-              size="icon"
-              aria-label={isDarkMode ? t('switchToLightMode') || "Switch to light mode" : t('switchToDarkMode') || "Switch to dark mode"}
-              onClick={handleDarkModeToggle}
-              className={`rounded-full glow-action ${actionPulse ? "animate-pulse" : ""} transition-all ${
-                isDarkMode
-                  ? "from-blue-700/70 to-yellow-300/60 text-yellow-200"
-                  : "from-yellow-100/70 to-blue-200/50 text-blue-700"
-              }`}
-            >
-              {isDarkMode
-                ? <Sun className="h-5 w-5" />
-                : <Moon className="h-5 w-5" />
-              }
-            </FancyButton>
+          <div className="flex gap-2">
             <FancyButton
               type="button"
               variant="ghost"
               size="icon"
               aria-label={t('toggleLanguage') || "Toggle language"}
               onClick={handleLanguageToggle}
-              className={`rounded-full from-green-400/60 to-blue-200/60 glow-action bg-gradient-to-tr`}
+              className="rounded-full from-green-400/60 to-blue-200/60 glow-action bg-gradient-to-tr"
             >
               <Globe2 className="h-5 w-5" />
             </FancyButton>
@@ -189,7 +137,7 @@ const SettingsDialog = () => {
               size="icon"
               aria-label={t('clearChat') || "Clear chat"}
               onClick={handleClearChat}
-              className={`rounded-full from-pink-200/60 to-red-200/60 dark:from-red-900/80 dark:to-pink-900/70 glow-action bg-gradient-to-tr`}
+              className="rounded-full from-pink-200/60 to-red-200/60 glow-action bg-gradient-to-tr"
             >
               <Trash2 className="h-5 w-5" />
             </FancyButton>
@@ -199,23 +147,23 @@ const SettingsDialog = () => {
               size="icon"
               aria-label={notifications ? (t('disableNotifications') || "Disable notifications") : (t('enableNotifications') || "Enable notifications")}
               onClick={handleNotificationsToggle}
-              className={`rounded-full from-purple-100/70 to-purple-300/60 dark:from-purple-900/60 dark:to-purple-700/70 glow-action bg-gradient-to-tr`}
+              className="rounded-full from-purple-100/70 to-purple-300/60 glow-action bg-gradient-to-tr"
             >
               <Zap className={`h-5 w-5 ${notifications ? "text-emerald-400" : "text-gray-400"}`} />
             </FancyButton>
           </div>
         </div>
 
-        <div className={`space-y-7 py-6 px-6 glass-card-body animate-fade-in-up`}>
+        <div className="space-y-7 py-6 px-6 glass-card-body animate-fade-in-up">
           {/* User Info */}
-          <GlassCard className="p-5 shadow-inner border border-white/20 dark:border-gray-800">
+          <GlassCard className="p-5 shadow-inner border border-white/20">
             <Label htmlFor="username" className="text-lg font-bold text-primary">{t('userName')}</Label>
             <Input
               id="username"
               value={tempUserName}
               onChange={(e) => setTempUserName(e.target.value)}
               placeholder={t('enterUserName') || "Enter your name"}
-              className="mt-3 glass-input bg-white/60 dark:bg-gray-900/30 border border-white/40 text-primary placeholder:text-primary/50 transition"
+              className="mt-3 glass-input bg-white/60 border border-white/40 text-primary placeholder:text-primary/50 transition"
               dir={dir}
               style={{ textAlign: isRTL ? 'right' : 'left'}}
             />
@@ -226,7 +174,7 @@ const SettingsDialog = () => {
           <div className="flex flex-col sm:flex-row gap-6">
             <GlassCard className="flex-1 p-5">
               <Label htmlFor="language" className="text-lg font-semibold text-primary">{t('language')}</Label>
-              <div className={`flex items-center gap-3 mt-2`}>
+              <div className="flex items-center gap-3 mt-2">
                 <span className={language === 'en' ? 'font-bold' : 'opacity-60'}>EN</span>
                 <Switch
                   id="language"
@@ -247,38 +195,16 @@ const SettingsDialog = () => {
                   onCheckedChange={setNotifications}
                   className={`glass-switch ${notifications ? 'animate-pulse' : ''}`}
                 />
-                <span className={`text-base font-medium`}>{notifications ? t('on') || 'On' : t('off') || 'Off'}</span>
+                <span className="text-base font-medium">{notifications ? t('on') || 'On' : t('off') || 'Off'}</span>
               </div>
               <p className="text-xs text-muted-foreground mt-2">{t('settingsNotificationsHint') || ''}</p>
             </GlassCard>
           </div>
 
-          {/* Dark Mode Toggle */}
-          <GlassCard className="p-5 flex items-center justify-between gap-2">
-            <Label className={`text-lg font-semibold text-primary flex items-center gap-3`}>
-              {t('darkMode') || 'Dark Mode'}
-            </Label>
-            <FancyButton
-              type="button"
-              variant={isDarkMode ? "secondary" : "outline"}
-              size="icon"
-              className={`ml-2 ${isDarkMode ? "bg-primary text-primary-foreground shadow-xl" : "bg-muted"} transition-all hover:scale-110`}
-              onClick={handleDarkModeToggle}
-              aria-label={isDarkMode ? t('switchToLightMode') || 'Switch to light mode' : t('switchToDarkMode') || 'Switch to dark mode'}
-            >
-              {isDarkMode ? (
-                <Sun className="h-6 w-6 text-yellow-400 animate-wiggle" />
-              ) : (
-                <Moon className="h-6 w-6 text-blue-500 animate-wiggle" />
-              )}
-            </FancyButton>
-            <span className="text-base font-semibold">{isDarkMode ? t('on') || 'On' : t('off') || 'Off'}</span>
-          </GlassCard>
-
           {/* Save Button */}
           <FancyButton
             onClick={handleSave}
-            className="w-full mt-4 font-bold text-lg bg-gradient-to-r from-green-500 via-blue-500 to-purple-600 dark:from-green-700 dark:via-blue-900 dark:to-purple-900 shadow-2xl hover:scale-105"
+            className="w-full mt-4 font-bold text-lg bg-gradient-to-r from-green-500 via-blue-500 to-purple-600 shadow-2xl hover:scale-105"
             dir={dir}
           >
             {t('save')}
