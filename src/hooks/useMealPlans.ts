@@ -1,20 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { searchNutrition } from '@/utils/nutritionixApi';
 import { callGroqAPI } from '@/utils/groqApi';
-
-interface MealPlan {
-  id: string;
-  date: string;
-  meal_type: 'breakfast' | 'lunch' | 'dinner' | 'snack';
-  meal_name: string;
-  calories?: number;
-  time?: string;
-  nutrition_data?: any;
-}
+import { MealPlan } from '@/types/meal';
 
 export const useMealPlans = () => {
   const [mealPlans, setMealPlans] = useState<{ [key: string]: MealPlan[] }>({});
@@ -37,7 +27,7 @@ export const useMealPlans = () => {
 
       if (error) throw error;
 
-      const formattedMealPlans = data.map((plan: any) => ({
+      const formattedMealPlans: MealPlan[] = data.map((plan: any) => ({
         id: plan.id,
         date: plan.date,
         meal_type: plan.meal_type as 'breakfast' | 'lunch' | 'dinner' | 'snack',
