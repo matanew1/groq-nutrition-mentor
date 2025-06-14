@@ -155,7 +155,7 @@ const MealPlannerTab = () => {
                 );
               })}
             </div>
-          </div>
+          </Card>
         </div>
       </div>
     </div>
