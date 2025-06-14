@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Apple, Heart, Zap, LogOut, Trash2, Calendar, Utensils } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -256,14 +255,10 @@ const Index = () => {
       {/* Main Content with Tabs */}
       <div className="max-w-6xl mx-auto p-2 sm:p-4 h-[calc(100vh-80px)] sm:h-[calc(100vh-120px)]">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList className="grid w-full grid-cols-3 mb-4">
+          <TabsList className="grid w-full grid-cols-2 mb-4">
             <TabsTrigger value="chat" className="flex items-center space-x-2">
               <Bot className="h-4 w-4" />
               <span>{t('chat')}</span>
-            </TabsTrigger>
-            <TabsTrigger value="calendar" className="flex items-center space-x-2">
-              <Calendar className="h-4 w-4" />
-              <span>{t('calendar')}</span>
             </TabsTrigger>
             <TabsTrigger value="meals" className="flex items-center space-x-2">
               <Utensils className="h-4 w-4" />
@@ -382,20 +377,6 @@ const Index = () => {
                   <span className="hidden sm:inline">
                     {user ? 'Your messages are automatically saved to your account' : 'Sign in to save your chat history'}
                   </span>
-                </p>
-              </div>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="calendar" className="flex-1">
-            <Card className="h-full p-6 border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm">
-              <div className="text-center py-20">
-                <Calendar className="h-16 w-16 mx-auto text-gray-400 mb-4" />
-                <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-300 mb-2">
-                  {t('calendar')} Feature
-                </h3>
-                <p className="text-gray-500 dark:text-gray-400">
-                  Calendar view for meal planning coming soon!
                 </p>
               </div>
             </Card>
