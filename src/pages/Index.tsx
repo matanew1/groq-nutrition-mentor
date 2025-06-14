@@ -161,13 +161,13 @@ const Index = () => {
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 transition-all duration-500 ${isRTL ? 'hebrew-text' : ''}`}>
+    <div className={`h-screen flex flex-col bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 transition-all duration-500 ${isRTL ? 'hebrew-text' : ''}`}>
       <AppHeader
         onClearMessages={handleClearMessages}
         activeTab={activeTab}
       />
 
-      <div className="max-w-7xl mx-auto p-2 sm:p-4 h-[calc(100vh-80px)] sm:h-[calc(100vh-100px)]">
+      <div className="flex-1 max-w-7xl mx-auto p-2 sm:p-4 w-full overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
           <TabsList className="grid w-full grid-cols-2 mb-4 sm:mb-6 glass-card-enhanced p-1 sm:p-2 h-auto">
             <TabsTrigger 
@@ -186,7 +186,7 @@ const Index = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="chat" className="flex-1 flex flex-col">
+          <TabsContent value="chat" className="flex-1 flex flex-col min-h-0">
             <ChatTab
               messages={messages}
               isLoading={isLoading}
@@ -202,8 +202,8 @@ const Index = () => {
             />
           </TabsContent>
 
-          <TabsContent value="meals" className="flex-1">
-            <EnhancedCard className="h-full overflow-auto">
+          <TabsContent value="meals" className="flex-1 min-h-0">
+            <EnhancedCard className="h-full overflow-y-auto">
               <EnhancedCardContent className="p-2 sm:p-6">
                 <MealPlannerTab />
               </EnhancedCardContent>

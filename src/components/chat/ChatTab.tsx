@@ -24,8 +24,8 @@ export const ChatTab = (props: ChatTabProps) => {
   const { user } = useAuth();
   
   return (
-    <div className="flex-1 flex flex-col space-y-4 sm:space-y-6">
-      <EnhancedCard className="flex-1">
+    <div className="h-full flex flex-col space-y-4 sm:space-y-6">
+      <EnhancedCard className="flex-1 min-h-0">
         <MessageList
           messages={props.messages}
           isLoading={props.isLoading}
