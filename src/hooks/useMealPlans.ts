@@ -1,11 +1,20 @@
 
-import { useState, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { searchNutrition } from '@/utils/nutritionixApi';
 import { callGroqAPI } from '@/utils/groqApi';
-import { MealPlan } from '@/types/meal';
+
+interface MealPlan {
+  id: string;
+  date: string;
+  meal_type: 'breakfast' | 'lunch' | 'dinner' | 'snack';
+  meal_name: string;
+  calories?: number;
+  time?: string;
+  nutrition_data?: any;
+}
 
 export const useMealPlans = () => {
   const [mealPlans, setMealPlans] = useState<{ [key: string]: MealPlan[] }>({});
@@ -14,7 +23,7 @@ export const useMealPlans = () => {
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const loadMealPlans = useCallback(async (date: string) => {
+  const loadMealPlans = async (date: string) => {
     if (!user) return;
 
     setLoading(true);
@@ -28,7 +37,7 @@ export const useMealPlans = () => {
 
       if (error) throw error;
 
-      const formattedMealPlans: MealPlan[] = data.map((plan: any) => ({
+      const formattedMealPlans = data.map((plan: any) => ({
         id: plan.id,
         date: plan.date,
         meal_type: plan.meal_type as 'breakfast' | 'lunch' | 'dinner' | 'snack',
@@ -52,9 +61,9 @@ export const useMealPlans = () => {
     } finally {
       setLoading(false);
     }
-  }, [user, toast]);
+  };
 
-  const addMealPlan = useCallback(async (mealPlan: Omit<MealPlan, 'id'>) => {
+  const addMealPlan = async (mealPlan: Omit<MealPlan, 'id'>) => {
     if (!user) return;
 
     setAddingMeal(true);
@@ -143,9 +152,9 @@ export const useMealPlans = () => {
     } finally {
       setAddingMeal(false);
     }
-  }, [user, toast]);
+  };
 
-  const deleteMealPlan = useCallback(async (id: string, date: string) => {
+  const deleteMealPlan = async (id: string, date: string) => {
     if (!user) return;
 
     try {
@@ -174,7 +183,7 @@ export const useMealPlans = () => {
         variant: "destructive",
       });
     }
-  }, [user, toast]);
+  };
 
   return {
     mealPlans,
