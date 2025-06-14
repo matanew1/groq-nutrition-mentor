@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Utensils, Loader2 } from 'lucide-react';
 import { EnhancedCard, EnhancedCardContent, EnhancedCardHeader, EnhancedCardTitle } from '@/components/ui/EnhancedCard';
@@ -99,13 +98,13 @@ const MealPlannerTab = () => {
   }
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 space-y-4 sm:space-y-6 p-2 sm:p-0">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0">
-        <div className="lg:col-span-1 h-full flex flex-col min-h-0">
+    <div className="flex flex-col flex-1 min-h-0 w-full">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0 h-full">
+        <div className="lg:col-span-1 flex flex-col h-full min-h-0">
           <PlannerCalendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
         </div>
-        <div className="lg:col-span-2 flex flex-col min-h-0 space-y-4 sm:space-y-6 h-full">
-          <EnhancedCard variant="glass" className="flex flex-col flex-1 min-h-0">
+        <div className="lg:col-span-2 flex flex-col min-h-0 flex-1 h-full space-y-4 sm:space-y-6">
+          <EnhancedCard variant="glass" className="flex flex-col flex-1 min-h-0 h-full">
             <EnhancedCardHeader>
               <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center justify-between">
                 <EnhancedCardTitle className="text-center sm:text-left">
@@ -126,7 +125,6 @@ const MealPlannerTab = () => {
                 </div>
               </div>
             </EnhancedCardHeader>
-
             <EnhancedCardContent className="flex flex-col flex-1 min-h-0 space-y-4 sm:space-y-6">
               <AddMealForm onAddMeal={handleAddMeal} addingMeal={addingMeal} mealTypes={mealTypes} />
               <div className="flex-1 min-h-0 overflow-y-auto">

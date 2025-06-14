@@ -166,8 +166,9 @@ const Index = () => {
         activeTab={activeTab}
       />
 
-      <div className="flex-1 max-w-7xl mx-auto p-2 sm:p-4 w-full overflow-hidden">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
+      {/* Updated wrapper to use flex, flex-1, min-h-0 */}
+      <div className="flex flex-col flex-1 min-h-0 max-w-7xl mx-auto p-2 sm:p-4 w-full overflow-hidden">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col flex-1 min-h-0">
           <TabsList className="grid w-full grid-cols-2 mb-4 sm:mb-6 glass-card-enhanced p-1 sm:p-2 h-auto">
             <TabsTrigger 
               value="chat" 
@@ -201,8 +202,9 @@ const Index = () => {
             />
           </TabsContent>
 
-          <TabsContent value="meals" className="flex-1 min-h-0 overflow-y-auto">
-            <div className="p-2 sm:p-6">
+          <TabsContent value="meals" className="flex-1 min-h-0 flex flex-col">
+            {/* Make sure this wrapper fills parent */}
+            <div className="flex flex-col flex-1 min-h-0">
               <MealPlannerTab />
             </div>
           </TabsContent>
