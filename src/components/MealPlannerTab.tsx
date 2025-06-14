@@ -10,6 +10,13 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useMealPlans } from '@/hooks/useMealPlans';
 import { format } from 'date-fns';
 
+const accessibleMealTypeStyles = {
+  breakfast: 'bg-amber-50 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 border-amber-100 dark:border-amber-700',
+  lunch: 'bg-yellow-50 dark:bg-yellow-900/60 text-yellow-700 dark:text-yellow-200 border-yellow-100 dark:border-yellow-700',
+  dinner: 'bg-violet-50 dark:bg-violet-900/50 text-violet-700 dark:text-violet-200 border-violet-100 dark:border-violet-800',
+  snack: 'bg-green-50 dark:bg-green-900/60 text-green-700 dark:text-green-200 border-green-100 dark:border-green-800',
+}
+
 const MealPlannerTab = () => {
   const { t, language } = useSettings();
   const { user } = useAuth();
@@ -22,10 +29,10 @@ const MealPlannerTab = () => {
   const isRTL = language === 'he';
 
   const mealTypes = [
-    { key: 'breakfast', icon: '🌅', color: 'bg-orange-50 text-orange-700 border-orange-200', label: t('breakfast') },
-    { key: 'lunch', icon: '☀️', color: 'bg-yellow-50 text-yellow-700 border-yellow-200', label: t('lunch') },
-    { key: 'dinner', icon: '🌙', color: 'bg-purple-50 text-purple-700 border-purple-200', label: t('dinner') },
-    { key: 'snack', icon: '🍎', color: 'bg-green-50 text-green-700 border-green-200', label: t('snack') }
+    { key: 'breakfast', icon: '🍳', style: accessibleMealTypeStyles.breakfast, label: t('breakfast') },
+    { key: 'lunch', icon: '🌞', style: accessibleMealTypeStyles.lunch, label: t('lunch') },
+    { key: 'dinner', icon: '🌙', style: accessibleMealTypeStyles.dinner, label: t('dinner') },
+    { key: 'snack', icon: '🍎', style: accessibleMealTypeStyles.snack, label: t('snack') }
   ];
 
   useEffect(() => {
@@ -75,10 +82,10 @@ const MealPlannerTab = () => {
   if (!user) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-6">
-        <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-full mb-6">
+        <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-full mb-6 aria-hidden">
           <Utensils className="h-12 w-12 text-gray-400" />
         </div>
-        <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-3">
+        <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-3">
           {t('signInRequired')}
         </h3>
         <p className="text-gray-500 dark:text-gray-400 max-w-sm">
@@ -90,10 +97,9 @@ const MealPlannerTab = () => {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      {/* Mobile: Stack calendar and planner vertically */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Calendar Section */}
-        <Card className="lg:col-span-1 shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+        <Card className="lg:col-span-1 shadow-sm border-0 bg-card dark:bg-card backdrop-blur-sm">
           <CardHeader className="pb-3">
             <CardTitle className={`text-lg flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <CalendarIcon className="h-5 w-5 text-green-600" />
@@ -112,7 +118,7 @@ const MealPlannerTab = () => {
 
         {/* Meal Planning Section */}
         <div className="lg:col-span-2 space-y-4">
-          <Card className="shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+          <Card className="shadow-sm border-0 bg-card dark:bg-card backdrop-blur-sm">
             <CardHeader className="pb-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <CardTitle className="text-lg sm:text-xl">
@@ -136,7 +142,7 @@ const MealPlannerTab = () => {
 
             <CardContent className="space-y-6">
               {/* Add Meal Form */}
-              <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="p-4 bg-muted dark:bg-muted/60 rounded-lg border border-gray-200 dark:border-gray-700">
                 <h4 className="font-medium mb-3 text-gray-800 dark:text-gray-200">{t('addNewMeal')}</h4>
                 <div className={`flex flex-col sm:flex-row gap-3 ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
                   <select
@@ -183,92 +189,95 @@ const MealPlannerTab = () => {
                 {mealTypes.map(mealType => {
                   const typeMeals = getMealsByType(mealType.key as 'breakfast' | 'lunch' | 'dinner' | 'snack');
                   return (
-                    <div key={mealType.key} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                      <div className={`p-4 ${mealType.color} border-b border-gray-200 dark:border-gray-600`}>
-                        <div className="flex items-center justify-between">
-                          <h4 className={`font-semibold flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                            <span className="text-xl">{mealType.icon}</span>
-                            <span>{mealType.label}</span>
-                          </h4>
-                          <Badge variant="outline" className="bg-white/50 dark:bg-gray-800/50">
-                            {typeMeals.length} {typeMeals.length === 1 ? t('item') : t('items')}
-                          </Badge>
-                        </div>
+                    <section
+                      key={mealType.key}
+                      className={`rounded-2xl mb-2 ring-1 ring-inset ring-border ${
+                        typeMeals.length === 0
+                          ? 'opacity-90'
+                          : ''
+                      }`}
+                      aria-labelledby={`mealtype-${mealType.key}`}
+                      tabIndex={0}
+                    >
+                      <div className={`p-4 sm:p-5 flex items-center justify-between border-b ${mealType.style}`}>
+                        <h4
+                          id={`mealtype-${mealType.key}`}
+                          className={`font-bold flex items-center gap-2 text-lg`}
+                        >
+                          <span aria-hidden>{mealType.icon}</span>
+                          <span>{mealType.label}</span>
+                        </h4>
+                        <Badge
+                          variant="outline"
+                          className={`${typeMeals.length > 0 ? 'bg-accent text-accent-foreground' : 'bg-muted text-muted-foreground'} px-3 py-1 rounded-full font-medium`}
+                          aria-label={`${typeMeals.length} ${typeMeals.length === 1 ? t('item') : t('items')}`}
+                        >
+                          {typeMeals.length} {typeMeals.length === 1 ? t('item') : t('items')}
+                        </Badge>
                       </div>
-                      
-                      <div className="p-4 bg-white dark:bg-gray-800">
+
+                      <div className="p-4 bg-popover dark:bg-popover w-full transition">
                         {typeMeals.length === 0 ? (
-                          <p className="text-gray-500 dark:text-gray-400 text-sm italic text-center py-4">
+                          <p className="text-muted-foreground text-sm italic text-center py-4" aria-live="polite">
                             {t('noMealsPlanned')} {mealType.label.toLowerCase()}
                           </p>
                         ) : (
-                          <div className="space-y-3">
+                          <ul className="space-y-3">
                             {typeMeals.map(meal => (
-                              <div key={meal.id} className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-                                <div className="flex items-start justify-between mb-3">
+                              <li
+                                key={meal.id}
+                                className="bg-secondary dark:bg-secondary/60 p-4 rounded-lg border border-border flex flex-col gap-1 relative transition"
+                                tabIndex={0}
+                                aria-live="polite"
+                              >
+                                <div className="flex items-start justify-between gap-3">
                                   <div className="flex-1 min-w-0">
-                                    <h5 className="font-medium text-gray-800 dark:text-gray-200 truncate">
-                                      {meal.meal_name}
-                                    </h5>
+                                    <span className="font-semibold text-lg text-foreground">{meal.meal_name}</span>
                                     {meal.time && (
-                                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                      <span className="block text-xs text-muted-foreground mt-1">
                                         {t('addedAt')} {meal.time}
-                                      </p>
+                                      </span>
                                     )}
                                   </div>
-                                  <div className={`flex items-center gap-2 ${isRTL ? 'ml-0 mr-3' : 'ml-3'}`}>
+                                  <div className="flex flex-col items-end gap-1 min-w-[65px]">
                                     {meal.calories && (
-                                      <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-300">
+                                      <Badge variant="secondary" className="bg-orange-100 dark:bg-orange-950 text-orange-700 dark:text-orange-300 font-medium py-0.5 px-2 rounded">
                                         {meal.calories} {t('calories')}
                                       </Badge>
                                     )}
                                     <Button
                                       variant="ghost"
                                       size="sm"
+                                      aria-label={t('removeMeal')}
                                       onClick={() => handleDeleteMeal(meal.id)}
-                                      className="p-2 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                                      className="hover:bg-destructive/10 hover:text-destructive p-2 rounded transition"
                                     >
                                       <Trash2 className="h-4 w-4" />
                                     </Button>
                                   </div>
                                 </div>
-                                
-                                {/* Enhanced Nutrition Data Card */}
+                                {/* Nutrition Data */}
                                 {meal.nutrition_data && meal.nutrition_data.foods && meal.nutrition_data.foods.length > 0 && (
-                                  <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
-                                    <h6 className={`text-sm font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                  <div className="mt-3 p-3 bg-accent dark:bg-accent/40 rounded-lg border border-accent/40">
+                                    <h6 className="text-xs font-bold text-accent-foreground mb-2 flex items-center gap-1">
                                       🍎 {t('nutritionFacts')}
                                     </h6>
                                     {meal.nutrition_data.foods.slice(0, 1).map((food: any, index: number) => (
-                                      <div key={index} className="text-sm text-green-700 dark:text-green-300">
-                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                                          <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                            <span>💪</span>
-                                            <span className="text-xs">{Math.round(food.nf_protein || 0)}g {t('protein')}</span>
-                                          </div>
-                                          <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                            <span>🌾</span>
-                                            <span className="text-xs">{Math.round(food.nf_total_carbohydrate || 0)}g {t('carbs')}</span>
-                                          </div>
-                                          <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                            <span>🧈</span>
-                                            <span className="text-xs">{Math.round(food.nf_total_fat || 0)}g {t('fat')}</span>
-                                          </div>
-                                          <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                            <span>🌿</span>
-                                            <span className="text-xs">{Math.round(food.nf_dietary_fiber || 0)}g {t('fiber')}</span>
-                                          </div>
-                                        </div>
+                                      <div key={index} className="text-xs text-accent-foreground grid grid-cols-2 sm:grid-cols-4 gap-1">
+                                        <span>💪 {Math.round(food.nf_protein)}g {t('protein')}</span>
+                                        <span>🌾 {Math.round(food.nf_total_carbohydrate)}g {t('carbs')}</span>
+                                        <span>🧈 {Math.round(food.nf_total_fat)}g {t('fat')}</span>
+                                        <span>🌿 {Math.round(food.nf_dietary_fiber)}g {t('fiber')}</span>
                                       </div>
                                     ))}
                                   </div>
                                 )}
-                              </div>
+                              </li>
                             ))}
-                          </div>
+                          </ul>
                         )}
                       </div>
-                    </div>
+                    </section>
                   );
                 })}
               </div>
