@@ -17,6 +17,7 @@ export type Database = {
           id: string
           meal_name: string
           meal_type: string
+          nutrition_data: Json | null
           time: string | null
           updated_at: string
           user_id: string
@@ -28,6 +29,7 @@ export type Database = {
           id?: string
           meal_name: string
           meal_type: string
+          nutrition_data?: Json | null
           time?: string | null
           updated_at?: string
           user_id: string
@@ -39,6 +41,7 @@ export type Database = {
           id?: string
           meal_name?: string
           meal_type?: string
+          nutrition_data?: Json | null
           time?: string | null
           updated_at?: string
           user_id?: string
