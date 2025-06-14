@@ -9,6 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { callGroqAPI } from '@/utils/groqApi';
 import { searchNutrition } from '@/utils/nutritionixApi';
+import { addEmojisToMessage, isHebrew } from '@/utils/messageFormatter';
+import DarkModeToggle from '@/components/DarkModeToggle';
 
 interface Message {
   id: string;
@@ -29,8 +31,18 @@ const Index = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+
+  // Apply dark mode to document
+  useEffect(() => {
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [isDarkMode]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -83,18 +95,23 @@ const Index = () => {
         }
       }
 
+      // Detect if user message is in Hebrew
+      const isHebrewMessage = isHebrew(inputValue);
+      
       // Get AI response with context
       const aiPrompt = `You are a professional nutrition mentor and health coach. Please provide helpful, accurate nutrition advice. 
+      ${isHebrewMessage ? 'Please respond in Hebrew as the user wrote in Hebrew.' : ''}
       User question: "${inputValue}"
       ${contextualInfo ? `Additional nutrition data context: ${contextualInfo}` : ''}
       
       Please provide a helpful, professional response about nutrition, health, or wellness.`;
 
       const aiResponse = await callGroqAPI(aiPrompt);
+      const enhancedResponse = addEmojisToMessage(aiResponse);
 
       const botMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: aiResponse,
+        content: enhancedResponse,
         sender: 'bot',
         timestamp: new Date(),
         nutritionData: nutritionData
@@ -111,7 +128,7 @@ const Index = () => {
       
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
-        content: "I apologize, but I'm having trouble connecting right now. Please try again in a moment.",
+        content: "❌ I apologize, but I'm having trouble connecting right now. Please try again in a moment.",
         sender: 'bot',
         timestamp: new Date()
       };
@@ -133,9 +150,9 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm border-b border-green-100 sticky top-0 z-10">
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-green-100 dark:border-gray-700 sticky top-0 z-10 transition-colors duration-300">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full">
@@ -145,18 +162,19 @@ const Index = () => {
               <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
                 NutriMentor AI
               </h1>
-              <p className="text-sm text-gray-600">Your Personal Nutrition Assistant</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Your Personal Nutrition Assistant</p>
             </div>
             <div className="flex-1" />
-            <div className="flex space-x-2">
-              <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200">
+            <div className="flex items-center space-x-2">
+              <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700">
                 <Heart className="h-3 w-3 mr-1" />
                 Health
               </Badge>
-              <Badge variant="secondary" className="bg-blue-100 text-blue-700 border-blue-200">
+              <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700">
                 <Zap className="h-3 w-3 mr-1" />
                 AI Powered
               </Badge>
+              <DarkModeToggle isDark={isDarkMode} onToggle={() => setIsDarkMode(!isDarkMode)} />
             </div>
           </div>
         </div>
@@ -165,7 +183,7 @@ const Index = () => {
       {/* Chat Container */}
       <div className="max-w-4xl mx-auto p-4 h-[calc(100vh-120px)] flex flex-col">
         {/* Messages */}
-        <Card className="flex-1 mb-4 border-0 shadow-lg bg-white/70 backdrop-blur-sm">
+        <Card className="flex-1 mb-4 border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-colors duration-300">
           <ScrollArea className="h-full p-4">
             <div className="space-y-4">
               {messages.map((message) => (
@@ -179,7 +197,7 @@ const Index = () => {
                     }`}
                   >
                     <div
-                      className={`p-2 rounded-full ${
+                      className={`p-2 rounded-full shadow-lg ${
                         message.sender === 'user'
                           ? 'bg-gradient-to-r from-blue-500 to-purple-500'
                           : 'bg-gradient-to-r from-green-500 to-blue-500'
@@ -192,26 +210,29 @@ const Index = () => {
                       )}
                     </div>
                     <div
-                      className={`p-3 rounded-lg ${
+                      className={`p-4 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
                         message.sender === 'user'
                           ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
-                          : 'bg-white border border-gray-200 text-gray-800 shadow-sm'
-                      }`}
+                          : 'bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100'
+                      } ${isHebrew(message.content) ? 'text-right' : 'text-left'}`}
+                      dir={isHebrew(message.content) ? 'rtl' : 'ltr'}
                     >
-                      <p className="text-sm leading-relaxed whitespace-pre-wrap">
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium">
                         {message.content}
                       </p>
                       {message.nutritionData && message.nutritionData.foods && (
-                        <div className="mt-3 p-3 bg-green-50 rounded-lg border border-green-200">
-                          <h4 className="font-semibold text-green-800 mb-2">Nutrition Facts</h4>
+                        <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
+                          <h4 className="font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center">
+                            🍎 Nutrition Facts
+                          </h4>
                           {message.nutritionData.foods.slice(0, 1).map((food: any, index: number) => (
-                            <div key={index} className="text-sm text-green-700">
+                            <div key={index} className="text-sm text-green-700 dark:text-green-300">
                               <p className="font-medium">{food.food_name}</p>
                               <div className="grid grid-cols-2 gap-2 mt-1">
-                                <span>Calories: {Math.round(food.nf_calories)}</span>
-                                <span>Protein: {Math.round(food.nf_protein)}g</span>
-                                <span>Carbs: {Math.round(food.nf_total_carbohydrate)}g</span>
-                                <span>Fat: {Math.round(food.nf_total_fat)}g</span>
+                                <span>🔥 Calories: {Math.round(food.nf_calories)}</span>
+                                <span>💪 Protein: {Math.round(food.nf_protein)}g</span>
+                                <span>🌾 Carbs: {Math.round(food.nf_total_carbohydrate)}g</span>
+                                <span>🧈 Fat: {Math.round(food.nf_total_fat)}g</span>
                               </div>
                             </div>
                           ))}
@@ -227,14 +248,14 @@ const Index = () => {
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="flex items-start space-x-2">
-                    <div className="p-2 rounded-full bg-gradient-to-r from-green-500 to-blue-500">
+                    <div className="p-2 rounded-full bg-gradient-to-r from-green-500 to-blue-500 shadow-lg">
                       <Bot className="h-4 w-4 text-white" />
                     </div>
-                    <div className="bg-white border border-gray-200 p-3 rounded-lg shadow-sm">
+                    <div className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-3 rounded-xl shadow-md">
                       <div className="flex space-x-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                        <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" />
+                        <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                        <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
                       </div>
                     </div>
                   </div>
@@ -246,27 +267,28 @@ const Index = () => {
         </Card>
 
         {/* Input */}
-        <Card className="border-0 shadow-lg bg-white/70 backdrop-blur-sm">
+        <Card className="border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-colors duration-300">
           <div className="p-4">
             <div className="flex space-x-2">
               <Input
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Ask about nutrition, calories, meal planning, or healthy recipes..."
-                className="flex-1 border-gray-200 focus:border-green-400 focus:ring-green-400"
+                placeholder="Ask about nutrition, calories, meal planning, or healthy recipes... / שאל על תזונה, קלוריות, תכנון ארוחות..."
+                className="flex-1 border-gray-200 dark:border-gray-600 focus:border-green-400 focus:ring-green-400 dark:bg-gray-700 dark:text-white transition-colors duration-200"
                 disabled={isLoading}
+                dir={isHebrew(inputValue) ? 'rtl' : 'ltr'}
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || isLoading}
-                className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0"
+                className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200"
               >
                 <Send className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xs text-gray-500 mt-2">
-              Try asking: "What's the nutrition in 1 cup of rice?" or "Give me a healthy breakfast idea"
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+              Try asking: "What's the nutrition in 1 cup of rice?" or "Give me a healthy breakfast idea" | נסה לשאול: "מה התזונה בכוס אורז?" או "תן לי רעיון לארוחת בוקר בריאה"
             </p>
           </div>
         </Card>
