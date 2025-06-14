@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Apple, Heart, Zap, LogOut, Trash2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -6,19 +7,16 @@ import { useNavigate } from 'react-router-dom';
 import { EnhancedBadge } from '@/components/ui/EnhancedBadge';
 import { EnhancedButton } from '@/components/ui/EnhancedButton';
 import LanguageToggle from '@/components/LanguageToggle';
-import DarkModeToggle from '@/components/DarkModeToggle';
 import SettingsDialog from '@/components/SettingsDialog';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 
 interface AppHeaderProps {
-  isDarkMode: boolean;
-  onToggleDarkMode: () => void;
   onClearMessages: () => void;
   activeTab: string;
 }
 
-export const AppHeader = ({ isDarkMode, onToggleDarkMode, onClearMessages, activeTab }: AppHeaderProps) => {
+export const AppHeader = ({ onClearMessages, activeTab }: AppHeaderProps) => {
   const { user, signOut } = useAuth();
   const { t, language, userName } = useSettings();
   const navigate = useNavigate();
@@ -68,7 +66,6 @@ export const AppHeader = ({ isDarkMode, onToggleDarkMode, onClearMessages, activ
             </EnhancedBadge>
             
             <LanguageToggle />
-            <DarkModeToggle isDark={isDarkMode} onToggle={onToggleDarkMode} />
             <SettingsDialog />
             
             {user ? (
