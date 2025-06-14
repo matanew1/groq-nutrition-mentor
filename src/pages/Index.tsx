@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Utensils } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -166,20 +167,19 @@ const Index = () => {
         activeTab={activeTab}
       />
 
-      {/* Ensure wrapper starts content from top, fills all space */}
-      <div className="flex flex-col flex-1 min-h-0 max-w-7xl mx-auto p-0 sm:p-0 w-full overflow-hidden">
+      <div className="flex flex-col flex-1 min-h-0 max-w-7xl mx-auto w-full overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col flex-1 min-h-0">
-          <TabsList className="grid w-full grid-cols-2 mb-4 sm:mb-6 glass-card-enhanced p-1 sm:p-2 h-auto">
+          <TabsList className="grid w-full grid-cols-2 glass-card-enhanced h-auto">
             <TabsTrigger 
               value="chat" 
-              className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 py-2 sm:py-3 px-4 sm:px-6 rounded-xl font-semibold transition-all text-sm sm:text-base`}
+              className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 rounded-xl font-semibold transition-all`}
             >
               <Bot className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>{t('chat')}</span>
             </TabsTrigger>
             <TabsTrigger 
               value="meals" 
-              className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 py-2 sm:py-3 px-4 sm:px-6 rounded-xl font-semibold transition-all text-sm sm:text-base`}
+              className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 rounded-xl font-semibold transition-all`}
             >
               <Utensils className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>{t('meals')}</span>

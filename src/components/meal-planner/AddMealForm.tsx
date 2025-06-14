@@ -24,9 +24,9 @@ export const AddMealForm = ({ onAddMeal, addingMeal, mealTypes }: AddMealFormPro
   };
 
   return (
-    <div className="glass-card-enhanced p-4 sm:p-5 w-full">
-      <h4 className="heading-enhanced text-base sm:text-lg mb-4 text-center sm:text-left">{t('addNewMeal')}</h4>
-      <div className={`flex flex-col gap-4 ${isRTL ? 'sm:flex-row-reverse' : 'sm:flex-row'}`}>
+    <div className="glass-card-enhanced w-full">
+      <h4 className="heading-enhanced text-base sm:text-lg text-center sm:text-left">{t('addNewMeal')}</h4>
+      <div className={`flex flex-col ${isRTL ? 'sm:flex-row-reverse' : 'sm:flex-row'}`}>
         <select
           value={newMeal.type}
           onChange={(e) => setNewMeal(prev => ({ ...prev, type: e.target.value as MealTypeKey }))}
