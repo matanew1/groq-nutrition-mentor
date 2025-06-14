@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { EnhancedCard } from '@/components/ui/EnhancedCard';
 import { EnhancedBadge } from '@/components/ui/EnhancedBadge';
@@ -14,32 +13,19 @@ interface MealTypeCardProps {
 
 export const MealTypeCard = ({ mealType, meals, onDeleteMeal }: MealTypeCardProps) => {
   const { t } = useSettings();
-  
-  const getCardClassName = () => {
-    const baseClass = `meal-type-card ${meals.length === 0 ? 'opacity-75' : ''}`;
-    switch (mealType.key) {
-      case 'breakfast':
-        return `${baseClass} breakfast-card`;
-      case 'lunch':
-        return `${baseClass} lunch-card`;
-      case 'dinner':
-        return `${baseClass} dinner-card`;
-      case 'snack':
-        return `${baseClass} snack-card`;
-      default:
-        return baseClass;
-    }
-  };
-  
+
+  // Style is now fully controlled by CSS, just assign mealType.key
+  const cardClass = `meal-type-card ${mealType.key}-card shadow-lg ${meals.length === 0 ? 'opacity-75' : ''}`;
+
   return (
     <div className="w-full">
-      <div className={`${getCardClassName()} h-full`}>
-        <div className={`p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between border-b-2 border-current/20 gap-3`}>
+      <div className={cardClass}>
+        <div className="p-5 flex flex-col sm:flex-row items-center justify-between border-b-2 border-current/20 gap-3">
           <h4 className="heading-enhanced text-base sm:text-lg flex items-center justify-center gap-2 sm:gap-3">
             <span className="text-xl sm:text-2xl" aria-hidden>{mealType.icon}</span>
             <span className="text-center sm:text-left font-bold">{mealType.label}</span>
           </h4>
-          <EnhancedBadge 
+          <EnhancedBadge
             variant={meals.length > 0 ? 'success' : 'default'}
             className="bg-white/60 dark:bg-black/40 backdrop-blur-sm border border-current/30 font-semibold"
           >
@@ -47,7 +33,7 @@ export const MealTypeCard = ({ mealType, meals, onDeleteMeal }: MealTypeCardProp
           </EnhancedBadge>
         </div>
 
-        <div className="p-4 sm:p-5">
+        <div className="p-5">
           {meals.length === 0 ? (
             <p className="text-center text-current/70 dark:text-current/70 py-6 sm:py-8 italic text-sm sm:text-base font-medium">
               {t('noMealsPlanned')} {mealType.label.toLowerCase()}

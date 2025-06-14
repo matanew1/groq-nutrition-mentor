@@ -1,4 +1,3 @@
-
 /* Enhanced UI Styles - Modern Design System */
 @layer components {
   /* Enhanced Glassmorphism Cards */
@@ -172,90 +171,108 @@
     color: rgb(243, 244, 246);
   }
 
-  /* Enhanced Meal Type Cards with Bold Borders */
+  /* Enhanced Meal Type Cards - Vibrant, Bolder, Clearer */
   .meal-type-card {
-    border-width: 3px;
+    border-width: 4px;
     border-style: solid;
-    border-radius: 1.25rem;
+    border-radius: 1.5rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     box-shadow:
-      0 8px 15px -5px rgba(0, 0, 0, 0.15),
-      0 4px 8px -3px rgba(0, 0, 0, 0.1);
+      0 10px 28px -6px rgba(40, 50, 70, 0.20),
+      0 6px 16px -8px rgba(40, 50, 120, 0.07);
     overflow: hidden;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(12px);
+    /* Softer inner shadow for glassy effect */
+    box-shadow:
+      0 10px 28px -6px rgba(40, 50, 70, 0.20),
+      0 6px 16px -8px rgba(40, 50, 120, 0.07),
+      0 0 0 6px rgba(141, 164, 248, 0.08) inset;
   }
 
   .meal-type-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-6px) scale(1.03);
     box-shadow:
-      0 20px 25px -5px rgba(0, 0, 0, 0.2),
-      0 10px 15px -3px rgba(0, 0, 0, 0.15);
-    border-width: 4px;
+      0 18px 38px -4px rgba(40, 50, 70, 0.27),
+      0 12px 30px -8px rgba(40, 50, 120, 0.13),
+      0 0 0 8px rgba(99, 102, 241, 0.16) inset;
+    border-width: 5px;
+    filter: brightness(1.03) saturate(104%);
   }
 
-  /* Breakfast Card Styling */
+  /* Stronger color, clearer gradients for meal types */
   .meal-type-card.breakfast-card {
-    background: linear-gradient(135deg, rgba(255, 243, 191, 0.9) 0%, rgba(255, 237, 167, 0.8) 100%);
-    border-color: rgb(245, 158, 11);
-    color: rgb(146, 64, 14);
+    background: linear-gradient(135deg, #FFF7CC 40%, #FFD966 100%);
+    border-color: #E8B400;
+    color: #975A08;
+    box-shadow:
+      0 10px 24px 0 rgba(255, 229, 118, 0.13),
+      0 1.5px 16px 0 rgba(232, 180, 0, 0.09);
   }
 
   .dark .meal-type-card.breakfast-card {
-    background: linear-gradient(135deg, rgba(120, 53, 15, 0.9) 0%, rgba(146, 64, 14, 0.8) 100%);
-    border-color: rgb(245, 158, 11);
-    color: rgb(251, 191, 36);
+    background: linear-gradient(135deg, #94511d 20%, #655016 100%);
+    border-color: #E8B400;
+    color: #FFE089;
   }
 
-  /* Lunch Card Styling */
   .meal-type-card.lunch-card {
-    background: linear-gradient(135deg, rgba(186, 230, 253, 0.9) 0%, rgba(147, 197, 253, 0.8) 100%);
-    border-color: rgb(59, 130, 246);
-    color: rgb(30, 64, 175);
+    background: linear-gradient(135deg, #C8E6FF 35%, #3399ff 100%);
+    border-color: #2286D3;
+    color: #314C88;
+    box-shadow:
+      0 10px 24px 0 rgba(51, 153, 255, 0.14),
+      0 1.5px 16px 0 rgba(34, 134, 211, 0.08);
   }
 
   .dark .meal-type-card.lunch-card {
-    background: linear-gradient(135deg, rgba(30, 58, 138, 0.9) 0%, rgba(30, 64, 175, 0.8) 100%);
-    border-color: rgb(96, 165, 250);
-    color: rgb(147, 197, 253);
+    background: linear-gradient(135deg, #0B2A48 30%, #1c4972 100%);
+    border-color: #43b0f7;
+    color: #BFE1FF;
   }
 
-  /* Dinner Card Styling */
   .meal-type-card.dinner-card {
-    background: linear-gradient(135deg, rgba(221, 214, 254, 0.9) 0%, rgba(196, 181, 253, 0.8) 100%);
-    border-color: rgb(139, 92, 246);
-    color: rgb(91, 33, 182);
+    background: linear-gradient(135deg, #E1D4FA 50%, #B08DFF 100%);
+    border-color: #7C41F2;
+    color: #501797;
+    box-shadow:
+      0 10px 24px 0 rgba(185, 136, 255, 0.14),
+      0 1.5px 16px 0 rgba(124, 65, 242, 0.10);
   }
 
   .dark .meal-type-card.dinner-card {
-    background: linear-gradient(135deg, rgba(76, 29, 149, 0.9) 0%, rgba(91, 33, 182, 0.8) 100%);
-    border-color: rgb(168, 85, 247);
-    color: rgb(196, 181, 253);
+    background: linear-gradient(135deg, #37195a 5%, #50259b 100%);
+    border-color: #B08DFF;
+    color: #E0CDFC;
   }
 
-  /* Snack Card Styling */
   .meal-type-card.snack-card {
-    background: linear-gradient(135deg, rgba(209, 250, 229, 0.9) 0%, rgba(167, 243, 208, 0.8) 100%);
-    border-color: rgb(34, 197, 94);
-    color: rgb(21, 128, 61);
+    background: linear-gradient(135deg, #C8FFE3 35%, #4AFFA1 100%);
+    border-color: #34D399;
+    color: #179158;
+    box-shadow:
+      0 10px 24px 0 rgba(52, 211, 153, 0.13),
+      0 1.5px 16px 0 rgba(52, 211, 153, 0.08);
   }
 
   .dark .meal-type-card.snack-card {
-    background: linear-gradient(135deg, rgba(20, 83, 45, 0.9) 0%, rgba(21, 128, 61, 0.8) 100%);
-    border-color: rgb(74, 222, 128);
-    color: rgb(167, 243, 208);
+    background: linear-gradient(135deg, #064933 20%, #126641 95%);
+    border-color: #34FFC2;
+    color: #A7F3D0;
   }
 
   .dark .meal-type-card {
     box-shadow:
-      0 8px 15px -5px rgba(0, 0, 0, 0.4),
-      0 4px 8px -3px rgba(0, 0, 0, 0.3);
+      0 8px 20px -4px rgba(60, 70, 90, 0.38),
+      0 4px 10px -6px rgba(56, 189, 248, 0.09),
+      0 0 0 6px rgba(59, 130, 246, 0.10) inset;
   }
 
   .dark .meal-type-card:hover {
     box-shadow:
-      0 20px 25px -5px rgba(0, 0, 0, 0.6),
-      0 10px 15px -3px rgba(0, 0, 0, 0.4);
+      0 22px 42px -6px rgba(60, 70, 90, 0.56),
+      0 12px 30px -8px rgba(34, 211, 238, 0.18),
+      0 0 0 12px rgba(34,136,211,0.18) inset;
   }
 
   /* Enhanced Loading Animation */
