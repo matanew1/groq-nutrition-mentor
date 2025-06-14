@@ -1,0 +1,124 @@
+
+/* RTL (Right-to-Left) support for Hebrew language */
+@layer base {
+  /* Enhanced RTL support for Hebrew */
+  [dir="rtl"] {
+    text-align: right;
+    direction: rtl;
+  }
+  
+  [dir="rtl"] .flex:not(.flex-col) {
+    flex-direction: row-reverse;
+  }
+  
+  [dir="rtl"] .grid {
+    direction: rtl;
+  }
+  
+  [dir="rtl"] .space-x-1 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+    margin-right: calc(0.25rem * var(--tw-space-x-reverse));
+    margin-left: calc(0.25rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+  
+  [dir="rtl"] .space-x-2 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+    margin-right: calc(0.5rem * var(--tw-space-x-reverse));
+    margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+  
+  [dir="rtl"] .space-x-3 > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-x-reverse: 1;
+    margin-right: calc(0.75rem * var(--tw-space-x-reverse));
+    margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
+  }
+  
+  /* RTL for specific components */
+  [dir="rtl"] .justify-end {
+    justify-content: flex-start;
+  }
+  
+  [dir="rtl"] .justify-start {
+    justify-content: flex-end;
+  }
+  
+  [dir="rtl"] .text-left {
+    text-align: right;
+  }
+  
+  [dir="rtl"] .text-right {
+    text-align: left;
+  }
+  
+  /* RTL for margin and padding adjustments */
+  [dir="rtl"] .ml-2 {
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
+  
+  [dir="rtl"] .mr-2 {
+    margin-right: 0;
+    margin-left: 0.5rem;
+  }
+  
+  [dir="rtl"] .ml-3 {
+    margin-left: 0;
+    margin-right: 0.75rem;
+  }
+  
+  [dir="rtl"] .mr-3 {
+    margin-right: 0;
+    margin-left: 0.75rem;
+  }
+  
+  [dir="rtl"] .pl-2 {
+    padding-left: 0;
+    padding-right: 0.5rem;
+  }
+  
+  [dir="rtl"] .pr-2 {
+    padding-right: 0;
+    padding-left: 0.5rem;
+  }
+  
+  /* RTL for chat messages */
+  [dir="rtl"] .space-x-reverse {
+    --tw-space-x-reverse: 1;
+  }
+  
+  [dir="rtl"] .flex-row-reverse {
+    flex-direction: row;
+  }
+  
+  /* RTL for input fields */
+  [dir="rtl"] input[type="text"],
+  [dir="rtl"] textarea,
+  [dir="rtl"] select {
+    text-align: right;
+    direction: rtl;
+  }
+  
+  /* RTL for buttons */
+  [dir="rtl"] button {
+    direction: rtl;
+  }
+  
+  /* Improved card styling for Hebrew */
+  [dir="rtl"] .card {
+    text-align: right;
+  }
+  
+  /* Tab improvements for RTL */
+  [dir="rtl"] .tabs-list {
+    direction: rtl;
+  }
+  
+  /* Calendar RTL support */
+  [dir="rtl"] .calendar {
+    direction: rtl;
+  }
+  
+  [dir="rtl"] .calendar table {
+    direction: rtl;
+  }
+}

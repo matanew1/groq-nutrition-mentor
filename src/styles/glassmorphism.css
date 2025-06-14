@@ -1,0 +1,111 @@
+
+/* Glassmorphism effects and related styles */
+@layer base {
+  /* Glassmorphism card styles */
+  .glass-card {
+    background: linear-gradient(130deg, rgba(255,255,255,0.8) 60%, rgba(192,210,255,0.17) 100%);
+    border-radius: 1.5rem;
+    border: 1.7px solid rgba(255,255,255,0.16);
+    box-shadow: 0 10px 52px 0 rgba(97,160,255,0.15), 0 1.5px 16px 0 rgba(31,38,135,0.12);
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    transition: box-shadow 0.26s, background 0.26s, transform 0.18s;
+    position: relative;
+    overflow: visible;
+  }
+
+  .glass-card-body {
+    background: linear-gradient(135deg, rgba(255,255,255,0.17) 87%,rgba(220,230,255,0.13) 100%);
+    backdrop-filter: blur(3px);
+  }
+
+  /* Fancy shadows and microinteraction for glass elements */
+  .shadow-glass {
+    box-shadow: 0 6px 36px 0 rgba(97,180,255,0.21), 0 2px 8px 0 rgba(32,60,120,0.12);
+  }
+  
+  .shadow-innerGlass {
+    box-shadow: inset 0 2px 11px 0 rgba(84,160,255,0.18), inset 0 1.5px 4px 0 rgba(31,38,135,0.11);
+  }
+
+  .fancy-btn {
+    border-radius: 9999px;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.08rem;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Glassy switches, input fields etc */
+  .glass-switch {
+    background: rgba(255,255,255,0.5);
+    border-radius: 99999px;
+    border: none;
+    box-shadow: 0 1px 6px 0 rgba(60,60,120,0.13);
+    transition: background 0.18s, box-shadow 0.18s;
+  }
+
+  .glass-input {
+    border-radius: 0.75rem;
+    border: 1.5px solid rgba(0,0,0,0.09);
+    background: rgba(255,255,255,0.65);
+    box-shadow: 0 2px 8px 0 rgba(90,120,210,0.06);
+    font-size: 1.04rem;
+  }
+
+  /* Pulse for microinteractions */
+  .pulse {
+    animation: pulse 1.4s cubic-bezier(0.4,0,0.6,1) infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity:1; }
+    50% { opacity: .6;}
+  }
+}
+
+@layer components {
+  .glass-card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.65) 60%, rgba(180,210,255,0.22) 100%);
+    border-radius: 1.2rem;
+    border: 1.5px solid rgba(255,255,255,0.32);
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.19);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    transition: box-shadow 0.2s, background 0.2s;
+  }
+  .glass-card-body {
+    background: linear-gradient(135deg, rgba(255,255,255,0.10) 70%,rgba(220,230,255,0.14) 100%);
+  }
+  .glass-card-dialog {
+    border-radius: 1.2rem !important;
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.11) !important; 
+    backdrop-filter: blur(32px) saturate(250%) !important;
+    background: linear-gradient(120deg, rgba(255,255,255,0.66) 67%,rgba(207,226,255,0.27) 100%) !important;
+  }
+  .glow-action {
+    box-shadow: 0 0 8px 2px rgba(62,180,255,0.11),0 1px 12px 2px rgba(88,200,255,0.15);
+    transition: box-shadow 0.16s, transform 0.15s;
+  }
+  .glass-switch {
+    background: rgba(255,255,255,0.5);
+    border-radius: 99999px;
+    border: none;
+    box-shadow: 0 1px 6px 0 rgba(60,60,120,0.13);
+    transition: background 0.18s, box-shadow 0.18s;
+  }
+  .glass-input {
+    border-radius: 0.75rem;
+    border: 1.5px solid rgba(0,0,0,0.09);
+    background: rgba(255,255,255,0.65);
+    box-shadow: 0 2px 8px 0 rgba(90,120,210,0.06);
+    font-size: 1.04rem;
+  }
+  .fancy-btn {
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 1.03rem;
+    letter-spacing: 0.015em;
+    /* gradient is set inline in button */
+  }
+}
