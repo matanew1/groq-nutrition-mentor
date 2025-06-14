@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Apple, Heart, Zap } from 'lucide-react';
+import { Send, Bot, User, Apple, Heart, Zap, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -151,28 +151,27 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
-      {/* Header */}
+      {/* Header - Mobile Optimized */}
       <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-green-100 dark:border-gray-700 sticky top-0 z-10 transition-colors duration-300">
-        <div className="max-w-4xl mx-auto px-4 py-4">
-          <div className="flex items-center space-x-3">
-            <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full">
-              <Apple className="h-6 w-6 text-white" />
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex items-center space-x-2 sm:space-x-3">
+            <div className="p-1.5 sm:p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full">
+              <Apple className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
             </div>
-            <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent truncate">
                 NutriMentor AI
               </h1>
-              <p className="text-sm text-gray-600 dark:text-gray-300">Your Personal Nutrition Assistant</p>
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 hidden sm:block">Your Personal Nutrition Assistant</p>
             </div>
-            <div className="flex-1" />
-            <div className="flex items-center space-x-2">
-              <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700">
-                <Heart className="h-3 w-3 mr-1" />
-                Health
+            <div className="flex items-center space-x-1 sm:space-x-2">
+              <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700 text-xs px-1.5 py-0.5 sm:px-2 sm:py-1">
+                <Heart className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-0.5 sm:mr-1" />
+                <span className="hidden sm:inline">Health</span>
               </Badge>
-              <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700">
-                <Zap className="h-3 w-3 mr-1" />
-                AI Powered
+              <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700 text-xs px-1.5 py-0.5 sm:px-2 sm:py-1">
+                <Zap className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-0.5 sm:mr-1" />
+                <span className="hidden sm:inline">AI</span>
               </Badge>
               <DarkModeToggle isDark={isDarkMode} onToggle={() => setIsDarkMode(!isDarkMode)} />
             </div>
@@ -180,59 +179,59 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Chat Container */}
-      <div className="max-w-4xl mx-auto p-4 h-[calc(100vh-120px)] flex flex-col">
+      {/* Chat Container - Mobile Optimized */}
+      <div className="max-w-4xl mx-auto p-2 sm:p-4 h-[calc(100vh-80px)] sm:h-[calc(100vh-120px)] flex flex-col">
         {/* Messages */}
-        <Card className="flex-1 mb-4 border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-colors duration-300">
-          <ScrollArea className="h-full p-4">
-            <div className="space-y-4">
+        <Card className="flex-1 mb-2 sm:mb-4 border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-colors duration-300">
+          <ScrollArea className="h-full p-2 sm:p-4">
+            <div className="space-y-3 sm:space-y-4">
               {messages.map((message) => (
                 <div
                   key={message.id}
                   className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div
-                    className={`flex items-start space-x-2 max-w-[80%] ${
+                    className={`flex items-start space-x-2 max-w-[85%] sm:max-w-[80%] ${
                       message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''
                     }`}
                   >
                     <div
-                      className={`p-2 rounded-full shadow-lg ${
+                      className={`p-1.5 sm:p-2 rounded-full shadow-lg flex-shrink-0 ${
                         message.sender === 'user'
                           ? 'bg-gradient-to-r from-blue-500 to-purple-500'
                           : 'bg-gradient-to-r from-green-500 to-blue-500'
                       }`}
                     >
                       {message.sender === 'user' ? (
-                        <User className="h-4 w-4 text-white" />
+                        <User className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                       ) : (
-                        <Bot className="h-4 w-4 text-white" />
+                        <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                       )}
                     </div>
                     <div
-                      className={`p-4 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
+                      className={`p-3 sm:p-4 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
                         message.sender === 'user'
                           ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
                           : 'bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100'
                       } ${isHebrew(message.content) ? 'text-right' : 'text-left'}`}
                       dir={isHebrew(message.content) ? 'rtl' : 'ltr'}
                     >
-                      <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium">
+                      <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium break-words">
                         {message.content}
                       </p>
                       {message.nutritionData && message.nutritionData.foods && (
-                        <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
-                          <h4 className="font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center">
+                        <div className="mt-3 p-2 sm:p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
+                          <h4 className="font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center text-sm">
                             🍎 Nutrition Facts
                           </h4>
                           {message.nutritionData.foods.slice(0, 1).map((food: any, index: number) => (
-                            <div key={index} className="text-sm text-green-700 dark:text-green-300">
+                            <div key={index} className="text-xs sm:text-sm text-green-700 dark:text-green-300">
                               <p className="font-medium">{food.food_name}</p>
-                              <div className="grid grid-cols-2 gap-2 mt-1">
-                                <span>🔥 Calories: {Math.round(food.nf_calories)}</span>
-                                <span>💪 Protein: {Math.round(food.nf_protein)}g</span>
-                                <span>🌾 Carbs: {Math.round(food.nf_total_carbohydrate)}g</span>
-                                <span>🧈 Fat: {Math.round(food.nf_total_fat)}g</span>
+                              <div className="grid grid-cols-2 gap-1 sm:gap-2 mt-1">
+                                <span>🔥 {Math.round(food.nf_calories)} cal</span>
+                                <span>💪 {Math.round(food.nf_protein)}g protein</span>
+                                <span>🌾 {Math.round(food.nf_total_carbohydrate)}g carbs</span>
+                                <span>🧈 {Math.round(food.nf_total_fat)}g fat</span>
                               </div>
                             </div>
                           ))}
@@ -248,8 +247,8 @@ const Index = () => {
               {isLoading && (
                 <div className="flex justify-start">
                   <div className="flex items-start space-x-2">
-                    <div className="p-2 rounded-full bg-gradient-to-r from-green-500 to-blue-500 shadow-lg">
-                      <Bot className="h-4 w-4 text-white" />
+                    <div className="p-1.5 sm:p-2 rounded-full bg-gradient-to-r from-green-500 to-blue-500 shadow-lg">
+                      <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                     </div>
                     <div className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-3 rounded-xl shadow-md">
                       <div className="flex space-x-1">
@@ -266,29 +265,30 @@ const Index = () => {
           </ScrollArea>
         </Card>
 
-        {/* Input */}
+        {/* Input - Mobile Optimized */}
         <Card className="border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-colors duration-300">
-          <div className="p-4">
+          <div className="p-2 sm:p-4">
             <div className="flex space-x-2">
               <Input
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Ask about nutrition, calories, meal planning, or healthy recipes... / שאל על תזונה, קלוריות, תכנון ארוחות..."
-                className="flex-1 border-gray-200 dark:border-gray-600 focus:border-green-400 focus:ring-green-400 dark:bg-gray-700 dark:text-white transition-colors duration-200"
+                placeholder="Ask about nutrition, calories, meal planning..."
+                className="flex-1 border-gray-200 dark:border-gray-600 focus:border-green-400 focus:ring-green-400 dark:bg-gray-700 dark:text-white transition-colors duration-200 text-sm sm:text-base"
                 disabled={isLoading}
                 dir={isHebrew(inputValue) ? 'rtl' : 'ltr'}
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || isLoading}
-                className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200"
+                className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 px-3 sm:px-4 min-w-[44px] h-10 sm:h-11"
               >
                 <Send className="h-4 w-4" />
               </Button>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-              Try asking: "What's the nutrition in 1 cup of rice?" or "Give me a healthy breakfast idea" | נסה לשאול: "מה התזונה בכוס אורז?" או "תן לי רעיון לארוחת בוקר בריאה"
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 px-1">
+              <span className="sm:hidden">Ask about nutrition, calories, or healthy recipes</span>
+              <span className="hidden sm:inline">Try asking: "What's the nutrition in 1 cup of rice?" or "Give me a healthy breakfast idea" | נסה לשאול: "מה התזונה בכוס אורז?" או "תן לי רעיון לארוחת בוקר בריאה"</span>
             </p>
           </div>
         </Card>
