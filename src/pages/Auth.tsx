@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -94,18 +93,18 @@ const Auth = () => {
   };
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4 ${isRTL ? 'font-hebrew' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
-      <Card className="w-full max-w-md p-6 space-y-6 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm">
+    <div className={`min-h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 dark:from-gray-900 dark:via-slate-800 dark:to-gray-900 flex items-center justify-center p-4 ${isRTL ? 'font-hebrew' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+      <Card className="w-full max-w-md p-6 space-y-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50">
         <div className="text-center space-y-2">
           <div className="flex justify-center">
-            <div className="p-3 bg-gradient-to-r from-green-500 to-blue-500 rounded-full">
+            <div className="p-3 bg-gradient-to-r from-slate-400 to-gray-500 rounded-full">
               <Apple className="h-8 w-8 text-white" />
             </div>
           </div>
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+          <h1 className="text-2xl font-bold bg-gradient-to-r from-slate-600 to-gray-700 bg-clip-text text-transparent">
             {isSignUp ? t('createAccount') : t('welcomeBack')}
           </h1>
-          <p className="text-gray-600 dark:text-gray-300">
+          <p className="text-gray-500 dark:text-gray-400">
             {isSignUp ? t('joinNutriMentor') : t('signInToNutrition')}
           </p>
         </div>
@@ -114,7 +113,7 @@ const Auth = () => {
           <Button
             onClick={handleGoogleAuth}
             disabled={loading}
-            className="w-full bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 shadow-sm"
+            className="w-full bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 shadow-sm"
             variant="outline"
           >
             <svg className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} viewBox="0 0 24 24">
@@ -129,7 +128,7 @@ const Auth = () => {
           <Button
             onClick={handleGitHubAuth}
             disabled={loading}
-            className="w-full bg-gray-900 hover:bg-gray-800 text-white"
+            className="w-full bg-gray-700 hover:bg-gray-600 text-white"
           >
             <Github className={`w-5 h-5 ${isRTL ? 'ml-2' : 'mr-2'}`} />
             {t('continueWithGitHub')}
@@ -138,10 +137,10 @@ const Auth = () => {
 
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t border-gray-300 dark:border-gray-600" />
+            <span className="w-full border-t border-gray-200 dark:border-gray-600" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white dark:bg-gray-800 px-2 text-gray-500">{t('continueWithEmail')}</span>
+            <span className="bg-white dark:bg-gray-800 px-2 text-gray-400">{t('continueWithEmail')}</span>
           </div>
         </div>
 
@@ -153,7 +152,7 @@ const Auth = () => {
                 placeholder={t('fullName')}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full"
+                className="w-full border-gray-200 dark:border-gray-600 focus:border-slate-400 focus:ring-slate-400"
                 dir={isRTL ? 'rtl' : 'ltr'}
               />
             </div>
@@ -166,7 +165,7 @@ const Auth = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full"
+              className="w-full border-gray-200 dark:border-gray-600 focus:border-slate-400 focus:ring-slate-400"
               dir={isRTL ? 'rtl' : 'ltr'}
             />
           </div>
@@ -178,7 +177,7 @@ const Auth = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full pr-10"
+              className="w-full pr-10 border-gray-200 dark:border-gray-600 focus:border-slate-400 focus:ring-slate-400"
               dir={isRTL ? 'rtl' : 'ltr'}
             />
             <button
@@ -197,7 +196,7 @@ const Auth = () => {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
+            className="w-full bg-gradient-to-r from-slate-500 to-gray-600 hover:from-slate-600 hover:to-gray-700"
           >
             <Mail className={`w-4 h-4 ${isRTL ? 'ml-2' : 'mr-2'}`} />
             {loading ? t('pleaseWait') : (isSignUp ? t('createAccount') : t('signIn'))}
@@ -208,7 +207,7 @@ const Auth = () => {
           <button
             type="button"
             onClick={() => setIsSignUp(!isSignUp)}
-            className="text-sm text-blue-600 hover:text-blue-500"
+            className="text-sm text-slate-600 hover:text-slate-500"
           >
             {isSignUp ? t('alreadyHaveAccount') : t('dontHaveAccount')}
           </button>
