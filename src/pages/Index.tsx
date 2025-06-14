@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Utensils } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -202,12 +201,10 @@ const Index = () => {
             />
           </TabsContent>
 
-          <TabsContent value="meals" className="flex-1 min-h-0">
-            <EnhancedCard className="h-full overflow-y-auto">
-              <EnhancedCardContent className="p-2 sm:p-6">
-                <MealPlannerTab />
-              </EnhancedCardContent>
-            </EnhancedCard>
+          <TabsContent value="meals" className="flex-1 min-h-0 overflow-y-auto">
+            <div className="p-2 sm:p-6">
+              <MealPlannerTab />
+            </div>
           </TabsContent>
         </Tabs>
       </div>

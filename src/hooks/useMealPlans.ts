@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+
+import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -13,7 +14,7 @@ export const useMealPlans = () => {
   const { user } = useAuth();
   const { toast } = useToast();
 
-  const loadMealPlans = async (date: string) => {
+  const loadMealPlans = useCallback(async (date: string) => {
     if (!user) return;
 
     setLoading(true);
@@ -51,9 +52,9 @@ export const useMealPlans = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, toast]);
 
-  const addMealPlan = async (mealPlan: Omit<MealPlan, 'id'>) => {
+  const addMealPlan = useCallback(async (mealPlan: Omit<MealPlan, 'id'>) => {
     if (!user) return;
 
     setAddingMeal(true);
@@ -142,9 +143,9 @@ export const useMealPlans = () => {
     } finally {
       setAddingMeal(false);
     }
-  };
+  }, [user, toast]);
 
-  const deleteMealPlan = async (id: string, date: string) => {
+  const deleteMealPlan = useCallback(async (id: string, date: string) => {
     if (!user) return;
 
     try {
@@ -173,7 +174,7 @@ export const useMealPlans = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [user, toast]);
 
   return {
     mealPlans,
