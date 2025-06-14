@@ -2,93 +2,86 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
-
+/* --- Enhanced design system --- */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 224 100% 98%;
+    --foreground: 232 26% 12%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 225 70% 99%;
+    --card-foreground: 232 28% 12%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 225 90% 99%;
+    --popover-foreground: 222 40% 5%;
 
-    --primary: 222.2 47.4% 11.2%;
+    --primary: 240 88% 61%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 216 80% 92%;
+    --secondary-foreground: 230 24% 22%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 215 40% 93%;
+    --muted-foreground: 218 17% 56%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 296 80% 96%;
+    --accent-foreground: 250 22% 24%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 84% 68%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 220 18% 90%;
+    --input: 220 18% 85%;
+    --ring: 240 100% 80%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 240 15% 96%;
+    --sidebar-foreground: 225 8% 26%;
+    --sidebar-primary: 242 52% 41%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 272 48% 98%;
+    --sidebar-accent-foreground: 242 32% 44%;
+    --sidebar-border: 220 12% 92%;
+    --sidebar-ring: 246 87% 71%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 236 40% 12%;
+    --foreground: 220 40% 95%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 236 38% 13%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 234 34% 15%;
+    --popover-foreground: 220 48% 97%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 210 74% 63%;
+    --primary-foreground: 220 40% 12%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 234 24% 24%;
+    --secondary-foreground: 220 40% 90%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 222 30% 17%;
+    --muted-foreground: 215 24% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 294 51% 19%;
+    --accent-foreground: 220 65% 90%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 61% 40%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
+    --border: 236 34% 18%;
+    --input: 237 30% 22%;
+    --ring: 219 40% 65%;
+
+    --sidebar-background: 238 22% 15%;
+    --sidebar-foreground: 217 82% 79%;
+    --sidebar-primary: 214 79% 42%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 277 17% 31%;
+    --sidebar-accent-foreground: 232 63% 71%;
+    --sidebar-border: 234 19% 17%;
+    --sidebar-ring: 217 60% 58%;
   }
 }
 
@@ -233,6 +226,113 @@
   
   [dir="rtl"] .calendar table {
     direction: rtl;
+  }
+  body {
+    @apply bg-background text-foreground font-inter leading-relaxed;
+    font-size: 1.09rem;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.5rem; }
+  h4 { font-size: 1.1rem; }
+  .glass-card {
+    background: linear-gradient(130deg, rgba(255,255,255,0.8) 60%, rgba(192,210,255,0.17) 100%);
+    border-radius: 1.5rem;
+    border: 1.7px solid rgba(255,255,255,0.16);
+    box-shadow: 0 10px 52px 0 rgba(97,160,255,0.15), 0 1.5px 16px 0 rgba(31,38,135,0.12);
+    backdrop-filter: blur(22px) saturate(180%);
+    -webkit-backdrop-filter: blur(22px) saturate(180%);
+    transition: box-shadow 0.26s, background 0.26s, transform 0.18s;
+    position: relative;
+    overflow: visible;
+  }
+  .glass-card-body {
+    background: linear-gradient(135deg, rgba(255,255,255,0.17) 87%,rgba(220,230,255,0.13) 100%);
+    backdrop-filter: blur(3px);
+  }
+
+  /* Fancy shadows and microinteraction for glass elements */
+  .shadow-glass {
+    box-shadow: 0 6px 36px 0 rgba(97,180,255,0.21), 0 2px 8px 0 rgba(32,60,120,0.12);
+  }
+  .shadow-innerGlass {
+    box-shadow: inset 0 2px 11px 0 rgba(84,160,255,0.18), inset 0 1.5px 4px 0 rgba(31,38,135,0.11);
+  }
+  .fancy-btn {
+    border-radius: 9999px;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.08rem;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+  }
+  /* Glassy switches, input fields etc */
+  .glass-switch {
+    background: rgba(255,255,255,0.5);
+    border-radius: 99999px;
+    border: none;
+    box-shadow: 0 1px 6px 0 rgba(60,60,120,0.13);
+    transition: background 0.18s, box-shadow 0.18s;
+  }
+  .glass-input {
+    border-radius: 0.75rem;
+    border: 1.5px solid rgba(0,0,0,0.09);
+    background: rgba(255,255,255,0.65);
+    box-shadow: 0 2px 8px 0 rgba(90,120,210,0.06);
+    font-size: 1.04rem;
+  }
+
+  /* Animate float blob left/right for glass glow */
+  @keyframes floatBlob {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-18px) scale(1.1); }
+  }
+  @keyframes floatBlobReverse {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(14px) scale(1.06); }
+  }
+  .animate-floatBlob { animation: floatBlob 4.5s ease-in-out infinite; }
+  .animate-floatBlobReverse { animation: floatBlobReverse 4.2s ease-in-out infinite; }
+
+  @keyframes glassReflect {
+    0%, 90%, 100% { opacity: 0.65; left: 10px; }
+    40% { opacity: 1; left: 80px; }
+    70% { opacity: 0.35; left: 28px; }
+  }
+  .animate-glassReflect { animation: glassReflect 3.7s ease-in-out infinite; }
+
+  /* rest of your existing and new animation rules */
+  /* Animations */
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-7deg);}
+    50% { transform: rotate(7deg);}
+  }
+  .animate-wiggle { animation: wiggle 0.8s cubic-bezier(0.16,0.7,0.58,1.0); }
+  .animate-fade-in { animation: fade-in 0.29s cubic-bezier(0.4,0,0.6,1) both;}
+  .animate-fade-in-up {
+    animation: fade-in-up 0.35s cubic-bezier(0.34,0.66,0.62,1.05) both;
+  }
+  @keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(30px);}
+    100% { opacity: 1; transform: translateY(0);}
+  }
+  @keyframes spin-slow {
+    from { transform: rotate(0deg);}
+    to { transform: rotate(360deg);}
+  }
+  .animate-spin-slow { animation: spin-slow 2.5s linear infinite;}
+  /* Pulse for microinteractions */
+  .pulse {
+    animation: pulse 1.4s cubic-bezier(0.4,0,0.6,1) infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity:1; }
+    50% { opacity: .6;}
   }
 }
 
