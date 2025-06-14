@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -91,7 +92,9 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground leading-relaxed;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.09rem;
   }
 
   /* Hebrew font support */
@@ -227,10 +230,7 @@
   [dir="rtl"] .calendar table {
     direction: rtl;
   }
-  body {
-    @apply bg-background text-foreground font-inter leading-relaxed;
-    font-size: 1.09rem;
-  }
+
   h1, h2, h3, h4 {
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
     font-weight: 700;
@@ -240,6 +240,8 @@
   h2 { font-size: 2rem; }
   h3 { font-size: 1.5rem; }
   h4 { font-size: 1.1rem; }
+
+  /* Glassmorphism card styles */
   .glass-card {
     background: linear-gradient(130deg, rgba(255,255,255,0.8) 60%, rgba(192,210,255,0.17) 100%);
     border-radius: 1.5rem;
@@ -251,6 +253,7 @@
     position: relative;
     overflow: visible;
   }
+
   .glass-card-body {
     background: linear-gradient(135deg, rgba(255,255,255,0.17) 87%,rgba(220,230,255,0.13) 100%);
     backdrop-filter: blur(3px);
@@ -260,9 +263,11 @@
   .shadow-glass {
     box-shadow: 0 6px 36px 0 rgba(97,180,255,0.21), 0 2px 8px 0 rgba(32,60,120,0.12);
   }
+  
   .shadow-innerGlass {
     box-shadow: inset 0 2px 11px 0 rgba(84,160,255,0.18), inset 0 1.5px 4px 0 rgba(31,38,135,0.11);
   }
+
   .fancy-btn {
     border-radius: 9999px;
     font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
@@ -271,6 +276,7 @@
     position: relative;
     overflow: hidden;
   }
+
   /* Glassy switches, input fields etc */
   .glass-switch {
     background: rgba(255,255,255,0.5);
@@ -279,6 +285,7 @@
     box-shadow: 0 1px 6px 0 rgba(60,60,120,0.13);
     transition: background 0.18s, box-shadow 0.18s;
   }
+
   .glass-input {
     border-radius: 0.75rem;
     border: 1.5px solid rgba(0,0,0,0.09);
@@ -306,7 +313,6 @@
   }
   .animate-glassReflect { animation: glassReflect 3.7s ease-in-out infinite; }
 
-  /* rest of your existing and new animation rules */
   /* Animations */
   @keyframes wiggle {
     0%, 100% { transform: rotate(-7deg);}
@@ -316,6 +322,10 @@
   .animate-fade-in { animation: fade-in 0.29s cubic-bezier(0.4,0,0.6,1) both;}
   .animate-fade-in-up {
     animation: fade-in-up 0.35s cubic-bezier(0.34,0.66,0.62,1.05) both;
+  }
+  @keyframes fade-in {
+    0% { opacity: 0;}
+    100% { opacity: 1;}
   }
   @keyframes fade-in-up {
     0% { opacity: 0; transform: translateY(30px);}
