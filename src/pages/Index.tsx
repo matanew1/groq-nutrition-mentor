@@ -31,14 +31,25 @@ const Index = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  // Apply dark mode to document
+  // Check if current language is Hebrew for RTL layout
+  const isRTL = language === 'he';
+
+  // Apply dark mode and RTL direction to document
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
-  }, [isDarkMode]);
+    
+    // Set document direction based on language
+    document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+    if (isRTL) {
+      document.documentElement.classList.add('font-hebrew');
+    } else {
+      document.documentElement.classList.remove('font-hebrew');
+    }
+  }, [isDarkMode, isRTL]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -183,11 +194,11 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300">
-      {/* Header - Mobile Optimized */}
+    <div className={`min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300 ${isRTL ? 'hebrew-text' : ''}`}>
+      {/* Header - Mobile Optimized with RTL support */}
       <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-green-100 dark:border-gray-700 sticky top-0 z-10 transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-          <div className="flex items-center space-x-2 sm:space-x-3">
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 sm:space-x-3`}>
             <div className="p-1.5 sm:p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full">
               <Apple className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
             </div>
@@ -197,13 +208,13 @@ const Index = () => {
               </h1>
               <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 hidden sm:block">{t('subtitle')}</p>
             </div>
-            <div className="flex items-center space-x-1 sm:space-x-2">
+            <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2`}>
               <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700 text-xs px-1.5 py-0.5 sm:px-2 sm:py-1">
-                <Heart className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-0.5 sm:mr-1" />
+                <Heart className={`h-2.5 w-2.5 sm:h-3 sm:w-3 ${isRTL ? 'ml-0.5 sm:ml-1' : 'mr-0.5 sm:mr-1'}`} />
                 <span className="hidden sm:inline">Health</span>
               </Badge>
               <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700 text-xs px-1.5 py-0.5 sm:px-2 sm:py-1">
-                <Zap className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-0.5 sm:mr-1" />
+                <Zap className={`h-2.5 w-2.5 sm:h-3 sm:w-3 ${isRTL ? 'ml-0.5 sm:ml-1' : 'mr-0.5 sm:mr-1'}`} />
                 <span className="hidden sm:inline">AI</span>
               </Badge>
               
@@ -212,7 +223,7 @@ const Index = () => {
               <SettingsDialog />
               
               {user ? (
-                <div className="flex items-center space-x-1">
+                <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1`}>
                   {userName && (
                     <span className="text-sm text-gray-600 dark:text-gray-300 hidden sm:inline">
                       {t('welcome')}, {userName}
@@ -256,11 +267,11 @@ const Index = () => {
       <div className="max-w-6xl mx-auto p-2 sm:p-4 h-[calc(100vh-80px)] sm:h-[calc(100vh-120px)]">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
           <TabsList className="grid w-full grid-cols-2 mb-4">
-            <TabsTrigger value="chat" className="flex items-center space-x-2">
+            <TabsTrigger value="chat" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
               <Bot className="h-4 w-4" />
               <span>{t('chat')}</span>
             </TabsTrigger>
-            <TabsTrigger value="meals" className="flex items-center space-x-2">
+            <TabsTrigger value="meals" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
               <Utensils className="h-4 w-4" />
               <span>{t('meals')}</span>
             </TabsTrigger>
@@ -271,68 +282,76 @@ const Index = () => {
             <Card className="flex-1 border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-colors duration-300">
               <ScrollArea className="h-full p-2 sm:p-4">
                 <div className="space-y-3 sm:space-y-4">
-                  {messages.map((message) => (
-                    <div
-                      key={message.id}
-                      className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                    >
+                  {messages.map((message) => {
+                    const messageIsHebrew = isHebrew(message.content);
+                    return (
                       <div
-                        className={`flex items-start space-x-2 max-w-[85%] sm:max-w-[80%] ${
-                          message.sender === 'user' ? 'flex-row-reverse space-x-reverse' : ''
+                        key={message.id}
+                        className={`flex ${message.sender === 'user' ? 
+                          (messageIsHebrew || isRTL ? 'justify-start' : 'justify-end') : 
+                          (messageIsHebrew || isRTL ? 'justify-end' : 'justify-start')
                         }`}
                       >
                         <div
-                          className={`p-1.5 sm:p-2 rounded-full shadow-lg flex-shrink-0 ${
-                            message.sender === 'user'
-                              ? 'bg-gradient-to-r from-blue-500 to-purple-500'
-                              : 'bg-gradient-to-r from-green-500 to-blue-500'
+                          className={`flex items-start space-x-2 max-w-[85%] sm:max-w-[80%] ${
+                            message.sender === 'user' ? 
+                              (messageIsHebrew || isRTL ? 'flex-row space-x-2' : 'flex-row-reverse space-x-reverse') : 
+                              (messageIsHebrew || isRTL ? 'flex-row-reverse space-x-reverse' : 'flex-row space-x-2')
                           }`}
                         >
-                          {message.sender === 'user' ? (
-                            <User className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
-                          ) : (
-                            <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
-                          )}
-                        </div>
-                        <div
-                          className={`p-3 sm:p-4 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
-                            message.sender === 'user'
-                              ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
-                              : 'bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100'
-                          } ${isHebrew(message.content) ? 'text-right' : 'text-left'}`}
-                          dir={isHebrew(message.content) ? 'rtl' : 'ltr'}
-                        >
-                          <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium break-words">
-                            {message.content}
-                          </p>
-                          {message.nutritionData && message.nutritionData.foods && (
-                            <div className="mt-3 p-2 sm:p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
-                              <h4 className="font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center text-sm">
-                                🍎 {t('nutritionFacts')}
-                              </h4>
-                              {message.nutritionData.foods.slice(0, 1).map((food: any, index: number) => (
-                                <div key={index} className="text-xs sm:text-sm text-green-700 dark:text-green-300">
-                                  <p className="font-medium">{food.food_name}</p>
-                                  <div className="grid grid-cols-2 gap-1 sm:gap-2 mt-1">
-                                    <span>🔥 {Math.round(food.nf_calories)} {t('calories')}</span>
-                                    <span>💪 {Math.round(food.nf_protein)}g {t('protein')}</span>
-                                    <span>🌾 {Math.round(food.nf_total_carbohydrate)}g {t('carbs')}</span>
-                                    <span>🧈 {Math.round(food.nf_total_fat)}g {t('fat')}</span>
+                          <div
+                            className={`p-1.5 sm:p-2 rounded-full shadow-lg flex-shrink-0 ${
+                              message.sender === 'user'
+                                ? 'bg-gradient-to-r from-blue-500 to-purple-500'
+                                : 'bg-gradient-to-r from-green-500 to-blue-500'
+                            }`}
+                          >
+                            {message.sender === 'user' ? (
+                              <User className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                            ) : (
+                              <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                            )}
+                          </div>
+                          <div
+                            className={`p-3 sm:p-4 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
+                              message.sender === 'user'
+                                ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
+                                : 'bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100'
+                            } ${messageIsHebrew ? 'text-right' : 'text-left'}`}
+                            dir={messageIsHebrew ? 'rtl' : 'ltr'}
+                          >
+                            <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium break-words">
+                              {message.content}
+                            </p>
+                            {message.nutritionData && message.nutritionData.foods && (
+                              <div className="mt-3 p-2 sm:p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
+                                <h4 className={`font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center text-sm ${messageIsHebrew ? 'text-right' : 'text-left'}`}>
+                                  🍎 {t('nutritionFacts')}
+                                </h4>
+                                {message.nutritionData.foods.slice(0, 1).map((food: any, index: number) => (
+                                  <div key={index} className="text-xs sm:text-sm text-green-700 dark:text-green-300">
+                                    <p className="font-medium">{food.food_name}</p>
+                                    <div className="grid grid-cols-2 gap-1 sm:gap-2 mt-1">
+                                      <span>🔥 {Math.round(food.nf_calories)} {t('calories')}</span>
+                                      <span>💪 {Math.round(food.nf_protein)}g {t('protein')}</span>
+                                      <span>🌾 {Math.round(food.nf_total_carbohydrate)}g {t('carbs')}</span>
+                                      <span>🧈 {Math.round(food.nf_total_fat)}g {t('fat')}</span>
+                                    </div>
                                   </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                          <p className="text-xs opacity-60 mt-2">
-                            {formatTime(message.timestamp)}
-                          </p>
+                                ))}
+                              </div>
+                            )}
+                            <p className={`text-xs opacity-60 mt-2 ${messageIsHebrew ? 'text-left' : 'text-right'}`}>
+                              {formatTime(message.timestamp)}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                   {isLoading && (
-                    <div className="flex justify-start">
-                      <div className="flex items-start space-x-2">
+                    <div className={`flex ${isRTL ? 'justify-end' : 'justify-start'}`}>
+                      <div className={`flex items-start ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
                         <div className="p-1.5 sm:p-2 rounded-full bg-gradient-to-r from-green-500 to-blue-500 shadow-lg">
                           <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
                         </div>
@@ -354,7 +373,7 @@ const Index = () => {
             {/* Chat Input */}
             <Card className="border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-colors duration-300">
               <div className="p-2 sm:p-4">
-                <div className="flex space-x-2">
+                <div className={`flex ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
                   <Input
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
@@ -362,7 +381,7 @@ const Index = () => {
                     placeholder={t('typeMessage')}
                     className="flex-1 border-gray-200 dark:border-gray-600 focus:border-green-400 focus:ring-green-400 dark:bg-gray-700 dark:text-white transition-colors duration-200 text-sm sm:text-base"
                     disabled={isLoading}
-                    dir={isHebrew(inputValue) ? 'rtl' : 'ltr'}
+                    dir={isHebrew(inputValue) || isRTL ? 'rtl' : 'ltr'}
                   />
                   <Button
                     onClick={handleSendMessage}
