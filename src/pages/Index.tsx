@@ -34,6 +34,19 @@ const Index = () => {
   // Check if current language is Hebrew for RTL layout
   const isRTL = language === 'he';
 
+  // Helper to determine direction per message
+  const getDirection = (text: string) => (isHebrew(text) ? 'rtl' : 'ltr');
+  const getAlignment = (text: string, sender: 'user' | 'bot') => {
+    // user: align left for LTR/English, align right for RTL/Hebrew
+    // bot: align right for LTR/English, align left for RTL/Hebrew
+    const isHebrewMsg = isHebrew(text);
+    if (sender === 'user') {
+      return isHebrewMsg ? 'justify-end' : 'justify-start';
+    } else {
+      return isHebrewMsg ? 'justify-start' : 'justify-end';
+    }
+  };
+
   // Apply dark mode and RTL direction to document
   useEffect(() => {
     if (isDarkMode) {
@@ -283,20 +296,19 @@ const Index = () => {
               <ScrollArea className="h-full p-2 sm:p-4">
                 <div className="space-y-3 sm:space-y-4">
                   {messages.map((message) => {
-                    const messageIsHebrew = isHebrew(message.content);
+                    const direction = getDirection(message.content);
+                    const alignment = getAlignment(message.content, message.sender);
                     return (
                       <div
                         key={message.id}
-                        className={`flex ${message.sender === 'user' ? 
-                          (messageIsHebrew || isRTL ? 'justify-start' : 'justify-end') : 
-                          (messageIsHebrew || isRTL ? 'justify-end' : 'justify-start')
-                        }`}
+                        className={`flex ${alignment}`}
+                        dir={direction}
                       >
                         <div
                           className={`flex items-start space-x-2 max-w-[85%] sm:max-w-[80%] ${
-                            message.sender === 'user' ? 
-                              (messageIsHebrew || isRTL ? 'flex-row space-x-2' : 'flex-row-reverse space-x-reverse') : 
-                              (messageIsHebrew || isRTL ? 'flex-row-reverse space-x-reverse' : 'flex-row space-x-2')
+                            message.sender === 'user'
+                              ? (direction === 'rtl' ? 'flex-row-reverse space-x-reverse' : 'flex-row space-x-2')
+                              : (direction === 'rtl' ? 'flex-row space-x-2' : 'flex-row-reverse space-x-reverse')
                           }`}
                         >
                           <div
@@ -317,15 +329,15 @@ const Index = () => {
                               message.sender === 'user'
                                 ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
                                 : 'bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100'
-                            } ${messageIsHebrew ? 'text-right' : 'text-left'}`}
-                            dir={messageIsHebrew ? 'rtl' : 'ltr'}
+                            } ${direction === 'rtl' ? 'text-right' : 'text-left'}`}
+                            dir={direction}
                           >
                             <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium break-words">
                               {message.content}
                             </p>
                             {message.nutritionData && message.nutritionData.foods && (
-                              <div className="mt-3 p-2 sm:p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
-                                <h4 className={`font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center text-sm ${messageIsHebrew ? 'text-right' : 'text-left'}`}>
+                              <div className="mt-3 p-2 sm:p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700" dir={direction}>
+                                <h4 className={`font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center text-sm ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
                                   🍎 {t('nutritionFacts')}
                                 </h4>
                                 {message.nutritionData.foods.slice(0, 1).map((food: any, index: number) => (
@@ -341,7 +353,7 @@ const Index = () => {
                                 ))}
                               </div>
                             )}
-                            <p className={`text-xs opacity-60 mt-2 ${messageIsHebrew ? 'text-left' : 'text-right'}`}>
+                            <p className={`text-xs opacity-60 mt-2 ${direction === 'rtl' ? 'text-left' : 'text-right'}`}>
                               {formatTime(message.timestamp)}
                             </p>
                           </div>
@@ -350,7 +362,7 @@ const Index = () => {
                     );
                   })}
                   {isLoading && (
-                    <div className={`flex ${isRTL ? 'justify-end' : 'justify-start'}`}>
+                    <div className={`flex ${isRTL ? 'justify-end' : 'justify-start'}`} dir={isRTL ? 'rtl' : 'ltr'}>
                       <div className={`flex items-start ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
                         <div className="p-1.5 sm:p-2 rounded-full bg-gradient-to-r from-green-500 to-blue-500 shadow-lg">
                           <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
@@ -381,7 +393,7 @@ const Index = () => {
                     placeholder={t('typeMessage')}
                     className="flex-1 border-gray-200 dark:border-gray-600 focus:border-green-400 focus:ring-green-400 dark:bg-gray-700 dark:text-white transition-colors duration-200 text-sm sm:text-base"
                     disabled={isLoading}
-                    dir={isHebrew(inputValue) || isRTL ? 'rtl' : 'ltr'}
+                    dir={isHebrew(inputValue) ? 'rtl' : 'ltr'}
                   />
                   <Button
                     onClick={handleSendMessage}
