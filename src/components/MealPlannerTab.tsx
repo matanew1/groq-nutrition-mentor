@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -34,6 +33,21 @@ const MealPlannerTab = () => {
       loadMealPlans(dateKey);
     }
   }, [user, dateKey]);
+
+  const formatDateInHebrew = (date: Date): string => {
+    if (language === 'he') {
+      const dayNames = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+      const monthNames = ['ינואר', 'פברואר', 'מרץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אוגוסט', 'ספטמבר', 'אוקטובר', 'נובמבר', 'דצמבר'];
+      
+      const dayOfWeek = dayNames[date.getDay()];
+      const day = date.getDate();
+      const month = monthNames[date.getMonth()];
+      const year = date.getFullYear();
+      
+      return `יום ${dayOfWeek}, ${day} ב${month} ${year}`;
+    }
+    return format(date, 'PPPP');
+  };
 
   const handleAddMeal = async () => {
     if (!newMeal.name.trim() || !selectedDate || !user) return;
@@ -102,7 +116,7 @@ const MealPlannerTab = () => {
             <CardHeader className="pb-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <CardTitle className="text-lg sm:text-xl">
-                  {selectedDate ? format(selectedDate, 'PPPP') : t('selectDate')}
+                  {selectedDate ? formatDateInHebrew(selectedDate) : t('selectDate')}
                 </CardTitle>
                 <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   {(loading || addingMeal) && (

@@ -49,6 +49,7 @@ const translations = {
     'carbs': 'carbs',
     'fat': 'fat',
     'clearChat': 'Clear Chat',
+    'chatWelcomeMessage': "Hello! I'm your personal nutrition mentor. I can help you with meal planning, nutritional analysis, calorie counting, and healthy eating advice. Try asking me about the nutrition facts of any food or for meal suggestions!",
     
     // Settings
     'language': 'Language',
@@ -80,7 +81,28 @@ const translations = {
     'error': 'Error',
     'success': 'Success',
     'cancel': 'Cancel',
-    'confirm': 'Confirm'
+    'confirm': 'Confirm',
+    
+    // Date formatting
+    'monday': 'Monday',
+    'tuesday': 'Tuesday',
+    'wednesday': 'Wednesday',
+    'thursday': 'Thursday',
+    'friday': 'Friday',
+    'saturday': 'Saturday',
+    'sunday': 'Sunday',
+    'january': 'January',
+    'february': 'February',
+    'march': 'March',
+    'april': 'April',
+    'may': 'May',
+    'june': 'June',
+    'july': 'July',
+    'august': 'August',
+    'september': 'September',
+    'october': 'October',
+    'november': 'November',
+    'december': 'December'
   },
   he: {
     // Navigation
@@ -117,6 +139,7 @@ const translations = {
     'carbs': 'פחמימות',
     'fat': 'שומן',
     'clearChat': 'נקה צ\'אט',
+    'chatWelcomeMessage': 'שלום! אני המנטור התזונתי האישי שלך. אני יכול לעזור לך עם תכנון ארוחות, ניתוח תזונתי, ספירת קלוריות ועצות תזונה בריאה. נסה לשאול אותי על נתוני התזונה של כל מזון או להמלצות ארוחות!',
     
     // Settings
     'language': 'שפה',
@@ -148,7 +171,28 @@ const translations = {
     'error': 'שגיאה',
     'success': 'הצלחה',
     'cancel': 'ביטול',
-    'confirm': 'אישור'
+    'confirm': 'אישור',
+    
+    // Date formatting
+    'monday': 'יום שני',
+    'tuesday': 'יום שלישי',
+    'wednesday': 'יום רביעי',
+    'thursday': 'יום חמישי',
+    'friday': 'יום שישי',
+    'saturday': 'יום שבת',
+    'sunday': 'יום ראשון',
+    'january': 'ינואר',
+    'february': 'פברואר',
+    'march': 'מרץ',
+    'april': 'אפריל',
+    'may': 'מאי',
+    'june': 'יוני',
+    'july': 'יולי',
+    'august': 'אוגוסט',
+    'september': 'ספטמבר',
+    'october': 'אוקטובר',
+    'november': 'נובמבר',
+    'december': 'דצמבר'
   }
 };
 

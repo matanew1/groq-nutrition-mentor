@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { useSettings } from '@/contexts/SettingsContext';
 
 interface Message {
   id: string;
@@ -17,6 +18,7 @@ export const useMessages = () => {
   const [loading, setLoading] = useState(true);
   const { user } = useAuth();
   const { toast } = useToast();
+  const { t } = useSettings();
 
   // Load messages from database
   useEffect(() => {
@@ -26,13 +28,13 @@ export const useMessages = () => {
       // Set default welcome message for non-authenticated users
       setMessages([{
         id: '1',
-        content: "Hello! I'm your personal nutrition mentor. I can help you with meal planning, nutritional analysis, calorie counting, and healthy eating advice. Try asking me about the nutrition facts of any food or for meal suggestions!",
+        content: t('chatWelcomeMessage'),
         sender: 'bot',
         timestamp: new Date()
       }]);
       setLoading(false);
     }
-  }, [user]);
+  }, [user, t]);
 
   const loadMessages = async () => {
     if (!user) return;
@@ -59,7 +61,7 @@ export const useMessages = () => {
         // Add welcome message for new users
         const welcomeMessage = {
           id: '1',
-          content: "Hello! I'm your personal nutrition mentor. I can help you with meal planning, nutritional analysis, calorie counting, and healthy eating advice. Try asking me about the nutrition facts of any food or for meal suggestions!",
+          content: t('chatWelcomeMessage'),
           sender: 'bot' as const,
           timestamp: new Date()
         };
