@@ -16,7 +16,7 @@ const MealPlannerTab = () => {
   const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [newMeal, setNewMeal] = useState({ name: '', type: 'breakfast' as 'breakfast' | 'lunch' | 'dinner' | 'snack' });
-  const { mealPlans, loading, loadMealPlans, addMealPlan, deleteMealPlan } = useMealPlans();
+  const { mealPlans, loading, addingMeal, loadMealPlans, addMealPlan, deleteMealPlan } = useMealPlans();
 
   const dateKey = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '';
   const dayMeals = mealPlans[dateKey] || [];
@@ -96,7 +96,7 @@ const MealPlannerTab = () => {
                 {selectedDate ? format(selectedDate, 'PPPP') : t('selectDate')}
               </h3>
               <div className="flex items-center space-x-2">
-                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                {(loading || addingMeal) && <Loader2 className="h-4 w-4 animate-spin" />}
                 {totalCalories > 0 && (
                   <Badge variant="secondary">
                     {totalCalories} {t('calories')}
@@ -111,6 +111,7 @@ const MealPlannerTab = () => {
                 value={newMeal.type}
                 onChange={(e) => setNewMeal(prev => ({ ...prev, type: e.target.value as typeof newMeal.type }))}
                 className="px-3 py-2 border rounded-md text-sm"
+                disabled={addingMeal}
               >
                 {mealTypes.map(type => (
                   <option key={type.key} value={type.key}>
@@ -119,14 +120,15 @@ const MealPlannerTab = () => {
                 ))}
               </select>
               <Input
-                placeholder={t('addMeal')}
+                placeholder={addingMeal ? "Adding meal with nutrition data..." : t('addMeal')}
                 value={newMeal.name}
                 onChange={(e) => setNewMeal(prev => ({ ...prev, name: e.target.value }))}
-                onKeyPress={(e) => e.key === 'Enter' && handleAddMeal()}
+                onKeyPress={(e) => e.key === 'Enter' && !addingMeal && handleAddMeal()}
                 className="flex-1"
+                disabled={addingMeal}
               />
-              <Button onClick={handleAddMeal} size="sm" disabled={loading}>
-                <Plus className="h-4 w-4" />
+              <Button onClick={handleAddMeal} size="sm" disabled={loading || addingMeal || !newMeal.name.trim()}>
+                {addingMeal ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
               </Button>
             </div>
 
@@ -152,28 +154,49 @@ const MealPlannerTab = () => {
                         </p>
                       ) : (
                         typeMeals.map(meal => (
-                          <div key={meal.id} className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded">
-                            <div>
-                              <p className="font-medium">{meal.meal_name}</p>
-                              {meal.time && (
-                                <p className="text-sm text-gray-600 dark:text-gray-400">{meal.time}</p>
-                              )}
+                          <div key={meal.id} className="bg-gray-50 dark:bg-gray-800 p-3 rounded">
+                            <div className="flex items-center justify-between mb-2">
+                              <div>
+                                <p className="font-medium">{meal.meal_name}</p>
+                                {meal.time && (
+                                  <p className="text-sm text-gray-600 dark:text-gray-400">{meal.time}</p>
+                                )}
+                              </div>
+                              <div className="flex items-center space-x-2">
+                                {meal.calories && (
+                                  <Badge variant="outline">
+                                    {meal.calories} cal
+                                  </Badge>
+                                )}
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => handleDeleteMeal(meal.id)}
+                                  className="p-1 hover:bg-red-100 hover:text-red-600"
+                                >
+                                  <Trash2 className="h-3 w-3" />
+                                </Button>
+                              </div>
                             </div>
-                            <div className="flex items-center space-x-2">
-                              {meal.calories && (
-                                <Badge variant="outline">
-                                  {meal.calories} cal
-                                </Badge>
-                              )}
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => handleDeleteMeal(meal.id)}
-                                className="p-1 hover:bg-red-100 hover:text-red-600"
-                              >
-                                <Trash2 className="h-3 w-3" />
-                              </Button>
-                            </div>
+                            
+                            {/* Nutrition Data Card */}
+                            {meal.nutrition_data && meal.nutrition_data.foods && meal.nutrition_data.foods.length > 0 && (
+                              <div className="mt-2 p-2 bg-green-50 dark:bg-green-900/30 rounded border border-green-200 dark:border-green-700">
+                                <h5 className="text-xs font-semibold text-green-800 dark:text-green-300 mb-1 flex items-center">
+                                  🍎 Nutrition Facts
+                                </h5>
+                                {meal.nutrition_data.foods.slice(0, 1).map((food: any, index: number) => (
+                                  <div key={index} className="text-xs text-green-700 dark:text-green-300">
+                                    <div className="grid grid-cols-2 gap-1">
+                                      <span>💪 {Math.round(food.nf_protein || 0)}g protein</span>
+                                      <span>🌾 {Math.round(food.nf_total_carbohydrate || 0)}g carbs</span>
+                                      <span>🧈 {Math.round(food.nf_total_fat || 0)}g fat</span>
+                                      <span>🌿 {Math.round(food.nf_dietary_fiber || 0)}g fiber</span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         ))
                       )}
