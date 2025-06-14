@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Utensils, Loader2 } from 'lucide-react';
 import { EnhancedCard, EnhancedCardContent, EnhancedCardHeader, EnhancedCardTitle } from '@/components/ui/EnhancedCard';
@@ -99,11 +100,11 @@ const MealPlannerTab = () => {
 
   return (
     <div className="flex flex-col flex-1 min-h-0 w-full">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0 h-full">
-        <div className="lg:col-span-1 flex flex-col h-full min-h-0">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0 h-full items-start">
+        <div className="lg:col-span-1 flex flex-col h-full min-h-0 items-start justify-start">
           <PlannerCalendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
         </div>
-        <div className="lg:col-span-2 flex flex-col min-h-0 flex-1 h-full space-y-4 sm:space-y-6">
+        <div className="lg:col-span-2 flex flex-col min-h-0 flex-1 h-full space-y-4 sm:space-y-6 items-start justify-start">
           <EnhancedCard variant="glass" className="flex flex-col flex-1 min-h-0 h-full">
             <EnhancedCardHeader>
               <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center justify-between">
@@ -148,3 +149,4 @@ const MealPlannerTab = () => {
 };
 
 export default MealPlannerTab;
+
