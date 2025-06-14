@@ -24,7 +24,7 @@ export const ChatTab = (props: ChatTabProps) => {
   const { user } = useAuth();
   
   return (
-    <div className="flex-1 flex flex-col space-y-6">
+    <div className="flex-1 flex flex-col space-y-4 sm:space-y-6">
       <EnhancedCard className="flex-1">
         <MessageList
           messages={props.messages}
@@ -39,7 +39,7 @@ export const ChatTab = (props: ChatTabProps) => {
       </EnhancedCard>
 
       <EnhancedCard>
-        <EnhancedCardContent className="p-6">
+        <EnhancedCardContent className="p-4 sm:p-6">
           <ChatInput
             inputValue={props.inputValue}
             setInputValue={props.setInputValue}

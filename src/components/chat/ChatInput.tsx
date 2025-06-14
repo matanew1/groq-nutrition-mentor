@@ -23,7 +23,7 @@ export const ChatInput = ({ inputValue, setInputValue, handleSendMessage, isLoad
   };
 
   return (
-    <div className={`flex ${isRTL ? 'space-x-reverse' : ''} space-x-4`}>
+    <div className={`flex flex-col sm:flex-row gap-3 sm:gap-4 ${isRTL ? 'sm:space-x-reverse' : ''}`}>
       <EnhancedInput
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
@@ -37,9 +37,10 @@ export const ChatInput = ({ inputValue, setInputValue, handleSendMessage, isLoad
         onClick={handleSendMessage}
         disabled={!inputValue.trim() || isLoading}
         loading={isLoading}
-        className="px-6"
+        className="sm:px-6"
       >
         <Send className="h-4 w-4" />
+        <span className="sm:hidden">Send</span>
       </EnhancedButton>
     </div>
   );

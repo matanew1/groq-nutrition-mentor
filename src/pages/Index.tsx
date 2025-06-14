@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Utensils } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -154,14 +153,14 @@ const Index = () => {
 
   if (messagesLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 flex items-center justify-center">
-        <EnhancedCard className="p-8 text-center">
-          <div className="loading-enhanced mb-4">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 flex items-center justify-center p-4">
+        <EnhancedCard className="p-6 sm:p-8 text-center max-w-sm w-full">
+          <div className="loading-enhanced mb-4 flex-center">
             <div className="loading-dot"></div>
             <div className="loading-dot"></div>
             <div className="loading-dot"></div>
           </div>
-          <p className="heading-enhanced text-lg">{t('loading')}</p>
+          <p className="heading-enhanced text-base sm:text-lg">{t('loading')}</p>
         </EnhancedCard>
       </div>
     );
@@ -176,21 +175,21 @@ const Index = () => {
         activeTab={activeTab}
       />
 
-      <div className="max-w-7xl mx-auto p-4 h-[calc(100vh-100px)]">
+      <div className="max-w-7xl mx-auto p-2 sm:p-4 h-[calc(100vh-80px)] sm:h-[calc(100vh-100px)]">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList className="grid w-full grid-cols-2 mb-6 glass-card-enhanced p-2 h-auto">
+          <TabsList className="grid w-full grid-cols-2 mb-4 sm:mb-6 glass-card-enhanced p-1 sm:p-2 h-auto">
             <TabsTrigger 
               value="chat" 
-              className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 py-3 px-6 rounded-xl font-semibold transition-all`}
+              className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 py-2 sm:py-3 px-4 sm:px-6 rounded-xl font-semibold transition-all text-sm sm:text-base`}
             >
-              <Bot className="h-5 w-5" />
+              <Bot className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>{t('chat')}</span>
             </TabsTrigger>
             <TabsTrigger 
               value="meals" 
-              className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 py-3 px-6 rounded-xl font-semibold transition-all`}
+              className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 py-2 sm:py-3 px-4 sm:px-6 rounded-xl font-semibold transition-all text-sm sm:text-base`}
             >
-              <Utensils className="h-5 w-5" />
+              <Utensils className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>{t('meals')}</span>
             </TabsTrigger>
           </TabsList>
@@ -213,7 +212,7 @@ const Index = () => {
 
           <TabsContent value="meals" className="flex-1">
             <EnhancedCard className="h-full overflow-auto">
-              <EnhancedCardContent className="p-6">
+              <EnhancedCardContent className="p-2 sm:p-6">
                 <MealPlannerTab />
               </EnhancedCardContent>
             </EnhancedCard>

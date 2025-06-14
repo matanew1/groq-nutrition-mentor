@@ -18,7 +18,7 @@ export const EnhancedCard = React.forwardRef<HTMLDivElement, EnhancedCardProps>(
     return (
       <div
         ref={ref}
-        className={cn(variants[variant], className)}
+        className={cn(variants[variant], 'w-full', className)}
         {...props}
       >
         {children}
@@ -35,7 +35,7 @@ export const EnhancedCardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn('flex flex-col space-y-2 p-6 pb-4', className)}
+    className={cn('flex flex-col space-y-2 p-4 sm:p-6 pb-2 sm:pb-4', className)}
     {...props}
   />
 ));
@@ -48,7 +48,7 @@ export const EnhancedCardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn('heading-enhanced text-xl font-bold leading-tight', className)}
+    className={cn('heading-enhanced text-lg sm:text-xl font-bold leading-tight text-center sm:text-left', className)}
     {...props}
   />
 ));
@@ -61,7 +61,7 @@ export const EnhancedCardContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn('p-6 pt-0', className)}
+    className={cn('p-4 sm:p-6 pt-0', className)}
     {...props}
   />
 ));

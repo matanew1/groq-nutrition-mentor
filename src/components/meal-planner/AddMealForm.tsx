@@ -24,13 +24,13 @@ export const AddMealForm = ({ onAddMeal, addingMeal, mealTypes }: AddMealFormPro
   };
 
   return (
-    <div className="glass-card-enhanced p-5">
-      <h4 className="heading-enhanced text-lg mb-4">{t('addNewMeal')}</h4>
-      <div className={`flex flex-col sm:flex-row gap-4 ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
+    <div className="glass-card-enhanced p-4 sm:p-5 w-full">
+      <h4 className="heading-enhanced text-base sm:text-lg mb-4 text-center sm:text-left">{t('addNewMeal')}</h4>
+      <div className={`flex flex-col gap-4 ${isRTL ? 'sm:flex-row-reverse' : 'sm:flex-row'}`}>
         <select
           value={newMeal.type}
           onChange={(e) => setNewMeal(prev => ({ ...prev, type: e.target.value as MealTypeKey }))}
-          className="input-enhanced min-w-[140px]"
+          className="input-enhanced w-full sm:min-w-[140px] sm:w-auto"
           disabled={addingMeal}
           dir={isRTL ? 'rtl' : 'ltr'}
         >
@@ -53,9 +53,10 @@ export const AddMealForm = ({ onAddMeal, addingMeal, mealTypes }: AddMealFormPro
           onClick={handleAdd} 
           disabled={addingMeal || !newMeal.name.trim()}
           loading={addingMeal}
+          className="w-full sm:w-auto"
         >
           <Plus className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
-          <span className="hidden sm:inline">{t('addMeal')}</span>
+          <span>{t('addMeal')}</span>
         </EnhancedButton>
       </div>
     </div>

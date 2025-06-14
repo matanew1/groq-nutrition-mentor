@@ -80,39 +80,43 @@ const MealPlannerTab = () => {
 
   if (!user) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-center">
-        <EnhancedCard className="p-8 max-w-md">
-          <div className="p-4 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-2xl mb-6 mx-auto w-fit">
-            <Utensils className="h-12 w-12 text-blue-600 dark:text-blue-400" />
+      <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-4">
+        <EnhancedCard className="p-6 sm:p-8 max-w-md w-full">
+          <div className="flex-center-col space-y-4">
+            <div className="p-4 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900 dark:to-purple-900 rounded-2xl">
+              <Utensils className="h-10 w-10 sm:h-12 sm:w-12 text-blue-600 dark:text-blue-400" />
+            </div>
+            <h3 className="heading-enhanced text-lg sm:text-xl mb-3">
+              {t('signInRequired')}
+            </h3>
+            <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
+              {t('signInToSaveMeals')}
+            </p>
           </div>
-          <h3 className="heading-enhanced text-xl mb-3">
-            {t('signInRequired')}
-          </h3>
-          <p className="text-gray-600 dark:text-gray-400">
-            {t('signInToSaveMeals')}
-          </p>
         </EnhancedCard>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <PlannerCalendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+    <div className="space-y-4 sm:space-y-6 p-2 sm:p-0">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="lg:col-span-1">
+          <PlannerCalendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
+        </div>
 
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
           <EnhancedCard variant="glass">
             <EnhancedCardHeader>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <EnhancedCardTitle>
+              <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center justify-between">
+                <EnhancedCardTitle className="text-center sm:text-left">
                   {selectedDate ? formatDateInHebrew(selectedDate) : t('selectDate')}
                 </EnhancedCardTitle>
-                <div className={`flex items-center gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                <div className={`flex items-center justify-center sm:justify-end gap-3 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   {(loading || addingMeal) && (
                     <div className={`flex items-center gap-2 text-sm text-gray-500 ${isRTL ? 'flex-row-reverse' : ''}`}>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      <span className="hidden sm:inline">{t('loading')}</span>
+                      <span>{t('loading')}</span>
                     </div>
                   )}
                   {totalCalories > 0 && (
@@ -124,10 +128,10 @@ const MealPlannerTab = () => {
               </div>
             </EnhancedCardHeader>
 
-            <EnhancedCardContent className="space-y-6">
+            <EnhancedCardContent className="space-y-4 sm:space-y-6">
               <AddMealForm onAddMeal={handleAddMeal} addingMeal={addingMeal} mealTypes={mealTypes} />
 
-              <div className="space-y-5">
+              <div className="grid grid-cols-1 gap-4 sm:gap-5">
                 {mealTypes.map(mealType => (
                   <MealTypeCard
                     key={mealType.key}
