@@ -99,14 +99,13 @@ const MealPlannerTab = () => {
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6 p-2 sm:p-0">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
-        <div className="lg:col-span-1">
+    <div className="flex flex-col flex-1 min-h-0 space-y-4 sm:space-y-6 p-2 sm:p-0">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 flex-1 min-h-0">
+        <div className="lg:col-span-1 h-full flex flex-col min-h-0">
           <PlannerCalendar selectedDate={selectedDate} onSelectDate={setSelectedDate} />
         </div>
-
-        <div className="lg:col-span-2 space-y-4 sm:space-y-6">
-          <EnhancedCard variant="glass">
+        <div className="lg:col-span-2 flex flex-col min-h-0 space-y-4 sm:space-y-6 h-full">
+          <EnhancedCard variant="glass" className="flex flex-col flex-1 min-h-0">
             <EnhancedCardHeader>
               <div className="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center justify-between">
                 <EnhancedCardTitle className="text-center sm:text-left">
@@ -128,18 +127,19 @@ const MealPlannerTab = () => {
               </div>
             </EnhancedCardHeader>
 
-            <EnhancedCardContent className="space-y-4 sm:space-y-6">
+            <EnhancedCardContent className="flex flex-col flex-1 min-h-0 space-y-4 sm:space-y-6">
               <AddMealForm onAddMeal={handleAddMeal} addingMeal={addingMeal} mealTypes={mealTypes} />
-
-              <div className="grid grid-cols-1 gap-4 sm:gap-5">
-                {mealTypes.map(mealType => (
-                  <MealTypeCard
-                    key={mealType.key}
-                    mealType={mealType}
-                    meals={getMealsByType(mealType.key)}
-                    onDeleteMeal={handleDeleteMeal}
-                  />
-                ))}
+              <div className="flex-1 min-h-0 overflow-y-auto">
+                <div className="grid grid-cols-1 gap-4 sm:gap-5">
+                  {mealTypes.map(mealType => (
+                    <MealTypeCard
+                      key={mealType.key}
+                      mealType={mealType}
+                      meals={getMealsByType(mealType.key)}
+                      onDeleteMeal={handleDeleteMeal}
+                    />
+                  ))}
+                </div>
               </div>
             </EnhancedCardContent>
           </EnhancedCard>
