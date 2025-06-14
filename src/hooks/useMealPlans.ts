@@ -36,7 +36,7 @@ export const useMealPlans = () => {
       const formattedMealPlans = data.map((plan: any) => ({
         id: plan.id,
         date: plan.date,
-        meal_type: plan.meal_type,
+        meal_type: plan.meal_type as 'breakfast' | 'lunch' | 'dinner' | 'snack',
         meal_name: plan.meal_name,
         calories: plan.calories,
         time: plan.time
@@ -80,7 +80,7 @@ export const useMealPlans = () => {
       const newMealPlan: MealPlan = {
         id: data.id,
         date: data.date,
-        meal_type: data.meal_type,
+        meal_type: data.meal_type as 'breakfast' | 'lunch' | 'dinner' | 'snack',
         meal_name: data.meal_name,
         calories: data.calories,
         time: data.time
