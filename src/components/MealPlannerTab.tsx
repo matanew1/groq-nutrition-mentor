@@ -1,30 +1,25 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Utensils } from 'lucide-react';
+import { Plus, Utensils, Trash2, Loader2 } from 'lucide-react';
 import { useSettings } from '@/contexts/SettingsContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { useMealPlans } from '@/hooks/useMealPlans';
 import { format } from 'date-fns';
-
-interface Meal {
-  id: string;
-  type: 'breakfast' | 'lunch' | 'dinner' | 'snack';
-  name: string;
-  calories?: number;
-  time?: string;
-}
 
 const MealPlannerTab = () => {
   const { t } = useSettings();
+  const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [meals, setMeals] = useState<{ [key: string]: Meal[] }>({});
-  const [newMeal, setNewMeal] = useState({ name: '', type: 'breakfast' as Meal['type'] });
+  const [newMeal, setNewMeal] = useState({ name: '', type: 'breakfast' as 'breakfast' | 'lunch' | 'dinner' | 'snack' });
+  const { mealPlans, loading, loadMealPlans, addMealPlan, deleteMealPlan } = useMealPlans();
 
   const dateKey = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '';
-  const dayMeals = meals[dateKey] || [];
+  const dayMeals = mealPlans[dateKey] || [];
 
   const mealTypes = [
     { key: 'breakfast', icon: '🌅', color: 'bg-orange-100 text-orange-700' },
@@ -33,29 +28,48 @@ const MealPlannerTab = () => {
     { key: 'snack', icon: '🍎', color: 'bg-green-100 text-green-700' }
   ];
 
-  const addMeal = () => {
-    if (!newMeal.name.trim() || !selectedDate) return;
+  useEffect(() => {
+    if (user && selectedDate) {
+      loadMealPlans(dateKey);
+    }
+  }, [user, dateKey]);
 
-    const meal: Meal = {
-      id: Date.now().toString(),
-      type: newMeal.type,
-      name: newMeal.name,
+  const handleAddMeal = async () => {
+    if (!newMeal.name.trim() || !selectedDate || !user) return;
+
+    await addMealPlan({
+      date: dateKey,
+      meal_type: newMeal.type,
+      meal_name: newMeal.name,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    setMeals(prev => ({
-      ...prev,
-      [dateKey]: [...(prev[dateKey] || []), meal]
-    }));
+    });
 
     setNewMeal({ name: '', type: 'breakfast' });
   };
 
-  const getMealsByType = (type: Meal['type']) => {
-    return dayMeals.filter(meal => meal.type === type);
+  const handleDeleteMeal = async (mealId: string) => {
+    await deleteMealPlan(mealId, dateKey);
+  };
+
+  const getMealsByType = (type: 'breakfast' | 'lunch' | 'dinner' | 'snack') => {
+    return dayMeals.filter(meal => meal.meal_type === type);
   };
 
   const totalCalories = dayMeals.reduce((sum, meal) => sum + (meal.calories || 0), 0);
+
+  if (!user) {
+    return (
+      <div className="text-center py-20">
+        <Utensils className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+        <h3 className="text-xl font-semibold text-gray-600 dark:text-gray-300 mb-2">
+          {t('signIn')} Required
+        </h3>
+        <p className="text-gray-500 dark:text-gray-400">
+          Please sign in to save and manage your meal plans.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -81,18 +95,21 @@ const MealPlannerTab = () => {
               <h3 className="font-semibold">
                 {selectedDate ? format(selectedDate, 'PPPP') : t('selectDate')}
               </h3>
-              {totalCalories > 0 && (
-                <Badge variant="secondary">
-                  {totalCalories} {t('calories')}
-                </Badge>
-              )}
+              <div className="flex items-center space-x-2">
+                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                {totalCalories > 0 && (
+                  <Badge variant="secondary">
+                    {totalCalories} {t('calories')}
+                  </Badge>
+                )}
+              </div>
             </div>
 
             {/* Add Meal Form */}
             <div className="flex gap-2 mb-6">
               <select
                 value={newMeal.type}
-                onChange={(e) => setNewMeal(prev => ({ ...prev, type: e.target.value as Meal['type'] }))}
+                onChange={(e) => setNewMeal(prev => ({ ...prev, type: e.target.value as typeof newMeal.type }))}
                 className="px-3 py-2 border rounded-md text-sm"
               >
                 {mealTypes.map(type => (
@@ -105,10 +122,10 @@ const MealPlannerTab = () => {
                 placeholder={t('addMeal')}
                 value={newMeal.name}
                 onChange={(e) => setNewMeal(prev => ({ ...prev, name: e.target.value }))}
-                onKeyPress={(e) => e.key === 'Enter' && addMeal()}
+                onKeyPress={(e) => e.key === 'Enter' && handleAddMeal()}
                 className="flex-1"
               />
-              <Button onClick={addMeal} size="sm">
+              <Button onClick={handleAddMeal} size="sm" disabled={loading}>
                 <Plus className="h-4 w-4" />
               </Button>
             </div>
@@ -116,7 +133,7 @@ const MealPlannerTab = () => {
             {/* Meals by Type */}
             <div className="space-y-4">
               {mealTypes.map(mealType => {
-                const typeMeals = getMealsByType(mealType.key as Meal['type']);
+                const typeMeals = getMealsByType(mealType.key as 'breakfast' | 'lunch' | 'dinner' | 'snack');
                 return (
                   <div key={mealType.key} className="border rounded-lg p-4">
                     <div className="flex items-center justify-between mb-3">
@@ -137,16 +154,26 @@ const MealPlannerTab = () => {
                         typeMeals.map(meal => (
                           <div key={meal.id} className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded">
                             <div>
-                              <p className="font-medium">{meal.name}</p>
+                              <p className="font-medium">{meal.meal_name}</p>
                               {meal.time && (
                                 <p className="text-sm text-gray-600 dark:text-gray-400">{meal.time}</p>
                               )}
                             </div>
-                            {meal.calories && (
-                              <Badge variant="outline">
-                                {meal.calories} cal
-                              </Badge>
-                            )}
+                            <div className="flex items-center space-x-2">
+                              {meal.calories && (
+                                <Badge variant="outline">
+                                  {meal.calories} cal
+                                </Badge>
+                              )}
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleDeleteMeal(meal.id)}
+                                className="p-1 hover:bg-red-100 hover:text-red-600"
+                              >
+                                <Trash2 className="h-3 w-3" />
+                              </Button>
+                            </div>
                           </div>
                         ))
                       )}

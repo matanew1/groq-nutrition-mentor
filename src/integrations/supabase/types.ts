@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      meal_plans: {
+        Row: {
+          calories: number | null
+          created_at: string
+          date: string
+          id: string
+          meal_name: string
+          meal_type: string
+          time: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          calories?: number | null
+          created_at?: string
+          date: string
+          id?: string
+          meal_name: string
+          meal_type: string
+          time?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          calories?: number | null
+          created_at?: string
+          date?: string
+          id?: string
+          meal_name?: string
+          meal_type?: string
+          time?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       messages: {
         Row: {
           content: string
