@@ -197,7 +197,7 @@ const Index = () => {
   // Show loading state while checking authentication
   if (messagesLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
+      <div className="h-screen w-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-green-500 mx-auto"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-300">{t('loading')}</p>
@@ -207,28 +207,27 @@ const Index = () => {
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300 ${isRTL ? 'hebrew-text' : ''}`}>
-      {/* Header - Mobile Optimized with RTL support */}
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-green-100 dark:border-gray-700 sticky top-0 z-10 transition-colors duration-300">
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-          <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 sm:space-x-3`}>
-            <div className="p-1.5 sm:p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full">
-              <Apple className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+    <div className={`h-screen w-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col ${isRTL ? 'hebrew-text' : ''}`}>
+      {/* Header */}
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm border-b border-green-100 dark:border-gray-700">
+        <div className="h-16 px-4 flex items-center">
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-3 flex-1`}>
+            <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full">
+              <Apple className="h-6 w-6 text-white" />
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent truncate">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent truncate">
                 {t('nutrimentor')}
               </h1>
-              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 hidden sm:block">{t('subtitle')}</p>
             </div>
-            <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2`}>
-              <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700 text-xs px-1.5 py-0.5 sm:px-2 sm:py-1">
-                <Heart className={`h-2.5 w-2.5 sm:h-3 sm:w-3 ${isRTL ? 'ml-0.5 sm:ml-1' : 'mr-0.5 sm:mr-1'}`} />
-                <span className="hidden sm:inline">Health</span>
+            <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
+              <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700">
+                <Heart className={`h-3 w-3 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                Health
               </Badge>
-              <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700 text-xs px-1.5 py-0.5 sm:px-2 sm:py-1">
-                <Zap className={`h-2.5 w-2.5 sm:h-3 sm:w-3 ${isRTL ? 'ml-0.5 sm:ml-1' : 'mr-0.5 sm:mr-1'}`} />
-                <span className="hidden sm:inline">AI</span>
+              <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700">
+                <Zap className={`h-3 w-3 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                AI
               </Badge>
               
               <LanguageToggle />
@@ -238,7 +237,7 @@ const Index = () => {
               {user ? (
                 <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1`}>
                   {userName && (
-                    <span className="text-sm text-gray-600 dark:text-gray-300 hidden sm:inline">
+                    <span className="text-sm text-gray-600 dark:text-gray-300">
                       {t('welcome')}, {userName}
                     </span>
                   )}
@@ -276,10 +275,10 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Main Content with Tabs */}
-      <div className="max-w-6xl mx-auto p-2 sm:p-4 h-[calc(100vh-80px)] sm:h-[calc(100vh-120px)]">
+      {/* Main Content with Tabs - Full height minus header */}
+      <div className="flex-1 flex flex-col">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList className="grid w-full grid-cols-2 mb-4">
+          <TabsList className="w-full grid grid-cols-2 rounded-none border-b">
             <TabsTrigger value="chat" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
               <Bot className="h-4 w-4" />
               <span>{t('chat')}</span>
@@ -290,11 +289,11 @@ const Index = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="chat" className="flex-1 flex flex-col space-y-2 sm:space-y-4">
-            {/* Chat Messages */}
-            <Card className="flex-1 border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-colors duration-300">
-              <ScrollArea className="h-full p-2 sm:p-4">
-                <div className="space-y-3 sm:space-y-4">
+          <TabsContent value="chat" className="flex-1 flex flex-col m-0 p-0">
+            {/* Chat Messages - Full height minus input */}
+            <Card className="flex-1 border-0 rounded-none shadow-none bg-transparent">
+              <ScrollArea className="h-full p-4">
+                <div className="space-y-4">
                   {messages.map((message) => {
                     const direction = getDirection(message.content);
                     const alignment = getAlignment(message.content, message.sender);
@@ -305,45 +304,45 @@ const Index = () => {
                         dir={direction}
                       >
                         <div
-                          className={`flex items-start space-x-2 max-w-[85%] sm:max-w-[80%] ${
+                          className={`flex items-start space-x-2 max-w-[85%] ${
                             message.sender === 'user'
                               ? (direction === 'rtl' ? 'flex-row-reverse space-x-reverse' : 'flex-row space-x-2')
                               : (direction === 'rtl' ? 'flex-row space-x-2' : 'flex-row-reverse space-x-reverse')
                           }`}
                         >
                           <div
-                            className={`p-1.5 sm:p-2 rounded-full shadow-lg flex-shrink-0 ${
+                            className={`p-2 rounded-full shadow-lg flex-shrink-0 ${
                               message.sender === 'user'
                                 ? 'bg-gradient-to-r from-blue-500 to-purple-500'
                                 : 'bg-gradient-to-r from-green-500 to-blue-500'
                             }`}
                           >
                             {message.sender === 'user' ? (
-                              <User className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                              <User className="h-4 w-4 text-white" />
                             ) : (
-                              <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                              <Bot className="h-4 w-4 text-white" />
                             )}
                           </div>
                           <div
-                            className={`p-3 sm:p-4 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
+                            className={`p-4 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
                               message.sender === 'user'
                                 ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
                                 : 'bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100'
                             } ${direction === 'rtl' ? 'text-right' : 'text-left'}`}
                             dir={direction}
                           >
-                            <p className="text-sm leading-relaxed whitespace-pre-wrap font-medium break-words">
+                            <p className="text-sm leading-relaxed whitespace-pre-wrap">
                               {message.content}
                             </p>
                             {message.nutritionData && message.nutritionData.foods && (
-                              <div className="mt-3 p-2 sm:p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700" dir={direction}>
-                                <h4 className={`font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center text-sm ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
+                              <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700" dir={direction}>
+                                <h4 className={`font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
                                   🍎 {t('nutritionFacts')}
                                 </h4>
                                 {message.nutritionData.foods.slice(0, 1).map((food: any, index: number) => (
-                                  <div key={index} className="text-xs sm:text-sm text-green-700 dark:text-green-300">
+                                  <div key={index} className="text-sm text-green-700 dark:text-green-300">
                                     <p className="font-medium">{food.food_name}</p>
-                                    <div className="grid grid-cols-2 gap-1 sm:gap-2 mt-1">
+                                    <div className="grid grid-cols-2 gap-2 mt-1">
                                       <span>🔥 {Math.round(food.nf_calories)} {t('calories')}</span>
                                       <span>💪 {Math.round(food.nf_protein)}g {t('protein')}</span>
                                       <span>🌾 {Math.round(food.nf_total_carbohydrate)}g {t('carbs')}</span>
@@ -353,7 +352,7 @@ const Index = () => {
                                 ))}
                               </div>
                             )}
-                            <p className={`text-xs opacity-60 mt-2 ${direction === 'rtl' ? 'text-left' : 'text-right'}`}>
+                            <p className="text-xs opacity-60 mt-2">
                               {formatTime(message.timestamp)}
                             </p>
                           </div>
@@ -364,8 +363,8 @@ const Index = () => {
                   {isLoading && (
                     <div className={`flex ${isRTL ? 'justify-end' : 'justify-start'}`} dir={isRTL ? 'rtl' : 'ltr'}>
                       <div className={`flex items-start ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
-                        <div className="p-1.5 sm:p-2 rounded-full bg-gradient-to-r from-green-500 to-blue-500 shadow-lg">
-                          <Bot className="h-3 w-3 sm:h-4 sm:w-4 text-white" />
+                        <div className="p-2 rounded-full bg-gradient-to-r from-green-500 to-blue-500 shadow-lg">
+                          <Bot className="h-4 w-4 text-white" />
                         </div>
                         <div className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-3 rounded-xl shadow-md">
                           <div className="flex space-x-1">
@@ -382,42 +381,34 @@ const Index = () => {
               </ScrollArea>
             </Card>
 
-            {/* Chat Input */}
-            <Card className="border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm transition-colors duration-300">
-              <div className="p-2 sm:p-4">
+            {/* Chat Input - Fixed at bottom */}
+            <Card className="border-0 rounded-none shadow-none bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm">
+              <div className="p-4">
                 <div className={`flex ${isRTL ? 'space-x-reverse' : ''} space-x-2`}>
                   <Input
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder={t('typeMessage')}
-                    className="flex-1 border-gray-200 dark:border-gray-600 focus:border-green-400 focus:ring-green-400 dark:bg-gray-700 dark:text-white transition-colors duration-200 text-sm sm:text-base"
+                    className="flex-1 border-gray-200 dark:border-gray-600 focus:border-green-400 focus:ring-green-400 dark:bg-gray-700 dark:text-white"
                     disabled={isLoading}
                     dir={isHebrew(inputValue) ? 'rtl' : 'ltr'}
                   />
                   <Button
                     onClick={handleSendMessage}
                     disabled={!inputValue.trim() || isLoading}
-                    className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 px-3 sm:px-4 min-w-[44px] h-10 sm:h-11"
+                    className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 min-w-[44px] h-11"
                   >
                     <Send className="h-4 w-4" />
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 px-1">
-                  <span className="sm:hidden">Ask about nutrition, calories, or healthy recipes</span>
-                  <span className="hidden sm:inline">
-                    {user ? 'Your messages are automatically saved to your account' : 'Sign in to save your chat history'}
-                  </span>
-                </p>
               </div>
             </Card>
           </TabsContent>
 
-          <TabsContent value="meals" className="flex-1">
-            <Card className="h-full border-0 shadow-lg bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm overflow-auto">
-              <div className="p-4 sm:p-6">
-                <MealPlannerTab />
-              </div>
+          <TabsContent value="meals" className="flex-1 m-0 p-0">
+            <Card className="h-full border-0 rounded-none shadow-none bg-transparent overflow-auto">
+              <MealPlannerTab />
             </Card>
           </TabsContent>
         </Tabs>

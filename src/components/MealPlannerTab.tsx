@@ -74,7 +74,7 @@ const MealPlannerTab = () => {
 
   if (!user) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] text-center p-6">
+      <div className="h-full flex flex-col items-center justify-center text-center p-6">
         <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-full mb-6">
           <Utensils className="h-12 w-12 text-gray-400" />
         </div>
@@ -89,9 +89,9 @@ const MealPlannerTab = () => {
   }
 
   return (
-    <div className="space-y-4 sm:space-y-6">
-      {/* Mobile: Stack calendar and planner vertically */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+    <div className="h-full p-6">
+      {/* Grid layout to fit screen */}
+      <div className="h-full grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Calendar Section */}
         <Card className="lg:col-span-1 shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
           <CardHeader className="pb-3">
@@ -100,7 +100,7 @@ const MealPlannerTab = () => {
               {t('selectDate')}
             </CardTitle>
           </CardHeader>
-          <CardContent className="px-2 sm:px-6">
+          <CardContent className="px-6">
             <Calendar
               mode="single"
               selected={selectedDate}
@@ -111,8 +111,8 @@ const MealPlannerTab = () => {
         </Card>
 
         {/* Meal Planning Section */}
-        <div className="lg:col-span-2 space-y-4">
-          <Card className="shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+        <div className="lg:col-span-2 flex flex-col">
+          <Card className="flex-1 shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm overflow-hidden">
             <CardHeader className="pb-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <CardTitle className="text-lg sm:text-xl">
@@ -122,7 +122,7 @@ const MealPlannerTab = () => {
                   {(loading || addingMeal) && (
                     <div className={`flex items-center gap-2 text-sm text-gray-500 ${isRTL ? 'flex-row-reverse' : ''}`}>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      <span className="hidden sm:inline">{t('loading')}</span>
+                      <span>{t('loading')}</span>
                     </div>
                   )}
                   {totalCalories > 0 && (
@@ -134,143 +134,145 @@ const MealPlannerTab = () => {
               </div>
             </CardHeader>
 
-            <CardContent className="space-y-6">
-              {/* Add Meal Form */}
-              <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-                <h4 className="font-medium mb-3 text-gray-800 dark:text-gray-200">{t('addNewMeal')}</h4>
-                <div className={`flex flex-col sm:flex-row gap-3 ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
-                  <select
-                    value={newMeal.type}
-                    onChange={(e) => setNewMeal(prev => ({ ...prev, type: e.target.value as typeof newMeal.type }))}
-                    className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    disabled={addingMeal}
-                    dir={isRTL ? 'rtl' : 'ltr'}
-                  >
-                    {mealTypes.map(type => (
-                      <option key={type.key} value={type.key}>
-                        {type.icon} {type.label}
-                      </option>
-                    ))}
-                  </select>
-                  <Input
-                    placeholder={addingMeal ? t('addingMealWithNutrition') : t('enterMealName')}
-                    value={newMeal.name}
-                    onChange={(e) => setNewMeal(prev => ({ ...prev, name: e.target.value }))}
-                    onKeyPress={(e) => e.key === 'Enter' && !addingMeal && handleAddMeal()}
-                    className="flex-1 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                    disabled={addingMeal}
-                    dir={isRTL ? 'rtl' : 'ltr'}
-                  />
-                  <Button 
-                    onClick={handleAddMeal} 
-                    disabled={loading || addingMeal || !newMeal.name.trim()}
-                    className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-4 sm:px-6"
-                  >
-                    {addingMeal ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <>
-                        <Plus className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                        <span className="hidden sm:inline">{t('addMeal')}</span>
-                      </>
-                    )}
-                  </Button>
+            <CardContent className="flex-1 overflow-auto">
+              <div className="h-full flex flex-col space-y-6">
+                {/* Add Meal Form */}
+                <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
+                  <h4 className="font-medium mb-3 text-gray-800 dark:text-gray-200">{t('addNewMeal')}</h4>
+                  <div className={`flex flex-col sm:flex-row gap-3 ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
+                    <select
+                      value={newMeal.type}
+                      onChange={(e) => setNewMeal(prev => ({ ...prev, type: e.target.value as typeof newMeal.type }))}
+                      className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      disabled={addingMeal}
+                      dir={isRTL ? 'rtl' : 'ltr'}
+                    >
+                      {mealTypes.map(type => (
+                        <option key={type.key} value={type.key}>
+                          {type.icon} {type.label}
+                        </option>
+                      ))}
+                    </select>
+                    <Input
+                      placeholder={addingMeal ? t('addingMealWithNutrition') : t('enterMealName')}
+                      value={newMeal.name}
+                      onChange={(e) => setNewMeal(prev => ({ ...prev, name: e.target.value }))}
+                      onKeyPress={(e) => e.key === 'Enter' && !addingMeal && handleAddMeal()}
+                      className="flex-1 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      disabled={addingMeal}
+                      dir={isRTL ? 'rtl' : 'ltr'}
+                    />
+                    <Button 
+                      onClick={handleAddMeal} 
+                      disabled={loading || addingMeal || !newMeal.name.trim()}
+                      className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-6"
+                    >
+                      {addingMeal ? (
+                        <Loader2 className="h-4 w-4 animate-spin" />
+                      ) : (
+                        <>
+                          <Plus className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                          {t('addMeal')}
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
-              </div>
 
-              {/* Meals by Type */}
-              <div className="space-y-4">
-                {mealTypes.map(mealType => {
-                  const typeMeals = getMealsByType(mealType.key as 'breakfast' | 'lunch' | 'dinner' | 'snack');
-                  return (
-                    <div key={mealType.key} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                      <div className={`p-4 ${mealType.color} border-b border-gray-200 dark:border-gray-600`}>
-                        <div className="flex items-center justify-between">
-                          <h4 className={`font-semibold flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                            <span className="text-xl">{mealType.icon}</span>
-                            <span>{mealType.label}</span>
-                          </h4>
-                          <Badge variant="outline" className="bg-white/50 dark:bg-gray-800/50">
-                            {typeMeals.length} {typeMeals.length === 1 ? t('item') : t('items')}
-                          </Badge>
+                {/* Meals by Type - Scrollable */}
+                <div className="flex-1 overflow-auto space-y-4">
+                  {mealTypes.map(mealType => {
+                    const typeMeals = getMealsByType(mealType.key as 'breakfast' | 'lunch' | 'dinner' | 'snack');
+                    return (
+                      <div key={mealType.key} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                        <div className={`p-4 ${mealType.color} border-b border-gray-200 dark:border-gray-600`}>
+                          <div className="flex items-center justify-between">
+                            <h4 className={`font-semibold flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                              <span className="text-xl">{mealType.icon}</span>
+                              <span>{mealType.label}</span>
+                            </h4>
+                            <Badge variant="outline" className="bg-white/50 dark:bg-gray-800/50">
+                              {typeMeals.length} {typeMeals.length === 1 ? t('item') : t('items')}
+                            </Badge>
+                          </div>
                         </div>
-                      </div>
-                      
-                      <div className="p-4 bg-white dark:bg-gray-800">
-                        {typeMeals.length === 0 ? (
-                          <p className="text-gray-500 dark:text-gray-400 text-sm italic text-center py-4">
-                            {t('noMealsPlanned')} {mealType.label.toLowerCase()}
-                          </p>
-                        ) : (
-                          <div className="space-y-3">
-                            {typeMeals.map(meal => (
-                              <div key={meal.id} className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-                                <div className="flex items-start justify-between mb-3">
-                                  <div className="flex-1 min-w-0">
-                                    <h5 className="font-medium text-gray-800 dark:text-gray-200 truncate">
-                                      {meal.meal_name}
-                                    </h5>
-                                    {meal.time && (
-                                      <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                        {t('addedAt')} {meal.time}
-                                      </p>
-                                    )}
+                        
+                        <div className="p-4 bg-white dark:bg-gray-800">
+                          {typeMeals.length === 0 ? (
+                            <p className="text-gray-500 dark:text-gray-400 text-sm italic text-center py-4">
+                              {t('noMealsPlanned')} {mealType.label.toLowerCase()}
+                            </p>
+                          ) : (
+                            <div className="space-y-3">
+                              {typeMeals.map(meal => (
+                                <div key={meal.id} className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                                  <div className="flex items-start justify-between mb-3">
+                                    <div className="flex-1 min-w-0">
+                                      <h5 className="font-medium text-gray-800 dark:text-gray-200 truncate">
+                                        {meal.meal_name}
+                                      </h5>
+                                      {meal.time && (
+                                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                          {t('addedAt')} {meal.time}
+                                        </p>
+                                      )}
+                                    </div>
+                                    <div className={`flex items-center gap-2 ${isRTL ? 'ml-0 mr-3' : 'ml-3'}`}>
+                                      {meal.calories && (
+                                        <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-300">
+                                          {meal.calories} {t('calories')}
+                                        </Badge>
+                                      )}
+                                      <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => handleDeleteMeal(meal.id)}
+                                        className="p-2 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                                      >
+                                        <Trash2 className="h-4 w-4" />
+                                      </Button>
+                                    </div>
                                   </div>
-                                  <div className={`flex items-center gap-2 ${isRTL ? 'ml-0 mr-3' : 'ml-3'}`}>
-                                    {meal.calories && (
-                                      <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-300">
-                                        {meal.calories} {t('calories')}
-                                      </Badge>
-                                    )}
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => handleDeleteMeal(meal.id)}
-                                      className="p-2 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
-                                    >
-                                      <Trash2 className="h-4 w-4" />
-                                    </Button>
-                                  </div>
-                                </div>
-                                
-                                {/* Enhanced Nutrition Data Card */}
-                                {meal.nutrition_data && meal.nutrition_data.foods && meal.nutrition_data.foods.length > 0 && (
-                                  <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
-                                    <h6 className={`text-sm font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                      🍎 {t('nutritionFacts')}
-                                    </h6>
-                                    {meal.nutrition_data.foods.slice(0, 1).map((food: any, index: number) => (
-                                      <div key={index} className="text-sm text-green-700 dark:text-green-300">
-                                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                                          <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                            <span>💪</span>
-                                            <span className="text-xs">{Math.round(food.nf_protein || 0)}g {t('protein')}</span>
-                                          </div>
-                                          <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                            <span>🌾</span>
-                                            <span className="text-xs">{Math.round(food.nf_total_carbohydrate || 0)}g {t('carbs')}</span>
-                                          </div>
-                                          <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                            <span>🧈</span>
-                                            <span className="text-xs">{Math.round(food.nf_total_fat || 0)}g {t('fat')}</span>
-                                          </div>
-                                          <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                                            <span>🌿</span>
-                                            <span className="text-xs">{Math.round(food.nf_dietary_fiber || 0)}g {t('fiber')}</span>
+                                  
+                                  {/* Enhanced Nutrition Data Card */}
+                                  {meal.nutrition_data && meal.nutrition_data.foods && meal.nutrition_data.foods.length > 0 && (
+                                    <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
+                                      <h6 className={`text-sm font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                        🍎 {t('nutritionFacts')}
+                                      </h6>
+                                      {meal.nutrition_data.foods.slice(0, 1).map((food: any, index: number) => (
+                                        <div key={index} className="text-sm text-green-700 dark:text-green-300">
+                                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                            <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                              <span>💪</span>
+                                              <span className="text-xs">{Math.round(food.nf_protein || 0)}g {t('protein')}</span>
+                                            </div>
+                                            <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                              <span>🌾</span>
+                                              <span className="text-xs">{Math.round(food.nf_total_carbohydrate || 0)}g {t('carbs')}</span>
+                                            </div>
+                                            <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                              <span>🧈</span>
+                                              <span className="text-xs">{Math.round(food.nf_total_fat || 0)}g {t('fat')}</span>
+                                            </div>
+                                            <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                              <span>🌿</span>
+                                              <span className="text-xs">{Math.round(food.nf_dietary_fiber || 0)}g {t('fiber')}</span>
+                                            </div>
                                           </div>
                                         </div>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        )}
+                                      ))}
+                                    </div>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </CardContent>
           </Card>
