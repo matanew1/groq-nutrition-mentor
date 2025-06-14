@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Apple, Heart, Zap, LogOut, Trash2 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
