@@ -13,10 +13,10 @@ import { AddMealForm } from './meal-planner/AddMealForm';
 import { MealTypeCard } from './meal-planner/MealTypeCard';
 
 const accessibleMealTypeStyles = {
-  breakfast: 'bg-amber-50 dark:bg-amber-900/50 text-amber-700 dark:text-amber-300 border-amber-100 dark:border-amber-700',
-  lunch: 'bg-yellow-50 dark:bg-yellow-900/60 text-yellow-700 dark:text-yellow-200 border-yellow-100 dark:border-yellow-700',
-  dinner: 'bg-violet-50 dark:bg-violet-900/50 text-violet-700 dark:text-violet-200 border-violet-100 dark:border-violet-800',
-  snack: 'bg-green-50 dark:bg-green-900/60 text-green-700 dark:text-green-200 border-green-100 dark:border-green-800',
+  breakfast: 'bg-amber-100/50 dark:bg-amber-900/30 text-amber-900 dark:text-amber-200 border-amber-200 dark:border-amber-800',
+  lunch: 'bg-sky-100/50 dark:bg-sky-900/30 text-sky-900 dark:text-sky-200 border-sky-200 dark:border-sky-800',
+  dinner: 'bg-violet-100/50 dark:bg-violet-900/30 text-violet-900 dark:text-violet-200 border-violet-200 dark:border-violet-800',
+  snack: 'bg-emerald-100/50 dark:bg-emerald-900/30 text-emerald-900 dark:text-emerald-200 border-emerald-200 dark:border-emerald-800',
 }
 
 const MealPlannerTab = () => {

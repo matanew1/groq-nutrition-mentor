@@ -174,26 +174,29 @@
 
   /* Enhanced Meal Type Cards */
   .meal-type-card {
-    background: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgb(229, 231, 235);
+    border-width: 1px;
+    border-style: solid;
+    border-color: transparent;
     border-radius: 1rem;
-    padding: 1.25rem;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    box-shadow: 
-      0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.05),
+      0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
   }
 
   .meal-type-card:hover {
     transform: translateY(-2px);
-    box-shadow: 
+    box-shadow:
       0 10px 15px -3px rgba(0, 0, 0, 0.1),
       0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 
   .dark .meal-type-card {
-    background: rgba(31, 41, 55, 0.95);
-    border: 1px solid rgb(75, 85, 99);
+    box-shadow:
+      0 4px 6px -1px rgba(0, 0, 0, 0.2),
+      0 2px 4px -2px rgba(0, 0, 0, 0.2);
   }
 
   /* Enhanced Loading Animation */
