@@ -150,8 +150,9 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       if (data) {
         setUserNameState(data.full_name || '');
         if (data.settings) {
-          setLanguageState(data.settings.language || 'en');
-          setNotificationsState(data.settings.notifications || false);
+          const settings = data.settings as { language?: 'en' | 'he'; notifications?: boolean };
+          setLanguageState(settings.language || 'en');
+          setNotificationsState(settings.notifications || false);
         }
       }
     } catch (error) {
@@ -159,7 +160,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
-  const saveUserSettings = async (newSettings: any) => {
+  const saveUserSettings = async (newSettings: { language: 'en' | 'he'; notifications: boolean }) => {
     if (!user) return;
 
     try {
