@@ -12,7 +12,7 @@ import { useMealPlans } from '@/hooks/useMealPlans';
 import { format } from 'date-fns';
 
 const MealPlannerTab = () => {
-  const { t } = useSettings();
+  const { t, language } = useSettings();
   const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [newMeal, setNewMeal] = useState({ name: '', type: 'breakfast' as 'breakfast' | 'lunch' | 'dinner' | 'snack' });
@@ -20,12 +20,13 @@ const MealPlannerTab = () => {
 
   const dateKey = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '';
   const dayMeals = mealPlans[dateKey] || [];
+  const isRTL = language === 'he';
 
   const mealTypes = [
-    { key: 'breakfast', icon: '🌅', color: 'bg-orange-50 text-orange-700 border-orange-200', label: 'Breakfast' },
-    { key: 'lunch', icon: '☀️', color: 'bg-yellow-50 text-yellow-700 border-yellow-200', label: 'Lunch' },
-    { key: 'dinner', icon: '🌙', color: 'bg-purple-50 text-purple-700 border-purple-200', label: 'Dinner' },
-    { key: 'snack', icon: '🍎', color: 'bg-green-50 text-green-700 border-green-200', label: 'Snack' }
+    { key: 'breakfast', icon: '🌅', color: 'bg-orange-50 text-orange-700 border-orange-200', label: t('breakfast') },
+    { key: 'lunch', icon: '☀️', color: 'bg-yellow-50 text-yellow-700 border-yellow-200', label: t('lunch') },
+    { key: 'dinner', icon: '🌙', color: 'bg-purple-50 text-purple-700 border-purple-200', label: t('dinner') },
+    { key: 'snack', icon: '🍎', color: 'bg-green-50 text-green-700 border-green-200', label: t('snack') }
   ];
 
   useEffect(() => {
@@ -64,10 +65,10 @@ const MealPlannerTab = () => {
           <Utensils className="h-12 w-12 text-gray-400" />
         </div>
         <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-3">
-          Sign In Required
+          {t('signInRequired')}
         </h3>
         <p className="text-gray-500 dark:text-gray-400 max-w-sm">
-          Please sign in to save and manage your personalized meal plans.
+          {t('signInToSaveMeals')}
         </p>
       </div>
     );
@@ -80,9 +81,9 @@ const MealPlannerTab = () => {
         {/* Calendar Section */}
         <Card className="lg:col-span-1 shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
           <CardHeader className="pb-3">
-            <CardTitle className="text-lg flex items-center gap-2">
+            <CardTitle className={`text-lg flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <CalendarIcon className="h-5 w-5 text-green-600" />
-              Select Date
+              {t('selectDate')}
             </CardTitle>
           </CardHeader>
           <CardContent className="px-2 sm:px-6">
@@ -101,18 +102,18 @@ const MealPlannerTab = () => {
             <CardHeader className="pb-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <CardTitle className="text-lg sm:text-xl">
-                  {selectedDate ? format(selectedDate, 'PPPP') : 'Select a Date'}
+                  {selectedDate ? format(selectedDate, 'PPPP') : t('selectDate')}
                 </CardTitle>
-                <div className="flex items-center gap-2">
+                <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   {(loading || addingMeal) && (
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
+                    <div className={`flex items-center gap-2 text-sm text-gray-500 ${isRTL ? 'flex-row-reverse' : ''}`}>
                       <Loader2 className="h-4 w-4 animate-spin" />
-                      <span className="hidden sm:inline">Loading...</span>
+                      <span className="hidden sm:inline">{t('loading')}</span>
                     </div>
                   )}
                   {totalCalories > 0 && (
                     <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200">
-                      🔥 {totalCalories} cal
+                      🔥 {totalCalories} {t('calories')}
                     </Badge>
                   )}
                 </div>
@@ -122,13 +123,14 @@ const MealPlannerTab = () => {
             <CardContent className="space-y-6">
               {/* Add Meal Form */}
               <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-                <h4 className="font-medium mb-3 text-gray-800 dark:text-gray-200">Add New Meal</h4>
-                <div className="flex flex-col sm:flex-row gap-3">
+                <h4 className="font-medium mb-3 text-gray-800 dark:text-gray-200">{t('addNewMeal')}</h4>
+                <div className={`flex flex-col sm:flex-row gap-3 ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
                   <select
                     value={newMeal.type}
                     onChange={(e) => setNewMeal(prev => ({ ...prev, type: e.target.value as typeof newMeal.type }))}
                     className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     disabled={addingMeal}
+                    dir={isRTL ? 'rtl' : 'ltr'}
                   >
                     {mealTypes.map(type => (
                       <option key={type.key} value={type.key}>
@@ -137,12 +139,13 @@ const MealPlannerTab = () => {
                     ))}
                   </select>
                   <Input
-                    placeholder={addingMeal ? "Adding meal with nutrition data..." : "Enter meal name (e.g., 'Grilled chicken breast')"}
+                    placeholder={addingMeal ? t('addingMealWithNutrition') : t('enterMealName')}
                     value={newMeal.name}
                     onChange={(e) => setNewMeal(prev => ({ ...prev, name: e.target.value }))}
                     onKeyPress={(e) => e.key === 'Enter' && !addingMeal && handleAddMeal()}
                     className="flex-1 focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     disabled={addingMeal}
+                    dir={isRTL ? 'rtl' : 'ltr'}
                   />
                   <Button 
                     onClick={handleAddMeal} 
@@ -153,8 +156,8 @@ const MealPlannerTab = () => {
                       <Loader2 className="h-4 w-4 animate-spin" />
                     ) : (
                       <>
-                        <Plus className="h-4 w-4 mr-1" />
-                        <span className="hidden sm:inline">Add</span>
+                        <Plus className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                        <span className="hidden sm:inline">{t('addMeal')}</span>
                       </>
                     )}
                   </Button>
@@ -169,12 +172,12 @@ const MealPlannerTab = () => {
                     <div key={mealType.key} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
                       <div className={`p-4 ${mealType.color} border-b border-gray-200 dark:border-gray-600`}>
                         <div className="flex items-center justify-between">
-                          <h4 className="font-semibold flex items-center gap-2">
+                          <h4 className={`font-semibold flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                             <span className="text-xl">{mealType.icon}</span>
                             <span>{mealType.label}</span>
                           </h4>
                           <Badge variant="outline" className="bg-white/50 dark:bg-gray-800/50">
-                            {typeMeals.length} {typeMeals.length === 1 ? 'item' : 'items'}
+                            {typeMeals.length} {typeMeals.length === 1 ? t('item') : t('items')}
                           </Badge>
                         </div>
                       </div>
@@ -182,7 +185,7 @@ const MealPlannerTab = () => {
                       <div className="p-4 bg-white dark:bg-gray-800">
                         {typeMeals.length === 0 ? (
                           <p className="text-gray-500 dark:text-gray-400 text-sm italic text-center py-4">
-                            No meals planned for {mealType.label.toLowerCase()}
+                            {t('noMealsPlanned')} {mealType.label.toLowerCase()}
                           </p>
                         ) : (
                           <div className="space-y-3">
@@ -195,14 +198,14 @@ const MealPlannerTab = () => {
                                     </h5>
                                     {meal.time && (
                                       <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                        Added at {meal.time}
+                                        {t('addedAt')} {meal.time}
                                       </p>
                                     )}
                                   </div>
-                                  <div className="flex items-center gap-2 ml-3">
+                                  <div className={`flex items-center gap-2 ${isRTL ? 'ml-0 mr-3' : 'ml-3'}`}>
                                     {meal.calories && (
                                       <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-300">
-                                        {meal.calories} cal
+                                        {meal.calories} {t('calories')}
                                       </Badge>
                                     )}
                                     <Button
@@ -219,27 +222,27 @@ const MealPlannerTab = () => {
                                 {/* Enhanced Nutrition Data Card */}
                                 {meal.nutrition_data && meal.nutrition_data.foods && meal.nutrition_data.foods.length > 0 && (
                                   <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
-                                    <h6 className="text-sm font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center gap-1">
-                                      🍎 Nutrition Facts
+                                    <h6 className={`text-sm font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                      🍎 {t('nutritionFacts')}
                                     </h6>
                                     {meal.nutrition_data.foods.slice(0, 1).map((food: any, index: number) => (
                                       <div key={index} className="text-sm text-green-700 dark:text-green-300">
                                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                                          <div className="flex items-center gap-1">
+                                          <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                                             <span>💪</span>
-                                            <span className="text-xs">{Math.round(food.nf_protein || 0)}g protein</span>
+                                            <span className="text-xs">{Math.round(food.nf_protein || 0)}g {t('protein')}</span>
                                           </div>
-                                          <div className="flex items-center gap-1">
+                                          <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                                             <span>🌾</span>
-                                            <span className="text-xs">{Math.round(food.nf_total_carbohydrate || 0)}g carbs</span>
+                                            <span className="text-xs">{Math.round(food.nf_total_carbohydrate || 0)}g {t('carbs')}</span>
                                           </div>
-                                          <div className="flex items-center gap-1">
+                                          <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                                             <span>🧈</span>
-                                            <span className="text-xs">{Math.round(food.nf_total_fat || 0)}g fat</span>
+                                            <span className="text-xs">{Math.round(food.nf_total_fat || 0)}g {t('fat')}</span>
                                           </div>
-                                          <div className="flex items-center gap-1">
+                                          <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                                             <span>🌿</span>
-                                            <span className="text-xs">{Math.round(food.nf_dietary_fiber || 0)}g fiber</span>
+                                            <span className="text-xs">{Math.round(food.nf_dietary_fiber || 0)}g {t('fiber')}</span>
                                           </div>
                                         </div>
                                       </div>
