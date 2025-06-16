@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Apple, Heart, Zap, LogOut, Trash2, Utensils, Menu, X } from 'lucide-react';
+import { Send, Bot, User, Heart, Zap, LogOut, Trash2, Utensils, Menu, X, Droplet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import DarkModeToggle from '@/components/DarkModeToggle';
 import LanguageToggle from '@/components/LanguageToggle';
 import MealPlannerTab from '@/components/MealPlannerTab';
+import WaterTrackerTab from '@/components/WaterTrackerTab';
 
 // Define interface for the food object
 interface FoodItem {
@@ -370,8 +371,8 @@ const Index = () => {
       <SheetContent side={isRTL ? "left" : "right"} className="w-64 p-4">
         <div className="flex flex-col space-y-4">
           <div className="flex items-center space-x-2" key={`mobile-header-${language}`}>
-            <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full">
-              <Apple className="h-5 w-5 text-white" />
+            <div className="p-2 rounded-full overflow-hidden">
+              <img src="/logo.png" alt="NutriMentor Logo" className="h-12 w-12" />
             </div>
             <span className="font-semibold text-lg">
               {language === 'he' ? translations.he.nutrimentor : translations.en.nutrimentor}
@@ -456,8 +457,8 @@ const Index = () => {
       <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-b border-green-100 dark:border-gray-700 shrink-0 shadow-sm">
         <div className="h-10 sm:h-12 px-3 sm:px-4 flex items-center">
           <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 sm:space-x-3 flex-1 min-w-0`} key={`header-${language}`}>
-            <div className="p-1.5 sm:p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full shadow-lg">
-              <Apple className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+            <div className="p-1.5 sm:p-2 rounded-full shadow-lg overflow-hidden">
+              <img src="/logo.png" alt="NutriMentor Logo" className="h-8 w-8 sm:h-10 sm:w-10" />
             </div>
             <div className="flex-1 min-w-0">
               <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent truncate">
@@ -531,8 +532,8 @@ const Index = () => {
                 <SheetContent side={isRTL ? "left" : "right"} className="w-72 p-4">
                   <div className="flex flex-col space-y-4">
                     <div className="flex items-center space-x-2">
-                      <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full">
-                        <Apple className="h-5 w-5 text-white" />
+                      <div className="p-2 rounded-full overflow-hidden">
+                        <img src="/logo.png" alt="NutriMentor Logo" className="h-8 w-8" />
                       </div>
                       <span className="font-semibold text-lg">{t('nutrimentor')}</span>
                     </div>
@@ -623,6 +624,10 @@ const Index = () => {
             <TabsTrigger value="meals" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-1 sm:py-1.5`}>
               <Utensils className="h-4 w-4 sm:h-4 sm:w-4" />
               <span>{t('meals')}</span>
+            </TabsTrigger>
+            <TabsTrigger value="water" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-2 sm:py-3`}>
+              <Droplet className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span>{t('water')}</span>
             </TabsTrigger>
           </TabsList>
 
@@ -746,6 +751,12 @@ const Index = () => {
           <TabsContent value="meals" className="m-0 p-0 overflow-auto flex-1">
             <Card className="border-0 rounded-none shadow-none bg-transparent h-full">
               <MealPlannerTab />
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="water" className="m-0 p-0 overflow-hidden">
+            <Card className="border-0 rounded-none shadow-none bg-transparent overflow-hidden">
+              <WaterTrackerTab />
             </Card>
           </TabsContent>
         </Tabs>
