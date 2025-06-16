@@ -6,7 +6,7 @@ import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { useSettings } from '@/hooks/useSettings';
-import { Apple, Mail, Eye, EyeOff, Github, Loader2 } from 'lucide-react';
+import { Mail, Eye, EyeOff, Github, Loader2 } from 'lucide-react';
 
 const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -184,8 +184,8 @@ const Auth = () => {
       <Card className="w-full max-w-sm sm:max-w-md p-4 sm:p-6 space-y-4 sm:space-y-6 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border border-gray-200/50 dark:border-gray-700/50 shadow-xl">
         <div className="text-center space-y-2">
           <div className="flex justify-center">
-            <div className="p-2 sm:p-3 bg-gradient-to-r from-slate-400 to-gray-500 rounded-full shadow-lg">
-              <Apple className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
+            <div className="p-2 sm:p-3 rounded-full shadow-lg overflow-hidden">
+              <img src="/logo.png" alt="NutriMentor Logo" className="h-16 w-16 sm:h-20 sm:w-20" />
             </div>
           </div>
           <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-slate-600 to-gray-700 bg-clip-text text-transparent">

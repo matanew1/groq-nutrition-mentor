@@ -1,73 +1,141 @@
-# Welcome to your Lovable project
+# GROQ Nutrition Mentor
 
-## Project info
+A modern nutrition tracking and AI-powered meal planning application built with React, TypeScript, and powered by GROQ AI.
 
-**URL**: https://lovable.dev/projects/45602608-80e0-4966-936f-25e98866c457
+![GitHub License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-## How can I edit this code?
+## 🍎 About
 
-There are several ways of editing your application.
+GROQ Nutrition Mentor is a comprehensive nutrition tracking and meal planning application that leverages artificial intelligence to provide personalized nutrition advice. The app supports both English and Hebrew languages, offering a fully responsive interface with both light and dark modes.
 
-**Use Lovable**
+## ✨ Features
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/45602608-80e0-4966-936f-25e98866c457) and start prompting.
+- **AI Nutrition Assistance**: Get personalized nutrition advice powered by GROQ API
+- **Meal Planning**: Create and manage daily meal plans
+- **Nutrition Data**: Access detailed nutrition information for thousands of foods via Nutritionix API
+- **Multilingual Support**: Full support for English and Hebrew, including RTL layout
+- **User Authentication**: Secure login with email, Google, or GitHub via Supabase
+- **Dark Mode**: Toggle between light and dark themes
+- **Responsive Design**: Works seamlessly across desktop and mobile devices
+- **Data Persistence**: All your nutrition data and meal plans are securely stored
 
-Changes made via Lovable will be committed automatically to this repo.
+## 🛠️ Technologies
 
-**Use your preferred IDE**
+- **Frontend**: React, TypeScript, Vite
+- **UI Components**: shadcn UI and Tailwind CSS
+- **State Management**: React Context API and React Query
+- **Authentication**: Supabase Auth
+- **Database**: Supabase PostgreSQL
+- **APIs**: GROQ API (AI), Nutritionix API (food data)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## 🚀 Getting Started
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prerequisites
 
-Follow these steps:
+- Node.js 16.x or higher
+- npm or bun package manager
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Installation
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+1. Clone the repository:
+   ```sh
+   git clone <your-repo-url>
+   cd groq-nutrition-mentor
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+2. Install dependencies:
+   ```sh
+   npm install
+   # or
+   bun install
+   ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+3. Start the development server:
+   ```sh
+   npm run dev
+   # or
+   bun dev
+   ```
+
+4. Open your browser and navigate to:
+   ```
+   http://localhost:5173
+   ```
+
+## 🧩 Project Structure
+
+```
+src/
+├── components/       # UI components
+├── contexts/         # React context for global state
+├── hooks/            # Custom React hooks
+├── integrations/     # Third-party integrations
+├── lib/              # Utility libraries
+├── pages/            # Application pages
+└── utils/            # Utility functions
 ```
 
-**Edit a file directly in GitHub**
+## 🔑 Environment Variables
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+The application requires the following environment variables:
 
-**Use GitHub Codespaces**
+- `SUPABASE_URL`: Your Supabase project URL
+- `SUPABASE_KEY`: Your Supabase anon/public key
+- `GROQ_API_KEY`: Your GROQ API key
+- `NUTRITIONIX_APP_ID`: Your Nutritionix App ID
+- `NUTRITIONIX_API_KEY`: Your Nutritionix API Key
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 📱 Features In Detail
 
-## What technologies are used for this project?
+### Chat Interface
 
-This project is built with:
+- Natural language nutrition advice
+- Food nutrition lookup
+- Diet recommendations
+- AI-powered responses to nutrition questions
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+### Meal Planner
 
-## How can I deploy this project?
+- Daily meal planning with calendar view
+- Categorized meals (breakfast, lunch, dinner, snacks)
+- Automatic calorie calculation
+- Nutrition data for planned meals
 
-Simply open [Lovable](https://lovable.dev/projects/45602608-80e0-4966-936f-25e98866c457) and click on Share -> Publish.
+### User Settings
 
-## Can I connect a custom domain to my Lovable project?
+- Language preference (English/Hebrew)
+- Theme preference (Light/Dark)
+- Notification settings
+- User profile management
 
-Yes, you can!
+## 🛡️ Authentication
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+The app provides multiple authentication methods:
+- Email/Password
+- Google OAuth
+- GitHub OAuth
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+User authentication is managed through Supabase authentication services.
+
+## 🔄 Data Flow
+
+1. User inputs food or nutrition questions
+2. App processes input through GROQ API for AI responses or Nutritionix API for nutrition data
+3. Results are displayed to user and stored in Supabase database
+4. User can save meals to meal plans and track nutrition over time
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgments
+
+- [GROQ API](https://groq.com/) for AI functionality
+- [Nutritionix API](https://www.nutritionix.com/business/api) for nutrition data
+- [Supabase](https://supabase.io/) for authentication and database
+- [shadcn/ui](https://ui.shadcn.com/) for UI components
+- [Tailwind CSS](https://tailwindcss.com/) for styling
