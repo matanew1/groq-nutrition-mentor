@@ -1,100 +1,192 @@
-
-export interface TranslationKey {
-  nutrimentor: string;
-  subtitle: string;
-  chat: string;
-  meals: string;
-  water: string;
-  typeMessage: string;
-  loading: string;
-  error: string;
-  success: string;
-  signIn: string;
-  signOut: string;
-  welcome: string;
-  clearChat: string;
-  nutritionFacts: string;
-  calories: string;
-  protein: string;
-  carbs: string;
-  fat: string;
-  signInRequired: string;
-  signInToSaveMeals: string;
-  selectDate: string;
-  addNewMeal: string;
-  enterMealName: string;
-  addMeal: string;
-  breakfast: string;
-  lunch: string;
-  dinner: string;
-  snack: string;
-  noMealsPlanned: string;
-  addingMealWithNutrition: string;
-}
-
 export const translations = {
   en: {
-    nutrimentor: "NutriMentor AI",
-    subtitle: "Your AI-powered nutrition companion",
-    chat: "Chat",
-    meals: "Meals",
-    water: "Water",
-    typeMessage: "Type your nutrition question...",
-    loading: "Loading...",
-    error: "Error",
-    success: "Success",
-    signIn: "Sign In",
-    signOut: "Sign Out",
-    welcome: "Welcome",
-    clearChat: "Clear Chat",
-    nutritionFacts: "Nutrition Facts",
-    calories: "calories",
-    protein: "protein",
-    carbs: "carbs",
-    fat: "fat",
-    signInRequired: "Sign In Required",
-    signInToSaveMeals: "Please sign in to save and track your meals",
-    selectDate: "Select Date",
-    addNewMeal: "Add New Meal",
-    enterMealName: "Enter meal name...",
-    addMeal: "Add Meal",
-    breakfast: "Breakfast",
-    lunch: "Lunch", 
-    dinner: "Dinner",
-    snack: "Snack",
-    noMealsPlanned: "No meals planned for",
-    addingMealWithNutrition: "Adding meal with nutrition data..."
-  } as TranslationKey,
+    // Navigation
+    'nutrimentor': 'NutriMentor AI',
+    'subtitle': 'Your Personal Nutrition Assistant',
+    'chat': 'Chat',
+    'calendar': 'Calendar',
+    'meals': 'Meal Planner',
+    
+    // Authentication
+    'signIn': 'Sign In',
+    'signOut': 'Sign Out',
+    'welcome': 'Welcome',
+    'welcomeBack': 'Welcome Back',
+    'createAccount': 'Create Account',
+    'continueWithGoogle': 'Continue with Google',
+    'continueWithGitHub': 'Continue with GitHub',
+    'continueWithEmail': 'Or continue with',
+    'fullName': 'Full Name',
+    'email': 'Email',
+    'password': 'Password',
+    'pleaseWait': 'Please wait...',
+    'alreadyHaveAccount': 'Already have an account? Sign in',
+    'dontHaveAccount': "Don't have an account? Sign up",
+    'joinNutriMentor': 'Join NutriMentor AI today',
+    'signInToNutrition': 'Sign in to your nutrition assistant',
+    'enterUserName': 'Enter your name',
+    
+    // Chat
+    'typeMessage': 'Ask about nutrition, calories, meal planning...',
+    'nutritionFacts': 'Nutrition Facts',
+    'calories': 'cal',
+    'protein': 'protein',
+    'carbs': 'carbs',
+    'fat': 'fat',
+    'clearChat': 'Clear Chat',
+    'chatWelcomeMessage': "Hello! I'm your personal nutrition mentor. I can help you with meal planning, nutritional analysis, calorie counting, and healthy eating advice. Try asking me about the nutrition facts of any food or for meal suggestions!",
+    
+    // Settings
+    'language': 'Language',
+    'notifications': 'Notifications',
+    'userName': 'User Name',
+    'save': 'Save',
+    'darkMode': 'Dark Mode',
+    'on': 'On',
+    'off': 'Off',
+    'settingsSaved': 'Settings saved successfully',
+    
+    // Meal Planner
+    'mealPlanner': 'Meal Planner',
+    'breakfast': 'Breakfast',
+    'lunch': 'Lunch',
+    'dinner': 'Dinner',
+    'snack': 'Snack',
+    'addMeal': 'Add Meal',
+    'selectDate': 'Select Date',
+    'addNewMeal': 'Add New Meal',
+    'enterMealName': 'Enter meal name (e.g., \'Grilled chicken breast\')',
+    'addingMealWithNutrition': 'Adding meal with nutrition data...',
+    'noMealsPlanned': 'No meals planned for',
+    'addedAt': 'Added at',
+    'item': 'item',
+    'items': 'items',
+    'signInRequired': 'Sign In Required',
+    'signInToSaveMeals': 'Please sign in to save and manage your personalized meal plans.',
+    'fiber': 'fiber',
+    
+    // Common
+    'loading': 'Loading...',
+    'error': 'Error',
+    'success': 'Success',
+    'cancel': 'Cancel',
+    'confirm': 'Confirm',
+    
+    // Date formatting
+    'monday': 'Monday',
+    'tuesday': 'Tuesday',
+    'wednesday': 'Wednesday',
+    'thursday': 'Thursday',
+    'friday': 'Friday',
+    'saturday': 'Saturday',
+    'sunday': 'Sunday',
+    'january': 'January',
+    'february': 'February',
+    'march': 'March',
+    'april': 'April',
+    'may': 'May',
+    'june': 'June',
+    'july': 'July',
+    'august': 'August',
+    'september': 'September',
+    'october': 'October',
+    'november': 'November',
+    'december': 'December'
+  },
   he: {
-    nutrimentor: "נוטרי מנטור AI",
-    subtitle: "המלווה התזונתי החכם שלך",
-    chat: "צ'אט",
-    meals: "ארוחות",
-    water: "מים",
-    typeMessage: "כתוב את השאלה התזונתית שלך...",
-    loading: "טוען...",
-    error: "שגיאה",
-    success: "הצלחה",
-    signIn: "התחבר",
-    signOut: "התנתק",
-    welcome: "ברוך הבא",
-    clearChat: "נקה צ'אט",
-    nutritionFacts: "נתונים תזונתיים",
-    calories: "קלוריות",
-    protein: "חלבון",
-    carbs: "פחמימות",
-    fat: "שומן",
-    signInRequired: "נדרשת התחברות",
-    signInToSaveMeals: "אנא התחבר כדי לשמור ולעקוב אחר הארוחות שלך",
-    selectDate: "בחר תאריך",
-    addNewMeal: "הוסף ארוחה חדשה",
-    enterMealName: "הכנס שם ארוחה...",
-    addMeal: "הוסף ארוחה",
-    breakfast: "ארוחת בוקר",
-    lunch: "ארוחת צהריים",
-    dinner: "ארוחת ערב", 
-    snack: "חטיף",
-    noMealsPlanned: "לא נתוכננו ארוחות עבור",
-    addingMealWithNutrition: "מוסיף ארוחה עם נתונים תזונתיים..."
-  } as TranslationKey
+    // Navigation
+    'nutrimentor': 'נוטרי מנטור AI',
+    'subtitle': 'העוזר התזונתי האישי שלך',
+    'chat': 'צ\'אט',
+    'calendar': 'לוח שנה',
+    'meals': 'מתכנן ארוחות',
+    
+    // Authentication
+    'signIn': 'התחבר',
+    'signOut': 'התנתק',
+    'welcome': 'ברוך הבא',
+    'welcomeBack': 'ברוך השב',
+    'createAccount': 'צור חשבון',
+    'continueWithGoogle': 'המשך עם גוגל',
+    'continueWithGitHub': 'המשך עם גיטהאב',
+    'continueWithEmail': 'או המשך עם',
+    'fullName': 'שם מלא',
+    'email': 'אימייל',
+    'password': 'סיסמה',
+    'pleaseWait': 'אנא המתן...',
+    'alreadyHaveAccount': 'יש לך חשבון? התחבר',
+    'dontHaveAccount': 'אין לך חשבון? הירשם',
+    'joinNutriMentor': 'הצטרף לנוטרי מנטור AI היום',
+    'signInToNutrition': 'התחבר לעוזר התזונה שלך',
+    'enterUserName': 'הכנס את שמך',
+    
+    // Chat
+    'typeMessage': 'שאל על תזונה, קלוריות, תכנון ארוחות...',
+    'nutritionFacts': 'נתוני תזונה',
+    'calories': 'קלוריות',
+    'protein': 'חלבון',
+    'carbs': 'פחמימות',
+    'fat': 'שומן',
+    'clearChat': 'נקה צ\'אט',
+    'chatWelcomeMessage': 'שלום! אני המנטור התזונתי האישי שלך. אני יכול לעזור לך עם תכנון ארוחות, ניתוח תזונתי, ספירת קלוריות ועצות תזונה בריאה. נסה לשאול אותי על נתוני התזונה של כל מזון או להמלצות ארוחות!',
+    
+    // Settings
+    'language': 'שפה',
+    'notifications': 'התראות',
+    'userName': 'שם משתמש',
+    'save': 'שמור',
+    'darkMode': 'מצב כהה',
+    'on': 'פועל',
+    'off': 'כבוי',
+    'settingsSaved': 'ההגדרות נשמרו בהצלחה',
+    
+    // Meal Planner
+    'mealPlanner': 'מתכנן ארוחות',
+    'breakfast': 'ארוחת בוקר',
+    'lunch': 'ארוחת צהריים',
+    'dinner': 'ארוחת ערב',
+    'snack': 'חטיף',
+    'addMeal': 'הוסף ארוחה',
+    'selectDate': 'בחר תאריך',
+    'addNewMeal': 'הוסף ארוחה חדשה',
+    'enterMealName': 'הכנס שם ארוחה (למשל, \'חזה עוף צלוי\')',
+    'addingMealWithNutrition': 'מוסיף ארוחה עם נתוני תזונה...',
+    'noMealsPlanned': 'לא מתוכננות ארוחות עבור',
+    'addedAt': 'נוסף ב',
+    'item': 'פריט',
+    'items': 'פריטים',
+    'signInRequired': 'נדרשת התחברות',
+    'signInToSaveMeals': 'אנא התחבר כדי לשמור ולנהל את תוכניות הארוחות האישיות שלך.',
+    'fiber': 'סיבים',
+    
+    // Common
+    'loading': 'טוען...',
+    'error': 'שגיאה',
+    'success': 'הצלחה',
+    'cancel': 'ביטול',
+    'confirm': 'אישור',
+    
+    // Date formatting
+    'monday': 'יום שני',
+    'tuesday': 'יום שלישי',
+    'wednesday': 'יום רביעי',
+    'thursday': 'יום חמישי',
+    'friday': 'יום שישי',
+    'saturday': 'יום שבת',
+    'sunday': 'יום ראשון',
+    'january': 'ינואר',
+    'february': 'פברואר',
+    'march': 'מרץ',
+    'april': 'אפריל',
+    'may': 'מאי',
+    'june': 'יוני',
+    'july': 'יולי',
+    'august': 'אוגוסט',
+    'september': 'ספטמבר',
+    'october': 'אוקטובר',
+    'november': 'נובמבר',
+    'december': 'דצמבר'
+  }
 };
+
+export type TranslationKey = keyof typeof translations.en;

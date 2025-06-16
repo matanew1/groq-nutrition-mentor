@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Apple, Heart, Zap, LogOut, Trash2, Utensils, Menu, X, Droplets } from 'lucide-react';
+import { Send, Bot, User, Apple, Heart, Zap, LogOut, Trash2, Utensils, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -19,7 +19,6 @@ import { useNavigate } from 'react-router-dom';
 import DarkModeToggle from '@/components/DarkModeToggle';
 import LanguageToggle from '@/components/LanguageToggle';
 import MealPlannerTab from '@/components/MealPlannerTab';
-import WaterTrackerTab from '@/components/WaterTrackerTab';
 
 // Define interface for the food object
 interface FoodItem {
@@ -176,95 +175,280 @@ const Index = () => {
       
       // Hebrew patterns for food queries - expanded
       const hebrewFoodPhrasePatterns = [
-        /(?:קלוריות|תזונה|ערכים תזונתיים|חלבון|פחמימות|שומן)\s+(?:ב|של|ל)\s+(.+?)(?:$|\?|\.)/i,
-        /(?:כמה קלוריות|כמה חלבון|כמה פחמימות|ערך תזונתי)\s+(?:ב|של|ל)\s+(.+?)(?:$|\?|\.)/i,
-        /(?:מה זה|ספר לי על)\s+(?:התזונה|הקלוריות|החלבון|הפחמימות)\s+(?:ב|של|ל)\s+(.+?)(?:$|\?|\.)/i,
-        /(?:מהם|כמה)\s+(?:העובדות התזונתיות|קלוריות)\s+(?:ב|של)\s+(.+?)(?:$|\?|\.)/i,
-        /(?:אכלתי|היה לי|צרכתי)\s+(.+?)(?:$|\?|\.|,)/i,
+        /(?:קלוריות|תזונה|ערך תזונתי|חלבון|פחמימות|שומן)\s+(?:ב|של|עבור)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:כמה קלוריות|כמה חלבון|כמה פחמימות|ערך תזונתי)\s+(?:יש ב|יש ל|ב|של|עבור)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:מה|ספר לי על)\s+(?:הקלוריות|הערך התזונתי|החלבון|הפחמימות|התזונה)\s+(?:של|ב|עבור)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:מנה של|כמות של|חתיכת|פרוסת)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:מהו|מה זה|מה ההרכב של)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:אכלתי|אכלנו|אוכל|אוכלת)\s+(.+?)(?:$|\?|\.|,)/i,
       ];
       
-      const isEnglishFoodPhrase = englishFoodPhrasePatterns.some(pattern => pattern.test(currentInput));
-      const isHebrewFoodPhrase = hebrewFoodPhrasePatterns.some(pattern => pattern.test(currentInput));
+      // Determine if we should use Hebrew patterns based on the language detection
+      const isHebrewMessage = isHebrew(currentInput);
+      const foodPhrasePatterns = isHebrewMessage ? hebrewFoodPhrasePatterns : englishFoodPhrasePatterns;
       
-      const shouldCallNutritionAPI = isNutritionQuery || isEnglishFoodPhrase || isHebrewFoodPhrase;
+      let isSpecificFoodQuery = foodPhrasePatterns.some(pattern => pattern.test(currentInput));
+      
+      // Check with alternative patterns if first set didn't match
+      if (!isSpecificFoodQuery) {
+        const alternativePatterns = isHebrewMessage ? englishFoodPhrasePatterns : hebrewFoodPhrasePatterns;
+        isSpecificFoodQuery = alternativePatterns.some(pattern => pattern.test(currentInput));
+      }
+      
+      // Also check for simple food mentions in Hebrew
+      if (!isSpecificFoodQuery && isHebrewMessage) {
+        // Import the food terms dictionary from nutritionixApi.ts for consistency
+        const foodTerms = [
+          'לחם', 'חלב', 'ביצה', 'ביצים', 'עוף', 'בשר', 'דג', 'אורז', 'תפוח אדמה', 'תפוחי אדמה',
+          'גבינה', 'יוגורט', 'ירקות', 'פירות', 'קפה', 'תה', 'מים', 'שוקולד', 'עוגה', 'עוגיות',
+          'חומוס', 'טחינה', 'פלאפל', 'שקשוקה', 'פיתה', 'חלה', 'סלט', 'תפוח', 'בננה', 'תפוז'
+        ];
+        
+        isSpecificFoodQuery = foodTerms.some(term => currentInput.includes(term));
+      }
+      
+      let nutritionData = null;
+      let contextualInfo = '';
 
-      if (shouldCallNutritionAPI) {
-        // Extract food item from the query using regex
-        let foodItem = currentInput;
-        
-        // Try to extract food item using English patterns
-        for (const pattern of englishFoodPhrasePatterns) {
-          const match = currentInput.match(pattern);
-          if (match && match[1]) {
-            foodItem = match[1].trim();
-            break;
+      // If it's a nutrition query or specifically asks about food
+      if (isNutritionQuery || isSpecificFoodQuery) {
+        try {
+          nutritionData = await searchNutrition(currentInput);
+          
+          if (nutritionData && nutritionData.foods && nutritionData.foods.length > 0) {
+            const food = nutritionData.foods[0];
+            
+            // Format nutrition information according to detected language
+            if (isHebrewMessage) {
+              contextualInfo = `\n\nנתוני תזונה עבור ${food.food_name}${food.brand_name ? ` (${food.brand_name})` : ''}:
+              
+              - גודל מנה: ${food.serving_qty} ${food.serving_unit} (${food.serving_weight_grams || 0} גרם)
+              - קלוריות: ${Math.round(food.nf_calories)} קק"ל
+              - חלבון: ${Math.round(food.nf_protein)} גרם
+              - פחמימות: ${Math.round(food.nf_total_carbohydrate)} גרם
+                - מתוכן סוכרים: ${Math.round(food.nf_sugars)} גרם
+                - מתוכן סיבים תזונתיים: ${Math.round(food.nf_dietary_fiber)} גרם
+              - שומן: ${Math.round(food.nf_total_fat)} גרם
+              
+              אנא הגב עם תובנות תזונתיות על בסיס נתונים אלה.`;
+            } else {
+              contextualInfo = `\n\nNutrition data found for ${food.food_name}${food.brand_name ? ` (${food.brand_name})` : ''}:
+              
+              - Serving size: ${food.serving_qty} ${food.serving_unit} (${food.serving_weight_grams || 0}g)
+              - Calories: ${Math.round(food.nf_calories)} kcal
+              - Protein: ${Math.round(food.nf_protein)}g
+              - Carbohydrates: ${Math.round(food.nf_total_carbohydrate)}g
+                - of which sugars: ${Math.round(food.nf_sugars)}g
+                - of which fiber: ${Math.round(food.nf_dietary_fiber)}g
+              - Fat: ${Math.round(food.nf_total_fat)}g
+              
+              Please respond with nutritional insights based on this data.`;
+            }
+          } else if (isSpecificFoodQuery) {
+            // If we failed to get nutrition data but it was a specific food query
+            if (isHebrewMessage) {
+              contextualInfo = "\n\nלא הצלחתי למצוא מידע תזונתי ספציפי עבור מזון זה. אנא ספק מידע תזונתי כללי על סוג זה של מזון.";
+            } else {
+              contextualInfo = "\n\nI couldn't find specific nutrition data for that food item. Please provide general nutritional information about this type of food.";
+            }
           }
-        }
-        
-        // If no match in English, try Hebrew patterns
-        if (foodItem === currentInput) {
-          for (const pattern of hebrewFoodPhrasePatterns) {
-            const match = currentInput.match(pattern);
-            if (match && match[1]) {
-              foodItem = match[1].trim();
-              break;
+        } catch (error) {
+          console.log('Nutritionix API call failed, continuing with AI response only');
+          if (isSpecificFoodQuery) {
+            // Let the AI know it should focus on nutrition despite the API failure
+            if (isHebrewMessage) {
+              contextualInfo = "\n\nלא הצלחתי לאחזר את נתוני התזונה המדויקים, אך אנא ספק מידע תזונתי כללי על מזון או רכיב זה.";
+            } else {
+              contextualInfo = "\n\nI couldn't retrieve the exact nutrition data, but please provide general nutritional information about this food or ingredient.";
             }
           }
         }
-        
-        const nutritionData = await searchNutrition(foodItem);
-        
-        if (nutritionData && nutritionData.foods && nutritionData.foods.length > 0) {
-          const enrichedMessage = addEmojisToMessage(currentInput, language);
-          await addMessage({
-            content: enrichedMessage,
-            sender: 'bot',
-            nutritionData: nutritionData
-          });
-        } else {
-          const groqResponse = await callGroqAPI(currentInput, language);
-          await addMessage({
-            content: groqResponse,
-            sender: 'bot'
-          });
-          if (groqResponse.includes("I am unable to find detailed information about the nutritional content")) {
-            toast({
-              title: t('error'),
-              description: "I am unable to find detailed information about the nutritional content of the food you mentioned. Please try again with a more specific search.",
-              variant: "destructive",
-            });
-          }
-        }
-      } else {
-        const groqResponse = await callGroqAPI(currentInput, language);
-        await addMessage({
-          content: groqResponse,
-          sender: 'bot'
-        });
       }
-    } catch (error: unknown) {
+
+      const isNutritionRelated = contextualInfo.length > 0;
+      
+      const aiPrompt = `You are NutriMentor AI, a professional nutrition mentor and health coach with expertise in nutritional science, dietary planning, and wellness coaching. 
+      
+      ${isHebrewMessage ? 'Please respond in Hebrew as the user wrote in Hebrew.' : ''}
+      
+      User question: "${currentInput}"
+      
+      ${contextualInfo ? `Additional nutrition data context: ${contextualInfo}` : ''}
+      
+      ${isNutritionRelated ? 
+        isHebrewMessage ? `
+        בעת מתן ייעוץ תזונתי:
+        - הסבר את היתרונות התזונתיים או החששות לגבי המזון
+        - הזכר כיצד הוא משתלב בתזונה מאוזנת
+        - הצע דרכים בריאות לשילוב מזון זה
+        - התייחס להמלצות לגבי גודל המנה
+        - התייחס לתפיסות שגויות נפוצות לגבי מזון זה
+        ` : `
+        When providing nutrition advice:
+        - Explain the nutritional benefits or concerns of the food
+        - Mention how it fits into a balanced diet
+        - Suggest healthy ways to incorporate this food
+        - Consider portion size recommendations
+        - Address any common misconceptions about this food
+        `
+        : isHebrewMessage ? `
+        אם זוהי שאלה הקשורה לתזונה:
+        - ספק מידע מבוסס מחקר
+        - הסבר מושגים בצורה ברורה ופשוטה
+        - הצע עצות מעשיות שהמשתמש יוכל ליישם
+        - התחשב באיזון תזונתי כללי ואורח חיים
+        - היה מעודד וחיובי בטון שלך
+        ` : `
+        If this is a nutrition-related query:
+        - Provide evidence-based information
+        - Explain concepts in clear, simple terms
+        - Offer practical advice the user can implement
+        - Consider overall dietary balance and lifestyle
+        - Be encouraging and positive in your tone
+        `
+      }
+      
+      Please provide a helpful, professional response with actionable advice tailored to the user's question.`;
+
+      const aiResponse = await callGroqAPI(aiPrompt);
+      const enhancedResponse = addEmojisToMessage(aiResponse);
+
+      await addMessage({
+        content: enhancedResponse,
+        sender: 'bot',
+        nutritionData: nutritionData
+      });
+
+    } catch (error) {
+      console.error('Error getting response:', error);
       toast({
         title: t('error'),
-        description: error instanceof Error ? error.message : "An unknown error occurred",
+        description: "Failed to get response. Please try again.",
         variant: "destructive",
+      });
+      
+      // Error message in appropriate language
+      const errorMessage = isHebrew(currentInput) 
+        ? "❌ אני מתנצל, אך יש לי בעיות התחברות כרגע. אנא נסה שוב בעוד רגע."
+        : "❌ I apologize, but I'm having trouble connecting right now. Please try again in a moment.";
+      
+      await addMessage({
+        content: errorMessage,
+        sender: 'bot'
       });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleSendMessage();
     }
   };
 
-  const formatTime = (timestamp: string) => {
-    const date = new Date(timestamp);
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
+
+  // Show loading state while checking authentication
+  if (authLoading || messagesLoading) {
+    return (
+      <div className="h-screen w-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-green-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-300 text-sm sm:text-base">{t('loading')}</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Mobile menu component
+  const MobileMenu = () => (
+    <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+      <SheetContent side={isRTL ? "left" : "right"} className="w-64 p-4">
+        <div className="flex flex-col space-y-4">
+          <div className="flex items-center space-x-2" key={`mobile-header-${language}`}>
+            <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full">
+              <Apple className="h-5 w-5 text-white" />
+            </div>
+            <span className="font-semibold text-lg">
+              {language === 'he' ? translations.he.nutrimentor : translations.en.nutrimentor}
+            </span>
+          </div>
+          
+          <div className="space-y-3">
+            <div className="flex items-center space-x-2">
+              <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300">
+                <Heart className="h-3 w-3 mr-1" />
+                Health
+              </Badge>
+              <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
+                <Zap className="h-3 w-3 mr-1" />
+                AI
+              </Badge>
+            </div>
+            
+            <div className="flex items-center space-x-2" key={`mobile-menu-${language}`}>
+              <LanguageToggle />
+              <DarkModeToggle isDark={isDarkMode} onToggle={() => setIsDarkMode(!isDarkMode)} />
+            </div>
+            
+            {user && (
+              <div className="space-y-2">
+                {userName && (
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    {t('welcome')}, {userName}
+                  </p>
+                )}
+                {activeTab === 'chat' && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      handleClearMessages();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full justify-start"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    {t('clearChat')}
+                  </Button>
+                )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => {
+                    handleSignOut();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full justify-start"
+                >
+                  <LogOut className="h-4 w-4 mr-2" />
+                  {t('signOut')}
+                </Button>
+              </div>
+            )}
+            
+            {!user && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  navigate('/auth');
+                  setMobileMenuOpen(false);
+                }}
+                className="w-full"
+              >
+                {t('signIn')}
+              </Button>
+            )}
+          </div>
+        </div>
+      </SheetContent>
+    </Sheet>
+  );
 
   return (
     <div className={`h-screen w-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col ${isRTL ? 'hebrew-text' : ''}`}>
@@ -431,7 +615,7 @@ const Index = () => {
       {/* Main Content with Enhanced Tabs */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList className="w-full grid grid-cols-3 rounded-none border-b h-12 sm:h-auto bg-white/50 dark:bg-gray-800/50">
+          <TabsList className="w-full grid grid-cols-2 rounded-none border-b h-12 sm:h-auto bg-white/50 dark:bg-gray-800/50">
             <TabsTrigger value="chat" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-2 sm:py-3`}>
               <Bot className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>{t('chat')}</span>
@@ -439,10 +623,6 @@ const Index = () => {
             <TabsTrigger value="meals" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-2 sm:py-3`}>
               <Utensils className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>{t('meals')}</span>
-            </TabsTrigger>
-            <TabsTrigger value="water" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-2 sm:py-3`}>
-              <Droplets className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span>{t('water')}</span>
             </TabsTrigger>
           </TabsList>
 
@@ -566,12 +746,6 @@ const Index = () => {
           <TabsContent value="meals" className="m-0 p-0 overflow-hidden">
             <Card className="border-0 rounded-none shadow-none bg-transparent overflow-hidden">
               <MealPlannerTab />
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="water" className="m-0 p-0 overflow-hidden">
-            <Card className="border-0 rounded-none shadow-none bg-transparent overflow-hidden">
-              <WaterTrackerTab />
             </Card>
           </TabsContent>
         </Tabs>
