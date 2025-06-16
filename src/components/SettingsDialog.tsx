@@ -15,12 +15,10 @@ import { useSettings } from '@/contexts/SettingsContext';
 import { useToast } from '@/hooks/use-toast';
 
 const getInitialDarkMode = () => {
-  // Check localStorage for persisted theme, fallback to document
   if (typeof window !== 'undefined') {
     const stored = window.localStorage.getItem('theme');
     if (stored === 'dark') return true;
     if (stored === 'light') return false;
-    // fallback: check for system preference
     return document.documentElement.classList.contains('dark');
   }
   return false;
@@ -40,10 +38,8 @@ const SettingsDialog = () => {
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
 
-  // Dark mode toggle and persistence
   const [isDarkMode, setIsDarkMode] = useState(getInitialDarkMode());
 
-  // Update global dark mode and localStorage
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
@@ -54,7 +50,6 @@ const SettingsDialog = () => {
     }
   }, [isDarkMode]);
 
-  // Update global direction and RTL font class on language change
   useEffect(() => {
     if (language === 'he') {
       document.documentElement.setAttribute('dir', 'rtl');
@@ -65,12 +60,10 @@ const SettingsDialog = () => {
     }
   }, [language]);
 
-  // Keep local temp name in sync if changed externally
   useEffect(() => {
     setTempUserName(userName);
   }, [userName]);
 
-  // When SettingsDialog opens, sync with most recent persisted theme
   useEffect(() => {
     if (open) {
       setIsDarkMode(getInitialDarkMode());
@@ -90,7 +83,6 @@ const SettingsDialog = () => {
     });
   };
 
-  // Container classes based on direction
   const dir = language === 'he' ? 'rtl' : 'ltr';
   const isRTL = dir === 'rtl';
 
@@ -100,7 +92,7 @@ const SettingsDialog = () => {
         <Button
           variant="ghost"
           size="sm"
-          className="p-2 rounded-full hover:bg-muted"
+          className="p-2 rounded-full hover:bg-muted transition-colors"
           aria-label={t('settings')}
         >
           <Settings className="h-4 w-4 text-primary" />

@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -40,6 +39,7 @@ const translations = {
     'dontHaveAccount': "Don't have an account? Sign up",
     'joinNutriMentor': 'Join NutriMentor AI today',
     'signInToNutrition': 'Sign in to your nutrition assistant',
+    'enterUserName': 'Enter your name',
     
     // Chat
     'typeMessage': 'Ask about nutrition, calories, meal planning...',
@@ -56,6 +56,10 @@ const translations = {
     'notifications': 'Notifications',
     'userName': 'User Name',
     'save': 'Save',
+    'darkMode': 'Dark Mode',
+    'on': 'On',
+    'off': 'Off',
+    'settingsSaved': 'Settings saved successfully',
     
     // Meal Planner
     'mealPlanner': 'Meal Planner',
@@ -130,6 +134,7 @@ const translations = {
     'dontHaveAccount': 'אין לך חשבון? הירשם',
     'joinNutriMentor': 'הצטרף לנוטרי מנטור AI היום',
     'signInToNutrition': 'התחבר לעוזר התזונה שלך',
+    'enterUserName': 'הכנס את שמך',
     
     // Chat
     'typeMessage': 'שאל על תזונה, קלוריות, תכנון ארוחות...',
@@ -146,6 +151,10 @@ const translations = {
     'notifications': 'התראות',
     'userName': 'שם משתמש',
     'save': 'שמור',
+    'darkMode': 'מצב כהה',
+    'on': 'פועל',
+    'off': 'כבוי',
+    'settingsSaved': 'ההגדרות נשמרו בהצלחה',
     
     // Meal Planner
     'mealPlanner': 'מתכנן ארוחות',
@@ -252,11 +261,12 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     try {
       const { error } = await supabase
         .from('profiles')
-        .update({
+        .upsert({
+          id: user.id,
           full_name: userName,
-          settings: newSettings
-        })
-        .eq('id', user.id);
+          settings: newSettings,
+          email: user.email
+        });
 
       if (error) {
         console.error('Error saving settings:', error);
