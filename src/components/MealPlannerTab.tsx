@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -74,14 +75,14 @@ const MealPlannerTab = () => {
 
   if (!user) {
     return (
-      <div className="h-full flex flex-col items-center justify-center text-center p-6">
-        <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-full mb-6">
-          <Utensils className="h-12 w-12 text-gray-400" />
+      <div className="h-full flex flex-col items-center justify-center text-center p-4 sm:p-6">
+        <div className="p-3 sm:p-4 bg-gray-50 dark:bg-gray-800 rounded-full mb-4 sm:mb-6">
+          <Utensils className="h-8 w-8 sm:h-12 sm:w-12 text-gray-400" />
         </div>
-        <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-3">
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2 sm:mb-3">
           {t('signInRequired')}
         </h3>
-        <p className="text-gray-500 dark:text-gray-400 max-w-sm">
+        <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-sm">
           {t('signInToSaveMeals')}
         </p>
       </div>
@@ -89,44 +90,44 @@ const MealPlannerTab = () => {
   }
 
   return (
-    <div className="h-full p-6">
-      {/* Grid layout to fit screen */}
-      <div className="h-full grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Calendar Section */}
-        <Card className="lg:col-span-1 shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
-          <CardHeader className="pb-3">
-            <CardTitle className={`text-lg flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-              <CalendarIcon className="h-5 w-5 text-green-600" />
+    <div className="h-full flex flex-col">
+      {/* Mobile-first layout: Stack vertically on small screens */}
+      <div className="h-full flex flex-col lg:grid lg:grid-cols-3 lg:gap-6 p-3 sm:p-6">
+        {/* Calendar Section - Collapsible on mobile */}
+        <Card className="lg:col-span-1 mb-4 lg:mb-0 shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardTitle className={`text-base sm:text-lg flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
+              <CalendarIcon className="h-4 w-4 sm:h-5 sm:w-5 text-green-600" />
               {t('selectDate')}
             </CardTitle>
           </CardHeader>
-          <CardContent className="px-6">
+          <CardContent className="px-3 sm:px-6">
             <Calendar
               mode="single"
               selected={selectedDate}
               onSelect={(date) => date && setSelectedDate(date)}
-              className="rounded-lg border-0 w-full"
+              className="rounded-lg border-0 w-full scale-90 sm:scale-100"
             />
           </CardContent>
         </Card>
 
         {/* Meal Planning Section */}
-        <div className="lg:col-span-2 flex flex-col">
-          <Card className="flex-1 shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm overflow-hidden">
-            <CardHeader className="pb-4">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <CardTitle className="text-lg sm:text-xl">
+        <div className="lg:col-span-2 flex flex-col flex-1 min-h-0">
+          <Card className="flex-1 shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm overflow-hidden flex flex-col">
+            <CardHeader className="pb-3 sm:pb-4 shrink-0">
+              <div className="flex flex-col gap-2 sm:gap-3">
+                <CardTitle className="text-base sm:text-lg md:text-xl">
                   {selectedDate ? formatDateInHebrew(selectedDate) : t('selectDate')}
                 </CardTitle>
                 <div className={`flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
                   {(loading || addingMeal) && (
-                    <div className={`flex items-center gap-2 text-sm text-gray-500 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                    <div className={`flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-gray-500 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                      <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
                       <span>{t('loading')}</span>
                     </div>
                   )}
                   {totalCalories > 0 && (
-                    <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200">
+                    <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200 text-xs">
                       🔥 {totalCalories} {t('calories')}
                     </Badge>
                   )}
@@ -134,16 +135,16 @@ const MealPlannerTab = () => {
               </div>
             </CardHeader>
 
-            <CardContent className="flex-1 overflow-auto">
-              <div className="h-full flex flex-col space-y-6">
-                {/* Add Meal Form */}
-                <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700">
-                  <h4 className="font-medium mb-3 text-gray-800 dark:text-gray-200">{t('addNewMeal')}</h4>
-                  <div className={`flex flex-col sm:flex-row gap-3 ${isRTL ? 'sm:flex-row-reverse' : ''}`}>
+            <CardContent className="flex-1 overflow-hidden flex flex-col">
+              <div className="h-full flex flex-col space-y-4 sm:space-y-6">
+                {/* Add Meal Form - More compact on mobile */}
+                <div className="p-3 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 shrink-0">
+                  <h4 className="font-medium mb-2 sm:mb-3 text-gray-800 dark:text-gray-200 text-sm sm:text-base">{t('addNewMeal')}</h4>
+                  <div className={`flex flex-col gap-2 sm:gap-3 ${isRTL ? 'sm:flex-row-reverse' : 'sm:flex-row'}`}>
                     <select
                       value={newMeal.type}
                       onChange={(e) => setNewMeal(prev => ({ ...prev, type: e.target.value as typeof newMeal.type }))}
-                      className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="px-2 sm:px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-xs sm:text-sm bg-white dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent h-9 sm:h-10"
                       disabled={addingMeal}
                       dir={isRTL ? 'rtl' : 'ltr'}
                     >
@@ -158,68 +159,69 @@ const MealPlannerTab = () => {
                       value={newMeal.name}
                       onChange={(e) => setNewMeal(prev => ({ ...prev, name: e.target.value }))}
                       onKeyPress={(e) => e.key === 'Enter' && !addingMeal && handleAddMeal()}
-                      className="flex-1 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                      className="flex-1 focus:ring-2 focus:ring-green-500 focus:border-transparent h-9 sm:h-10 text-xs sm:text-sm"
                       disabled={addingMeal}
                       dir={isRTL ? 'rtl' : 'ltr'}
                     />
                     <Button 
                       onClick={handleAddMeal} 
                       disabled={loading || addingMeal || !newMeal.name.trim()}
-                      className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-6"
+                      className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white px-3 sm:px-6 h-9 sm:h-10 text-xs sm:text-sm"
                     >
                       {addingMeal ? (
-                        <Loader2 className="h-4 w-4 animate-spin" />
+                        <Loader2 className="h-3 w-3 sm:h-4 sm:w-4 animate-spin" />
                       ) : (
                         <>
-                          <Plus className={`h-4 w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
-                          {t('addMeal')}
+                          <Plus className={`h-3 w-3 sm:h-4 sm:w-4 ${isRTL ? 'ml-1' : 'mr-1'}`} />
+                          <span className="hidden sm:inline">{t('addMeal')}</span>
+                          <span className="sm:hidden">Add</span>
                         </>
                       )}
                     </Button>
                   </div>
                 </div>
 
-                {/* Meals by Type - Scrollable */}
-                <div className="flex-1 overflow-auto space-y-4">
+                {/* Meals by Type - Scrollable with mobile optimization */}
+                <div className="flex-1 overflow-auto space-y-3 sm:space-y-4">
                   {mealTypes.map(mealType => {
                     const typeMeals = getMealsByType(mealType.key as 'breakfast' | 'lunch' | 'dinner' | 'snack');
                     return (
                       <div key={mealType.key} className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-                        <div className={`p-4 ${mealType.color} border-b border-gray-200 dark:border-gray-600`}>
+                        <div className={`p-3 sm:p-4 ${mealType.color} border-b border-gray-200 dark:border-gray-600`}>
                           <div className="flex items-center justify-between">
-                            <h4 className={`font-semibold flex items-center gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
-                              <span className="text-xl">{mealType.icon}</span>
+                            <h4 className={`font-semibold flex items-center gap-1 sm:gap-2 text-sm sm:text-base ${isRTL ? 'flex-row-reverse' : ''}`}>
+                              <span className="text-base sm:text-xl">{mealType.icon}</span>
                               <span>{mealType.label}</span>
                             </h4>
-                            <Badge variant="outline" className="bg-white/50 dark:bg-gray-800/50">
+                            <Badge variant="outline" className="bg-white/50 dark:bg-gray-800/50 text-xs">
                               {typeMeals.length} {typeMeals.length === 1 ? t('item') : t('items')}
                             </Badge>
                           </div>
                         </div>
                         
-                        <div className="p-4 bg-white dark:bg-gray-800">
+                        <div className="p-3 sm:p-4 bg-white dark:bg-gray-800">
                           {typeMeals.length === 0 ? (
-                            <p className="text-gray-500 dark:text-gray-400 text-sm italic text-center py-4">
+                            <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm italic text-center py-3 sm:py-4">
                               {t('noMealsPlanned')} {mealType.label.toLowerCase()}
                             </p>
                           ) : (
-                            <div className="space-y-3">
+                            <div className="space-y-2 sm:space-y-3">
                               {typeMeals.map(meal => (
-                                <div key={meal.id} className="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
-                                  <div className="flex items-start justify-between mb-3">
+                                <div key={meal.id} className="bg-gray-50 dark:bg-gray-700/50 p-3 sm:p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                                  <div className="flex items-start justify-between mb-2 sm:mb-3">
                                     <div className="flex-1 min-w-0">
-                                      <h5 className="font-medium text-gray-800 dark:text-gray-200 truncate">
+                                      <h5 className="font-medium text-gray-800 dark:text-gray-200 truncate text-sm sm:text-base">
                                         {meal.meal_name}
                                       </h5>
                                       {meal.time && (
-                                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                        <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
                                           {t('addedAt')} {meal.time}
                                         </p>
                                       )}
                                     </div>
-                                    <div className={`flex items-center gap-2 ${isRTL ? 'ml-0 mr-3' : 'ml-3'}`}>
+                                    <div className={`flex items-center gap-1 sm:gap-2 ${isRTL ? 'ml-0 mr-2 sm:mr-3' : 'ml-2 sm:ml-3'}`}>
                                       {meal.calories && (
-                                        <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-300">
+                                        <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200 dark:bg-orange-900/30 dark:text-orange-300 text-xs">
                                           {meal.calories} {t('calories')}
                                         </Badge>
                                       )}
@@ -227,22 +229,22 @@ const MealPlannerTab = () => {
                                         variant="ghost"
                                         size="sm"
                                         onClick={() => handleDeleteMeal(meal.id)}
-                                        className="p-2 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                                        className="p-1.5 sm:p-2 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
                                       >
-                                        <Trash2 className="h-4 w-4" />
+                                        <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
                                       </Button>
                                     </div>
                                   </div>
                                   
-                                  {/* Enhanced Nutrition Data Card */}
+                                  {/* Enhanced Nutrition Data Card - Mobile optimized */}
                                   {meal.nutrition_data && meal.nutrition_data.foods && meal.nutrition_data.foods.length > 0 && (
-                                    <div className="mt-3 p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
-                                      <h6 className={`text-sm font-semibold text-green-800 dark:text-green-300 mb-2 flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
+                                    <div className="mt-2 sm:mt-3 p-2 sm:p-3 bg-green-50 dark:bg-green-900/30 rounded-lg border border-green-200 dark:border-green-700">
+                                      <h6 className={`text-xs sm:text-sm font-semibold text-green-800 dark:text-green-300 mb-1 sm:mb-2 flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                                         🍎 {t('nutritionFacts')}
                                       </h6>
                                       {meal.nutrition_data.foods.slice(0, 1).map((food: any, index: number) => (
-                                        <div key={index} className="text-sm text-green-700 dark:text-green-300">
-                                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                                        <div key={index} className="text-xs sm:text-sm text-green-700 dark:text-green-300">
+                                          <div className="grid grid-cols-2 gap-1 sm:gap-2">
                                             <div className={`flex items-center gap-1 ${isRTL ? 'flex-row-reverse' : ''}`}>
                                               <span>💪</span>
                                               <span className="text-xs">{Math.round(food.nf_protein || 0)}g {t('protein')}</span>
