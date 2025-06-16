@@ -6,6 +6,7 @@ export const translations = {
     'chat': 'Chat',
     'calendar': 'Calendar',
     'meals': 'Meal Planner',
+    'water': 'Water Tracker',
     
     // Authentication
     'signIn': 'Sign In',
@@ -63,7 +64,27 @@ export const translations = {
     'items': 'items',
     'signInRequired': 'Sign In Required',
     'signInToSaveMeals': 'Please sign in to save and manage your personalized meal plans.',
-    'fiber': 'fiber',
+    'fiber': 'fiber',    // Water Tracker
+    'waterTracker': 'Water Tracker',
+    'todaysProgress': 'Today\'s Progress',
+    'waterGoal': 'Daily Water Goal',
+    'addWater': 'Add Water',
+    'waterHistory': 'Water History',
+    'noWaterEntries': 'No water entries for today',
+    'hydrationTips': 'Hydration Tips',
+    'completed': 'of daily goal completed',
+    'signInToTrackWater': 'Please sign in to track your water intake',
+    'waterTip1': 'Drink a glass of water when you wake up to rehydrate',
+    'waterTip2': 'Set reminders to drink water throughout the day',
+    'waterTip3': 'Carry a reusable water bottle with you',
+    'waterTip4': 'Eat water-rich fruits and vegetables',
+    'cup': 'cup',
+    'cups': 'cups',
+    'cupsRemaining': '{{count}} more cups to go today!',    'smallCup': 'Small Cup',
+    'standardCup': 'Cup',
+    'glass': 'Glass',
+    'bottle': 'Bottle',
+    'drinking': 'Drinking...',
     
     // Common
     'loading': 'Loading...',
@@ -96,10 +117,10 @@ export const translations = {
   he: {
     // Navigation
     'nutrimentor': 'נוטרי מנטור AI',
-    'subtitle': 'העוזר התזונתי האישי שלך',
-    'chat': 'צ\'אט',
+    'subtitle': 'העוזר התזונתי האישי שלך',    'chat': 'צ\'אט',
     'calendar': 'לוח שנה',
     'meals': 'מתכנן ארוחות',
+    'water': 'מעקב מים',
     
     // Authentication
     'signIn': 'התחבר',
@@ -181,11 +202,31 @@ export const translations = {
     'may': 'מאי',
     'june': 'יוני',
     'july': 'יולי',
-    'august': 'אוגוסט',
-    'september': 'ספטמבר',
+    'august': 'אוגוסט',    'september': 'ספטמבר',
     'october': 'אוקטובר',
     'november': 'נובמבר',
-    'december': 'דצמבר'
+    'december': 'דצמבר',
+      // Water Tracker
+    'waterTracker': 'מעקב מים',
+    'todaysProgress': 'התקדמות היום',
+    'waterGoal': 'יעד מים יומי',
+    'addWater': 'הוסף מים',
+    'waterHistory': 'היסטוריית שתייה',
+    'noWaterEntries': 'אין רשומות מים להיום',
+    'hydrationTips': 'טיפים להידרציה',
+    'completed': 'מהיעד היומי הושלם',
+    'signInToTrackWater': 'אנא התחבר כדי לעקוב אחר צריכת המים שלך',
+    'waterTip1': 'שתה כוס מים כשאתה מתעורר כדי להתרענן',
+    'waterTip2': 'הגדר תזכורות לשתיית מים במהלך היום',
+    'waterTip3': 'קח איתך בקבוק מים רב-פעמי',
+    'waterTip4': 'אכול פירות וירקות עשירים במים',
+    'cup': 'כוס',
+    'cups': 'כוסות',
+    'cupsRemaining': 'עוד {{count}} כוסות להיום!',    'smallCup': 'כוס קטנה',
+    'standardCup': 'כוס',
+    'glass': 'כוס זכוכית',
+    'bottle': 'בקבוק',
+    'drinking': 'שותה...'
   }
 };
 

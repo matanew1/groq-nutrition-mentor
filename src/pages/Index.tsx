@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Heart, Zap, LogOut, Trash2, Utensils, Menu, X } from 'lucide-react';
+import { Send, Bot, User, Heart, Zap, LogOut, Trash2, Utensils, Menu, X, Droplet } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -19,6 +19,7 @@ import { useNavigate } from 'react-router-dom';
 import DarkModeToggle from '@/components/DarkModeToggle';
 import LanguageToggle from '@/components/LanguageToggle';
 import MealPlannerTab from '@/components/MealPlannerTab';
+import WaterTrackerTab from '@/components/WaterTrackerTab';
 
 // Define interface for the food object
 interface FoodItem {
@@ -615,7 +616,7 @@ const Index = () => {
       {/* Main Content with Enhanced Tabs */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList className="w-full grid grid-cols-2 rounded-none border-b h-12 sm:h-auto bg-white/50 dark:bg-gray-800/50">
+          <TabsList className="w-full grid grid-cols-3 rounded-none border-b h-12 sm:h-auto bg-white/50 dark:bg-gray-800/50">
             <TabsTrigger value="chat" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-2 sm:py-3`}>
               <Bot className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>{t('chat')}</span>
@@ -623,6 +624,10 @@ const Index = () => {
             <TabsTrigger value="meals" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-2 sm:py-3`}>
               <Utensils className="h-4 w-4 sm:h-5 sm:w-5" />
               <span>{t('meals')}</span>
+            </TabsTrigger>
+            <TabsTrigger value="water" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-2 sm:py-3`}>
+              <Droplet className="h-4 w-4 sm:h-5 sm:w-5" />
+              <span>{t('water')}</span>
             </TabsTrigger>
           </TabsList>
 
@@ -746,6 +751,12 @@ const Index = () => {
           <TabsContent value="meals" className="m-0 p-0 overflow-hidden">
             <Card className="border-0 rounded-none shadow-none bg-transparent overflow-hidden">
               <MealPlannerTab />
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="water" className="m-0 p-0 overflow-hidden">
+            <Card className="border-0 rounded-none shadow-none bg-transparent overflow-hidden">
+              <WaterTrackerTab />
             </Card>
           </TabsContent>
         </Tabs>

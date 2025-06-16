@@ -124,7 +124,7 @@ const Auth = () => {
           navigate('/');
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Auth error:', error);
       toast({
         title: t('error'),
@@ -146,7 +146,7 @@ const Auth = () => {
         title: t('success'),
         description: "Redirecting to Google for authentication...",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Google auth error:', error);
       toast({
         title: t('error'),
@@ -167,7 +167,7 @@ const Auth = () => {
         title: t('success'),
         description: "Redirecting to GitHub for authentication...",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('GitHub auth error:', error);
       toast({
         title: t('error'),
