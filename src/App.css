@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -22,6 +24,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -39,4 +42,163 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Transparent Scrollbar Styles */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200, 200, 200, 0.5) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgba(200, 200, 200, 0.5);
+  border-radius: 10px;
+  border: 0;
+}
+
+.dark *::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.5);
+}
+
+/* Custom class for fully transparent scrollbar */
+.transparent-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200, 200, 200, 0.3) transparent;
+}
+
+.transparent-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  background-color: transparent;
+}
+
+.transparent-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.transparent-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(200, 200, 200, 0.3);
+  border-radius: 10px;
+  border: none;
+  box-shadow: none;
+}
+
+.dark .transparent-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 100, 100, 0.3);
+}
+
+/* Extremely specific rule to ensure transparent scrollbar background */
+*::-webkit-scrollbar,
+.transparent-scrollbar::-webkit-scrollbar {
+  width: 6px !important;
+  height: 6px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+*::-webkit-scrollbar-track,
+.transparent-scrollbar::-webkit-scrollbar-track {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Force transparent background on Chrome/Safari */
+*::-webkit-scrollbar-corner,
+.transparent-scrollbar::-webkit-scrollbar-corner {
+  background: transparent !important;
+}
+
+/* Additional Firefox specific rule */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200, 200, 200, 0.3) transparent;
+}
+
+/* Enhanced Calendar Styling */
+.rdp {
+  --rdp-accent-color: #10b981 !important;
+  --rdp-background-color: rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Make calendar elements larger and more attractive */
+.rdp-months {
+  width: 100%;
+}
+
+.rdp-month {
+  width: 100%;
+}
+
+.rdp-table {
+  width: 100%;
+}
+
+.rdp-caption {
+  padding: 0.5rem 0;
+}
+
+.rdp-caption_label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--green-600);
+}
+
+.rdp-nav {
+  padding: 0.25rem;
+}
+
+/* Beautiful selected day styling */
+.rdp-day_selected {
+  background-color: var(--green-500) !important;
+  color: white !important;
+  transform: scale(1.05);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.rdp-day_selected:hover {
+  background-color: var(--green-600) !important;
+  transform: scale(1.1);
+}
+
+/* Today's date highlight */
+.rdp-day_today {
+  border: 2px solid var(--green-500) !important;
+  font-weight: bold;
+}
+
+/* Dark mode adjustments */
+.dark .rdp-day_selected {
+  background-color: var(--green-500) !important;
+  color: var(--gray-900) !important;
+}
+
+.dark .rdp-caption_label {
+  color: var(--green-400);
+}
+
+.dark .rdp-day_today {
+  border-color: var(--green-400) !important;
+}
+
+/* Focus and hover effects */
+.rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  background-color: rgba(16, 185, 129, 0.15) !important;
+  color: var(--green-700);
+}
+
+.dark .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  background-color: rgba(16, 185, 129, 0.25) !important;
+  color: var(--green-300);
 }

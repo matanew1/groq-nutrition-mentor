@@ -20,6 +20,17 @@ import LanguageToggle from '@/components/LanguageToggle';
 import SettingsDialog from '@/components/SettingsDialog';
 import MealPlannerTab from '@/components/MealPlannerTab';
 
+// Define interface for the food object
+interface FoodItem {
+  nf_protein: number;
+  nf_total_carbohydrate: number;
+  nf_total_fat: number;
+  nf_dietary_fiber: number;
+  nf_calories: number;
+  food_name: string;
+  nf_sugars?: number;
+}
+
 const Index = () => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -79,10 +90,10 @@ const Index = () => {
         description: "You have been signed out successfully.",
       });
       navigate('/auth');
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: t('error'),
-        description: error.message,
+        description: error instanceof Error ? error.message : "An unknown error occurred",
         variant: "destructive",
       });
     }
@@ -95,10 +106,10 @@ const Index = () => {
         title: t('success'),
         description: "All your chat history has been cleared.",
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast({
         title: t('error'),
-        description: error.message,
+        description: error instanceof Error ? error.message : "An unknown error occurred",
         variant: "destructive",
       });
     }
@@ -117,40 +128,171 @@ const Index = () => {
     setIsLoading(true);
 
     try {
-      const foodKeywords = ['nutrition', 'calories', 'protein', 'carbs', 'fat', 'nutrients', 'food'];
+      // More comprehensive list of nutrition-related keywords in multiple languages
+      const foodKeywords = [
+        // English keywords
+        'nutrition', 'calories', 'protein', 'carbs', 'fat', 'nutrients', 'food', 'diet', 
+        'meal', 'eating', 'weight', 'healthy', 'vitamin', 'mineral', 'fiber', 'sugar',
+        'breakfast', 'lunch', 'dinner', 'snack', 'portion', 'serving',
+        // Hebrew keywords
+        'קלוריות', 'תזונה', 'חלבון', 'פחמימות', 'שומן', 'אוכל', 'דיאטה', 'ארוחה', 'משקל',
+        'בריאות', 'ויטמין', 'מינרל', 'סיבים', 'סוכר', 'ארוחת בוקר', 'ארוחת צהריים', 
+        'ארוחת ערב', 'נתרן', 'מלח', 'כולסטרול', 'ערך תזונתי', 'רכיבים תזונתיים',
+        'אכלתי', 'אוכל', 'ירקות', 'פירות', 'מנה', 'כמות', 'גרם', 'קילו'
+      ];
+      
+      // Check if query contains nutrition-related words
+      const wordsInQuery = currentInput.toLowerCase().split(/\s+/);
+      const queryWords = new Set(wordsInQuery);
       const isNutritionQuery = foodKeywords.some(keyword => 
-        currentInput.toLowerCase().includes(keyword)
+        currentInput.toLowerCase().includes(keyword.toLowerCase())
       );
-
+      
+      // Check if query is specifically asking about food
+      const englishFoodPhrasePatterns = [
+        /(?:calories|nutrition|nutrients|macros|protein|carbs|fat)\s+(?:in|of|for)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:how many calories|how much protein|how many carbs|nutritional value)\s+(?:in|of|for)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:what is|tell me about)\s+(?:the nutrition|the calories|the protein|the carbs)\s+(?:in|of|for)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:what are|how many)\s+(?:the nutrition facts|calories)\s+(?:in|of)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:i ate|i had|i consumed)\s+(.+?)(?:$|\?|\.|,)/i,
+      ];
+      
+      // Hebrew patterns for food queries - expanded
+      const hebrewFoodPhrasePatterns = [
+        /(?:קלוריות|תזונה|ערך תזונתי|חלבון|פחמימות|שומן)\s+(?:ב|של|עבור)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:כמה קלוריות|כמה חלבון|כמה פחמימות|ערך תזונתי)\s+(?:יש ב|יש ל|ב|של|עבור)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:מה|ספר לי על)\s+(?:הקלוריות|הערך התזונתי|החלבון|הפחמימות|התזונה)\s+(?:של|ב|עבור)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:מנה של|כמות של|חתיכת|פרוסת)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:מהו|מה זה|מה ההרכב של)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:אכלתי|אכלנו|אוכל|אוכלת)\s+(.+?)(?:$|\?|\.|,)/i,
+      ];
+      
+      // Determine if we should use Hebrew patterns based on the language detection
+      const isHebrewMessage = isHebrew(currentInput);
+      const foodPhrasePatterns = isHebrewMessage ? hebrewFoodPhrasePatterns : englishFoodPhrasePatterns;
+      
+      let isSpecificFoodQuery = foodPhrasePatterns.some(pattern => pattern.test(currentInput));
+      
+      // Check with alternative patterns if first set didn't match
+      if (!isSpecificFoodQuery) {
+        const alternativePatterns = isHebrewMessage ? englishFoodPhrasePatterns : hebrewFoodPhrasePatterns;
+        isSpecificFoodQuery = alternativePatterns.some(pattern => pattern.test(currentInput));
+      }
+      
+      // Also check for simple food mentions in Hebrew
+      if (!isSpecificFoodQuery && isHebrewMessage) {
+        // Import the food terms dictionary from nutritionixApi.ts for consistency
+        const foodTerms = [
+          'לחם', 'חלב', 'ביצה', 'ביצים', 'עוף', 'בשר', 'דג', 'אורז', 'תפוח אדמה', 'תפוחי אדמה',
+          'גבינה', 'יוגורט', 'ירקות', 'פירות', 'קפה', 'תה', 'מים', 'שוקולד', 'עוגה', 'עוגיות',
+          'חומוס', 'טחינה', 'פלאפל', 'שקשוקה', 'פיתה', 'חלה', 'סלט', 'תפוח', 'בננה', 'תפוז'
+        ];
+        
+        isSpecificFoodQuery = foodTerms.some(term => currentInput.includes(term));
+      }
+      
       let nutritionData = null;
       let contextualInfo = '';
 
-      if (isNutritionQuery) {
+      // If it's a nutrition query or specifically asks about food
+      if (isNutritionQuery || isSpecificFoodQuery) {
         try {
           nutritionData = await searchNutrition(currentInput);
+          
           if (nutritionData && nutritionData.foods && nutritionData.foods.length > 0) {
             const food = nutritionData.foods[0];
-            contextualInfo = `\n\nNutrition data found for ${food.food_name}:
-            - Calories: ${food.nf_calories}
-            - Protein: ${food.nf_protein}g
-            - Carbs: ${food.nf_total_carbohydrate}g
-            - Fat: ${food.nf_total_fat}g
-            - Fiber: ${food.nf_dietary_fiber}g
-            - Sugar: ${food.nf_sugars}g`;
+            
+            // Format nutrition information according to detected language
+            if (isHebrewMessage) {
+              contextualInfo = `\n\nנתוני תזונה עבור ${food.food_name}${food.brand_name ? ` (${food.brand_name})` : ''}:
+              
+              - גודל מנה: ${food.serving_qty} ${food.serving_unit} (${food.serving_weight_grams || 0} גרם)
+              - קלוריות: ${Math.round(food.nf_calories)} קק"ל
+              - חלבון: ${Math.round(food.nf_protein)} גרם
+              - פחמימות: ${Math.round(food.nf_total_carbohydrate)} גרם
+                - מתוכן סוכרים: ${Math.round(food.nf_sugars)} גרם
+                - מתוכן סיבים תזונתיים: ${Math.round(food.nf_dietary_fiber)} גרם
+              - שומן: ${Math.round(food.nf_total_fat)} גרם
+              
+              אנא הגב עם תובנות תזונתיות על בסיס נתונים אלה.`;
+            } else {
+              contextualInfo = `\n\nNutrition data found for ${food.food_name}${food.brand_name ? ` (${food.brand_name})` : ''}:
+              
+              - Serving size: ${food.serving_qty} ${food.serving_unit} (${food.serving_weight_grams || 0}g)
+              - Calories: ${Math.round(food.nf_calories)} kcal
+              - Protein: ${Math.round(food.nf_protein)}g
+              - Carbohydrates: ${Math.round(food.nf_total_carbohydrate)}g
+                - of which sugars: ${Math.round(food.nf_sugars)}g
+                - of which fiber: ${Math.round(food.nf_dietary_fiber)}g
+              - Fat: ${Math.round(food.nf_total_fat)}g
+              
+              Please respond with nutritional insights based on this data.`;
+            }
+          } else if (isSpecificFoodQuery) {
+            // If we failed to get nutrition data but it was a specific food query
+            if (isHebrewMessage) {
+              contextualInfo = "\n\nלא הצלחתי למצוא מידע תזונתי ספציפי עבור מזון זה. אנא ספק מידע תזונתי כללי על סוג זה של מזון.";
+            } else {
+              contextualInfo = "\n\nI couldn't find specific nutrition data for that food item. Please provide general nutritional information about this type of food.";
+            }
           }
         } catch (error) {
           console.log('Nutritionix API call failed, continuing with AI response only');
+          if (isSpecificFoodQuery) {
+            // Let the AI know it should focus on nutrition despite the API failure
+            if (isHebrewMessage) {
+              contextualInfo = "\n\nלא הצלחתי לאחזר את נתוני התזונה המדויקים, אך אנא ספק מידע תזונתי כללי על מזון או רכיב זה.";
+            } else {
+              contextualInfo = "\n\nI couldn't retrieve the exact nutrition data, but please provide general nutritional information about this food or ingredient.";
+            }
+          }
         }
       }
 
-      const isHebrewMessage = isHebrew(currentInput);
+      const isNutritionRelated = contextualInfo.length > 0;
       
-      const aiPrompt = `You are a professional nutrition mentor and health coach. Please provide helpful, accurate nutrition advice. 
+      const aiPrompt = `You are NutriMentor AI, a professional nutrition mentor and health coach with expertise in nutritional science, dietary planning, and wellness coaching. 
+      
       ${isHebrewMessage ? 'Please respond in Hebrew as the user wrote in Hebrew.' : ''}
+      
       User question: "${currentInput}"
+      
       ${contextualInfo ? `Additional nutrition data context: ${contextualInfo}` : ''}
       
-      Please provide a helpful, professional response about nutrition, health, or wellness.`;
+      ${isNutritionRelated ? 
+        isHebrewMessage ? `
+        בעת מתן ייעוץ תזונתי:
+        - הסבר את היתרונות התזונתיים או החששות לגבי המזון
+        - הזכר כיצד הוא משתלב בתזונה מאוזנת
+        - הצע דרכים בריאות לשילוב מזון זה
+        - התייחס להמלצות לגבי גודל המנה
+        - התייחס לתפיסות שגויות נפוצות לגבי מזון זה
+        ` : `
+        When providing nutrition advice:
+        - Explain the nutritional benefits or concerns of the food
+        - Mention how it fits into a balanced diet
+        - Suggest healthy ways to incorporate this food
+        - Consider portion size recommendations
+        - Address any common misconceptions about this food
+        `
+        : isHebrewMessage ? `
+        אם זוהי שאלה הקשורה לתזונה:
+        - ספק מידע מבוסס מחקר
+        - הסבר מושגים בצורה ברורה ופשוטה
+        - הצע עצות מעשיות שהמשתמש יוכל ליישם
+        - התחשב באיזון תזונתי כללי ואורח חיים
+        - היה מעודד וחיובי בטון שלך
+        ` : `
+        If this is a nutrition-related query:
+        - Provide evidence-based information
+        - Explain concepts in clear, simple terms
+        - Offer practical advice the user can implement
+        - Consider overall dietary balance and lifestyle
+        - Be encouraging and positive in your tone
+        `
+      }
+      
+      Please provide a helpful, professional response with actionable advice tailored to the user's question.`;
 
       const aiResponse = await callGroqAPI(aiPrompt);
       const enhancedResponse = addEmojisToMessage(aiResponse);
@@ -169,8 +311,13 @@ const Index = () => {
         variant: "destructive",
       });
       
+      // Error message in appropriate language
+      const errorMessage = isHebrew(currentInput) 
+        ? "❌ אני מתנצל, אך יש לי בעיות התחברות כרגע. אנא נסה שוב בעוד רגע."
+        : "❌ I apologize, but I'm having trouble connecting right now. Please try again in a moment.";
+      
       await addMessage({
-        content: "❌ I apologize, but I'm having trouble connecting right now. Please try again in a moment.",
+        content: errorMessage,
         sender: 'bot'
       });
     } finally {
@@ -514,7 +661,7 @@ const Index = () => {
                                 <h4 className={`font-semibold text-green-800 dark:text-green-300 mb-2 sm:mb-3 flex items-center text-sm sm:text-base ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
                                   🍎 {t('nutritionFacts')}
                                 </h4>
-                                {message.nutritionData.foods.slice(0, 1).map((food: any, index: number) => (
+                                {message.nutritionData.foods.slice(0, 1).map((food: FoodItem, index: number) => (
                                   <div key={index} className="text-sm sm:text-base text-green-700 dark:text-green-300">
                                     <p className="font-medium mb-2">{food.food_name}</p>
                                     <div className="grid grid-cols-2 gap-2 sm:gap-3 text-xs sm:text-sm">
@@ -581,8 +728,8 @@ const Index = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="meals" className="flex-1 m-0 p-0 overflow-hidden">
-            <Card className="h-full border-0 rounded-none shadow-none bg-transparent overflow-hidden">
+          <TabsContent value="meals" className="m-0 p-0 overflow-hidden">
+            <Card className="border-0 rounded-none shadow-none bg-transparent overflow-hidden">
               <MealPlannerTab />
             </Card>
           </TabsContent>
