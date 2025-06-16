@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { useSettings } from '@/contexts/SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
 import { Apple, Mail, Eye, EyeOff, Github, Loader2 } from 'lucide-react';
 
 const Auth = () => {

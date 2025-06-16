@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Utensils, Trash2, Loader2, Calendar as CalendarIcon } from 'lucide-react';
-import { useSettings } from '@/contexts/SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMealPlans } from '@/hooks/useMealPlans';
 import { format } from 'date-fns';

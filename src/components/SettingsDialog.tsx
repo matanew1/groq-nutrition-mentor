@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Settings, Sun, Moon } from 'lucide-react';
-import { useSettings } from '@/contexts/SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
 import { useToast } from '@/hooks/use-toast';
 
 const getInitialDarkMode = () => {

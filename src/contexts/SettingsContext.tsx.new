@@ -1,9 +1,7 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { translations, TranslationKey } from '@/utils/translations';
-
-// Re-export useSettings to fix import issues
 
 interface SettingsContextType {
   language: 'en' | 'he';
@@ -15,8 +13,15 @@ interface SettingsContextType {
   t: (key: string) => string;
 }
 
-// Export the context so it can be consumed by our custom hook
-export const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
+const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
+
+export const useSettings = () => {
+  const context = useContext(SettingsContext);
+  if (context === undefined) {
+    throw new Error('useSettings must be used within a SettingsProvider');
+  }
+  return context;
+};
 
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<'en' | 'he'>('en');
@@ -24,7 +29,13 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [userName, setUserNameState] = useState('');
   const { user } = useAuth();
 
-  const loadUserSettings = useCallback(async () => {
+  useEffect(() => {
+    if (user) {
+      loadUserSettings();
+    }
+  }, [user]);
+
+  const loadUserSettings = async () => {
     if (!user) return;
 
     try {
@@ -50,14 +61,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     } catch (error) {
       console.error('Error loading user settings:', error);
     }
-  }, [user, setUserNameState, setLanguageState, setNotificationsState]);
-  
-  // Add useEffect to call loadUserSettings when user is available
-  useEffect(() => {
-    if (user) {
-      loadUserSettings();
-    }
-  }, [user, loadUserSettings]);
+  };
 
   const saveUserSettings = async (newSettings: { language: 'en' | 'he'; notifications: boolean }) => {
     if (!user) return;

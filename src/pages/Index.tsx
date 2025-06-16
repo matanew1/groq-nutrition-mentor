@@ -13,11 +13,11 @@ import { searchNutrition } from '@/utils/nutritionixApi';
 import { addEmojisToMessage, isHebrew } from '@/utils/messageFormatter';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMessages } from '@/hooks/useMessages';
-import { useSettings } from '@/contexts/SettingsContext';
+import { useSettings } from '@/hooks/useSettings';
+import { translations } from '@/utils/translations';
 import { useNavigate } from 'react-router-dom';
 import DarkModeToggle from '@/components/DarkModeToggle';
 import LanguageToggle from '@/components/LanguageToggle';
-import SettingsDialog from '@/components/SettingsDialog';
 import MealPlannerTab from '@/components/MealPlannerTab';
 
 // Define interface for the food object
@@ -73,6 +73,22 @@ const Index = () => {
       document.documentElement.classList.remove('font-hebrew');
     }
   }, [isDarkMode, isRTL]);
+  
+  // Listen for language change events to force re-render
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      // This just forces a state change to trigger re-render
+      setIsLoading(isLoading => {
+        setTimeout(() => setIsLoading(isLoading), 0);
+        return isLoading;
+      });
+    };
+    
+    document.addEventListener('languageChanged', handleLanguageChange);
+    return () => {
+      document.removeEventListener('languageChanged', handleLanguageChange);
+    };
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -353,11 +369,13 @@ const Index = () => {
     <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
       <SheetContent side={isRTL ? "left" : "right"} className="w-64 p-4">
         <div className="flex flex-col space-y-4">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2" key={`mobile-header-${language}`}>
             <div className="p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full">
               <Apple className="h-5 w-5 text-white" />
             </div>
-            <span className="font-semibold text-lg">{t('nutrimentor')}</span>
+            <span className="font-semibold text-lg">
+              {language === 'he' ? translations.he.nutrimentor : translations.en.nutrimentor}
+            </span>
           </div>
           
           <div className="space-y-3">
@@ -372,10 +390,9 @@ const Index = () => {
               </Badge>
             </div>
             
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2" key={`mobile-menu-${language}`}>
               <LanguageToggle />
               <DarkModeToggle isDark={isDarkMode} onToggle={() => setIsDarkMode(!isDarkMode)} />
-              <SettingsDialog />
             </div>
             
             {user && (
@@ -438,21 +455,21 @@ const Index = () => {
       {/* Enhanced Header - Mobile optimized */}
       <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-b border-green-100 dark:border-gray-700 shrink-0 shadow-sm">
         <div className="h-14 sm:h-16 px-3 sm:px-4 flex items-center">
-          <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 sm:space-x-3 flex-1 min-w-0`}>
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 sm:space-x-3 flex-1 min-w-0`} key={`header-${language}`}>
             <div className="p-1.5 sm:p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full shadow-lg">
               <Apple className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
             </div>
             <div className="flex-1 min-w-0">
               <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent truncate">
-                {t('nutrimentor')}
+                {language === 'he' ? translations.he.nutrimentor : translations.en.nutrimentor}
               </h1>
               <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hidden sm:block">
-                {t('subtitle')}
+                {language === 'he' ? translations.he.subtitle : translations.en.subtitle}
               </p>
             </div>
             
             {/* Desktop controls */}
-            <div className="hidden lg:flex items-center space-x-2">
+            <div className="hidden lg:flex items-center space-x-2" key={`desktop-header-${language}`}>
               <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700 text-xs">
                 <Heart className="h-3 w-3 mr-1" />
                 Health
@@ -464,7 +481,6 @@ const Index = () => {
               
               <LanguageToggle />
               <DarkModeToggle isDark={isDarkMode} onToggle={() => setIsDarkMode(!isDarkMode)} />
-              <SettingsDialog />
               
               {user ? (
                 <div className="flex items-center space-x-2">
@@ -536,7 +552,6 @@ const Index = () => {
                       <div className="flex items-center space-x-2">
                         <LanguageToggle />
                         <DarkModeToggle isDark={isDarkMode} onToggle={() => setIsDarkMode(!isDarkMode)} />
-                        <SettingsDialog />
                       </div>
                       
                       {user && (
