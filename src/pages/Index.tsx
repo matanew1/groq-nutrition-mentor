@@ -451,10 +451,10 @@ const Index = () => {
   );
 
   return (
-    <div className={`h-screen w-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col ${isRTL ? 'hebrew-text' : ''}`}>
+    <div className={`h-screen w-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col ${isRTL ? 'hebrew-text' : ''}`} style={{paddingTop: 0, marginTop: 0, height: '100%', maxHeight: '100vh', overflow: 'hidden'}}>
       {/* Enhanced Header - Mobile optimized */}
       <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-b border-green-100 dark:border-gray-700 shrink-0 shadow-sm">
-        <div className="h-14 sm:h-16 px-3 sm:px-4 flex items-center">
+        <div className="h-10 sm:h-12 px-3 sm:px-4 flex items-center">
           <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 sm:space-x-3 flex-1 min-w-0`} key={`header-${language}`}>
             <div className="p-1.5 sm:p-2 bg-gradient-to-r from-green-500 to-blue-500 rounded-full shadow-lg">
               <Apple className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
@@ -613,15 +613,15 @@ const Index = () => {
       </div>
 
       {/* Main Content with Enhanced Tabs */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden" style={{marginTop: 0, paddingTop: 0, height: 'calc(100% - 40px)'}}>
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList className="w-full grid grid-cols-2 rounded-none border-b h-12 sm:h-auto bg-white/50 dark:bg-gray-800/50">
-            <TabsTrigger value="chat" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-2 sm:py-3`}>
-              <Bot className="h-4 w-4 sm:h-5 sm:w-5" />
+          <TabsList className="w-full grid grid-cols-2 rounded-none border-b h-8 sm:h-9 bg-white/50 dark:bg-gray-800/50 mt-0 pt-0">
+            <TabsTrigger value="chat" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-1 sm:py-1.5`}>
+              <Bot className="h-4 w-4 sm:h-4 sm:w-4" />
               <span>{t('chat')}</span>
             </TabsTrigger>
-            <TabsTrigger value="meals" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-2 sm:py-3`}>
-              <Utensils className="h-4 w-4 sm:h-5 sm:w-5" />
+            <TabsTrigger value="meals" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-1 sm:py-1.5`}>
+              <Utensils className="h-4 w-4 sm:h-4 sm:w-4" />
               <span>{t('meals')}</span>
             </TabsTrigger>
           </TabsList>
@@ -743,8 +743,8 @@ const Index = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="meals" className="m-0 p-0 overflow-hidden">
-            <Card className="border-0 rounded-none shadow-none bg-transparent overflow-hidden">
+          <TabsContent value="meals" className="m-0 p-0 overflow-auto flex-1">
+            <Card className="border-0 rounded-none shadow-none bg-transparent h-full">
               <MealPlannerTab />
             </Card>
           </TabsContent>

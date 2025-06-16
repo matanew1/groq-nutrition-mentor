@@ -112,8 +112,8 @@ const MealPlannerTab = () => {
   return (
     <div className="flex h-full w-full flex-col bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 overflow-hidden">
       {/* Mobile-first layout: Stack vertically on small screens with proper viewport height handling */}
-      <div className="flex flex-col lg:grid lg:grid-cols-3 xl:gap-8 lg:gap-6 p-1 sm:p-6 h-full overflow-hidden" 
-           style={{ maxHeight: 'calc(100vh - 120px)' }}>
+      <div className="flex flex-col lg:grid lg:grid-cols-3 xl:gap-8 lg:gap-6 p-0 sm:p-4 h-full overflow-hidden" 
+           style={{ maxHeight: 'calc(100vh - 80px)' }}>
         
         {/* Date Selection Section - Ultra compact on mobile */}
         <Card className="lg:col-span-1 mb-1 lg:mb-0 shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm flex flex-col shrink-0"
