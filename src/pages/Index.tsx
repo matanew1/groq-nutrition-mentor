@@ -1,5 +1,6 @@
+
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Heart, Zap, LogOut, Trash2, Utensils, Menu, X, Droplet } from 'lucide-react';
+import { Send, Bot, User, Heart, Zap, LogOut, Trash2, Utensils, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
@@ -19,7 +20,6 @@ import { useNavigate } from 'react-router-dom';
 import DarkModeToggle from '@/components/DarkModeToggle';
 import LanguageToggle from '@/components/LanguageToggle';
 import MealPlannerTab from '@/components/MealPlannerTab';
-import WaterTrackerTab from '@/components/WaterTrackerTab';
 
 // Define interface for the food object
 interface FoodItem {
@@ -365,94 +365,8 @@ const Index = () => {
     );
   }
 
-  // Mobile menu component
-  const MobileMenu = () => (
-    <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-      <SheetContent side={isRTL ? "left" : "right"} className="w-64 p-4">
-        <div className="flex flex-col space-y-4">
-          <div className="flex items-center space-x-2" key={`mobile-header-${language}`}>
-            <div className="p-2 rounded-full overflow-hidden">
-              <img src="/logo.png" alt="NutriMentor Logo" className="h-12 w-12" />
-            </div>
-            <span className="font-semibold text-lg">
-              {language === 'he' ? translations.he.nutrimentor : translations.en.nutrimentor}
-            </span>
-          </div>
-          
-          <div className="space-y-3">
-            <div className="flex items-center space-x-2">
-              <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300">
-                <Heart className="h-3 w-3 mr-1" />
-                Health
-              </Badge>
-              <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
-                <Zap className="h-3 w-3 mr-1" />
-                AI
-              </Badge>
-            </div>
-            
-            <div className="flex items-center space-x-2" key={`mobile-menu-${language}`}>
-              <LanguageToggle />
-              <DarkModeToggle isDark={isDarkMode} onToggle={() => setIsDarkMode(!isDarkMode)} />
-            </div>
-            
-            {user && (
-              <div className="space-y-2">
-                {userName && (
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    {t('welcome')}, {userName}
-                  </p>
-                )}
-                {activeTab === 'chat' && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => {
-                      handleClearMessages();
-                      setMobileMenuOpen(false);
-                    }}
-                    className="w-full justify-start"
-                  >
-                    <Trash2 className="h-4 w-4 mr-2" />
-                    {t('clearChat')}
-                  </Button>
-                )}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    handleSignOut();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full justify-start"
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  {t('signOut')}
-                </Button>
-              </div>
-            )}
-            
-            {!user && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  navigate('/auth');
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full"
-              >
-                {t('signIn')}
-              </Button>
-            )}
-          </div>
-        </div>
-      </SheetContent>
-    </Sheet>
-  );
-
   return (
-    <div className={`h-screen w-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col ${isRTL ? 'hebrew-text' : ''}`} style={{paddingTop: 0, marginTop: 0, height: '100%', maxHeight: '100vh', overflow: 'hidden'}}>
+    <div className={`h-screen w-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col ${isRTL ? 'hebrew-text' : ''}`}>
       {/* Enhanced Header - Mobile optimized */}
       <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-b border-green-100 dark:border-gray-700 shrink-0 shadow-sm">
         <div className="h-10 sm:h-12 px-3 sm:px-4 flex items-center">
@@ -614,9 +528,9 @@ const Index = () => {
       </div>
 
       {/* Main Content with Enhanced Tabs */}
-      <div className="flex-1 flex flex-col overflow-hidden" style={{marginTop: 0, paddingTop: 0, height: 'calc(100% - 40px)'}}>
+      <div className="flex-1 flex flex-col overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList className="w-full grid grid-cols-2 rounded-none border-b h-8 sm:h-9 bg-white/50 dark:bg-gray-800/50 mt-0 pt-0">
+          <TabsList className="w-full grid grid-cols-2 rounded-none border-b h-8 sm:h-9 bg-white/50 dark:bg-gray-800/50">
             <TabsTrigger value="chat" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-1 sm:py-1.5`}>
               <Bot className="h-4 w-4 sm:h-4 sm:w-4" />
               <span>{t('chat')}</span>
@@ -624,10 +538,6 @@ const Index = () => {
             <TabsTrigger value="meals" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-1 sm:py-1.5`}>
               <Utensils className="h-4 w-4 sm:h-4 sm:w-4" />
               <span>{t('meals')}</span>
-            </TabsTrigger>
-            <TabsTrigger value="water" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-2 sm:py-3`}>
-              <Droplet className="h-4 w-4 sm:h-5 sm:w-5" />
-              <span>{t('water')}</span>
             </TabsTrigger>
           </TabsList>
 
@@ -748,16 +658,8 @@ const Index = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="meals" className="m-0 p-0 overflow-auto flex-1">
-            <Card className="border-0 rounded-none shadow-none bg-transparent h-full">
-              <MealPlannerTab />
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="water" className="m-0 p-0 overflow-hidden">
-            <Card className="border-0 rounded-none shadow-none bg-transparent overflow-hidden">
-              <WaterTrackerTab />
-            </Card>
+          <TabsContent value="meals" className="flex-1 m-0 p-0 overflow-hidden">
+            <MealPlannerTab />
           </TabsContent>
         </Tabs>
       </div>

@@ -105,6 +105,33 @@ export type Database = {
         }
         Relationships: []
       }
+      water_tracker: {
+        Row: {
+          amount: number
+          created_at: string
+          date: string
+          id: string
+          timestamp: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          date: string
+          id?: string
+          timestamp: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          date?: string
+          id?: string
+          timestamp?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
