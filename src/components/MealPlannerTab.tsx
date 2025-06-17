@@ -112,12 +112,10 @@ const MealPlannerTab = () => {
   return (
     <div className="flex h-full w-full flex-col bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 overflow-hidden">
       {/* Remove top padding and optimize spacing */}
-      <div className="flex flex-col lg:grid lg:grid-cols-3 xl:gap-6 lg:gap-4 h-full overflow-hidden" 
-           style={{ maxHeight: 'calc(100vh - 80px)' }}>
+      <div className="flex flex-col lg:grid lg:grid-cols-3 xl:gap-6 lg:gap-4 h-full overflow-hidden">
         
         {/* Date Selection Section - More compact */}
-        <Card className="lg:col-span-1 mb-2 lg:mb-0 shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm flex flex-col shrink-0"
-              style={{ minHeight: '80px', maxHeight: '140px' }}>
+        <Card className="lg:col-span-1 mb-2 lg:mb-0 shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm shrink-0">
           <CardHeader className="pb-2 sm:pb-3 shrink-0 py-2 px-3 sm:px-6">
             <CardTitle className={`text-sm sm:text-lg flex items-center gap-1 sm:gap-2 ${isRTL ? 'flex-row-reverse' : ''}`}>
               <CalendarIcon className="h-4 w-4 sm:h-6 sm:w-6 text-green-600" />
@@ -161,7 +159,7 @@ const MealPlannerTab = () => {
                 mode="single"
                 selected={selectedDate}
                 onSelect={(date) => date && setSelectedDate(date)}
-                className="rounded-xl border-0 w-full max-w-[400px] scale-95"
+                className="rounded-xl border-0 w-full sm:scale-1 md:scale-90 lg:scale-100 xl:scale-110"
               />
             </div>
           </CardContent>

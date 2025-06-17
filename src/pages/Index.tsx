@@ -658,7 +658,7 @@ const Index = () => {
             </Card>
           </TabsContent>
 
-          <TabsContent value="meals" className="flex-1 m-0 p-0 overflow-hidden">
+          <TabsContent value="meals" className="m-0 p-0 overflow-hidden">
             <MealPlannerTab />
           </TabsContent>
         </Tabs>
