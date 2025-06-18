@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import { useSettings } from '@/hooks/useSettings';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMealPlans } from '@/hooks/useMealPlans';
 import { format, addDays, subDays } from 'date-fns';
+import '@/styles/scroller.css';
 
 // Define interface for the food object
 interface FoodItem {
@@ -22,12 +23,18 @@ interface FoodItem {
 }
 
 const MealPlannerTab = () => {
+  // 1. All hooks first
   const { t, language } = useSettings();
   const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [newMeal, setNewMeal] = useState({ name: '', type: 'breakfast' as 'breakfast' | 'lunch' | 'dinner' | 'snack' });
   const { mealPlans, loading, addingMeal, loadMealPlans, addMealPlan, deleteMealPlan } = useMealPlans();
+  
+  // Create refs for elements we need to measure
+  const mealFormRef = useRef<HTMLDivElement | null>(null);
+  const headerRef = useRef<HTMLDivElement | null>(null);
 
+  // 2. Then derived values
   const dateKey = selectedDate ? format(selectedDate, 'yyyy-MM-dd') : '';
   const dayMeals = mealPlans[dateKey] || [];
   const isRTL = language === 'he';
@@ -39,12 +46,65 @@ const MealPlannerTab = () => {
     { key: 'snack', icon: '🍎', color: 'bg-gray-50 dark:bg-gray-800', label: t('snack') }
   ];
 
+  // Load meal plans when user or date changes
   useEffect(() => {
     if (user && selectedDate) {
       loadMealPlans(dateKey);
     }
   //  eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, dateKey]);
+
+  // Effect for measuring and updating CSS variables
+  useEffect(() => {
+    if (!user) return; // Skip measurements if not logged in
+    
+    // Set the tabs height CSS variable
+    const tabsElement = document.querySelector('.TabsList');
+    if (tabsElement) {
+      const tabsHeight = tabsElement.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--tabs-height', `${tabsHeight}px`);
+    }
+
+    // Get the app header height
+    const appHeaderElement = document.querySelector('header');
+    if (appHeaderElement) {
+      const appHeaderHeight = appHeaderElement.getBoundingClientRect().height;
+      document.documentElement.style.setProperty('--app-header-height', `${appHeaderHeight}px`);
+    }
+    
+    // Set up ResizeObserver to monitor size changes
+    const resizeObserver = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        const element = entry.target;
+        
+        if (element === mealFormRef.current) {
+          document.documentElement.style.setProperty('--meal-form-height', `${element.offsetHeight}px`);
+        }
+        
+        if (element === headerRef.current) {
+          document.documentElement.style.setProperty('--header-height', `${element.offsetHeight}px`);
+        }
+      });
+    });
+    
+    // Observe elements
+    if (mealFormRef.current) {
+      resizeObserver.observe(mealFormRef.current);
+      // Set initial value
+      document.documentElement.style.setProperty('--meal-form-height', `${mealFormRef.current.offsetHeight}px`);
+    }
+    
+    if (headerRef.current) {
+      resizeObserver.observe(headerRef.current);
+      // Set initial value
+      document.documentElement.style.setProperty('--header-height', `${headerRef.current.offsetHeight}px`);
+    }
+    
+    // Clean up
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [user]); // Only re-run when user changes
 
   const formatDateInHebrew = (date: Date): string => {
     if (language === 'he') {
@@ -167,7 +227,7 @@ const MealPlannerTab = () => {
         {/* Meal Planning Section - Responsive width */}
         <div className="lg:col-span-2 xl:col-span-2 2xl:col-span-3 flex flex-col h-full min-h-0 overflow-hidden">
           <Card className="shadow-sm border-0 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm overflow-hidden flex flex-col h-full">
-            <CardHeader className="pb-1 xs:pb-1.5 sm:pb-2 md:pb-3 lg:pb-4 shrink-0 py-1 xs:py-1.5 sm:py-2 md:py-3 lg:py-4 px-2 xs:px-2.5 sm:px-3 md:px-4 lg:px-6">
+            <CardHeader ref={headerRef} className="pb-1 xs:pb-1.5 sm:pb-2 md:pb-3 lg:pb-4 shrink-0 py-1 xs:py-1.5 sm:py-2 md:py-3 lg:py-4 px-2 xs:px-2.5 sm:px-3 md:px-4 lg:px-6">
               <div className="flex flex-col gap-0.5 xs:gap-1 md:gap-2">
                 <CardTitle className="text-xs xs:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl truncate">
                   {selectedDate ? formatDateInHebrew(selectedDate) : t('selectDate')}
@@ -190,7 +250,9 @@ const MealPlannerTab = () => {
 
             <CardContent className="flex-1 min-h-0 flex flex-col p-1 xs:p-1.5 sm:p-2 md:p-4 lg:p-6 pt-0">
               {/* Add Meal Form - Responsive layout */}
-              <div className="p-1 xs:p-1.5 sm:p-2 md:p-3 lg:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 shrink-0 mb-1 xs:mb-1.5 sm:mb-2 md:mb-3 lg:mb-4">
+              <div 
+                ref={mealFormRef}
+                className="p-1 xs:p-1.5 sm:p-2 md:p-3 lg:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg border border-gray-200 dark:border-gray-700 shrink-0 mb-1 xs:mb-1.5 sm:mb-2 md:mb-3 lg:mb-4">
                 <h4 className="font-medium mb-1 xs:mb-1.5 sm:mb-2 md:mb-3 text-gray-800 dark:text-gray-200 text-xs sm:text-sm lg:text-base hidden sm:block">
                   {t('addNewMeal')}
                 </h4>
@@ -235,15 +297,9 @@ const MealPlannerTab = () => {
                 </div>
               </div>
 
-              {/* Meals by Type - Responsive scrollable area */}
-              <div 
-                className="flex-1 overflow-y-auto min-h-0 pr-0.5 xs:pr-1"
-                style={{
-                  scrollbarWidth: 'thin',
-                  scrollbarColor: 'rgba(200, 200, 200, 0.3) transparent'
-                }}
-              >
-                <div className="space-y-0.5 xs:space-y-1 sm:space-y-1.5 md:space-y-2 lg:space-y-3">
+              {/* Meals by Type - Responsive scrollable area that extends to bottom */}
+              <div className="scroller-to-bottom border-bottom-screen">
+                <div className="space-y-0.5 xs:space-y-1 sm:space-y-1.5 md:space-y-2 lg:space-y-3 pb-4">
                   {mealTypes.map(mealType => {
                     const typeMeals = getMealsByType(mealType.key as 'breakfast' | 'lunch' | 'dinner' | 'snack');
                     return (

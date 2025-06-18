@@ -1,0 +1,81 @@
+/* Style for scrollable area that extends to screen bottom */
+.scroller-to-bottom {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+    height: calc(100vh - var(--meal-form-height, 80px) - var(--header-height, 50px) - var(--app-header-height, 40px) - var(--tabs-height, 40px) - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
+    max-height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+    /* Important for absolute positioning of pseudo-elements */
+}
+
+/* Add extra padding to the bottom to ensure content doesn't get cut off */
+.scroller-to-bottom>div:last-child {
+    padding-bottom: calc(env(safe-area-inset-bottom, 16px) + 8px);
+    margin-bottom: 1px;
+    /* Ensures bottom border visibility */
+}
+
+/* Custom scrollbar styling */
+.scroller-to-bottom::-webkit-scrollbar {
+    width: 4px;
+}
+
+.scroller-to-bottom::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.scroller-to-bottom::-webkit-scrollbar-thumb {
+    background-color: rgba(155, 155, 155, 0.5);
+    border-radius: 6px;
+    border: transparent;
+}
+
+.scroller-to-bottom::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(155, 155, 155, 0.7);
+}
+
+/* Dark mode styles */
+.dark .scroller-to-bottom {
+    scrollbar-color: rgba(200, 200, 200, 0.3) transparent;
+}
+
+.dark .scroller-to-bottom::-webkit-scrollbar-thumb {
+    background-color: rgba(200, 200, 200, 0.3);
+}
+
+.dark .scroller-to-bottom::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(200, 200, 200, 0.5);
+}
+
+/* Utility class to ensure elements extend to the bottom of the screen */
+.extend-to-bottom {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.border-bottom-screen {
+    position: relative;
+    border-bottom: none;
+    /* Remove default border */
+}
+
+/* Use pseudo-element for the border to ensure it spans the full width */
+.border-bottom-screen::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1px;
+    background-color: var(--border-color, rgba(229, 231, 235, 1));
+    z-index: 10;
+}
+
+.dark .border-bottom-screen::after {
+    background-color: var(--border-color-dark, rgba(75, 85, 99, 1));
+}
