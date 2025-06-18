@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, Heart, Zap, LogOut, Trash2, Utensils, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -356,10 +355,10 @@ const Index = () => {
   // Show loading state while checking authentication
   if (authLoading || messagesLoading) {
     return (
-      <div className="h-screen w-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
+      <div className="h-screen w-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-2 sm:p-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 sm:h-16 sm:w-16 border-b-2 border-green-500 mx-auto"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-300 text-sm sm:text-base">{t('loading')}</p>
+          <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 md:h-16 md:w-16 border-b-2 border-green-500 mx-auto"></div>
+          <p className="mt-2 sm:mt-4 text-gray-600 dark:text-gray-300 text-xs sm:text-sm md:text-base">{t('loading')}</p>
         </div>
       </div>
     );
@@ -367,29 +366,29 @@ const Index = () => {
 
   return (
     <div className={`h-screen w-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col ${isRTL ? 'hebrew-text' : ''}`}>
-      {/* Enhanced Header - Mobile optimized */}
+      {/* Enhanced Header - Fully responsive */}
       <div className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-b border-green-100 dark:border-gray-700 shrink-0 shadow-sm">
-        <div className="h-10 sm:h-12 px-3 sm:px-4 flex items-center">
-          <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-2 sm:space-x-3 flex-1 min-w-0`} key={`header-${language}`}>
-            <div className="p-1.5 sm:p-2 rounded-full shadow-lg overflow-hidden">
-              <img src="/logo.png" alt="NutriMentor Logo" className="h-8 w-8 sm:h-10 sm:w-10" />
+        <div className="h-12 sm:h-14 md:h-16 px-2 sm:px-3 md:px-4 lg:px-6 flex items-center">
+          <div className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 md:space-x-3 flex-1 min-w-0`} key={`header-${language}`}>
+            <div className="p-1 sm:p-1.5 md:p-2 rounded-full shadow-lg overflow-hidden shrink-0">
+              <img src="/logo.png" alt="NutriMentor Logo" className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10" />
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent truncate">
+              <h1 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent truncate">
                 {language === 'he' ? translations.he.nutrimentor : translations.en.nutrimentor}
               </h1>
-              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hidden sm:block">
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 hidden md:block truncate">
                 {language === 'he' ? translations.he.subtitle : translations.en.subtitle}
               </p>
             </div>
             
-            {/* Desktop controls */}
-            <div className="hidden lg:flex items-center space-x-2" key={`desktop-header-${language}`}>
-              <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700 text-xs">
+            {/* Desktop controls - Hidden on smaller screens */}
+            <div className="hidden lg:flex items-center space-x-1 xl:space-x-2" key={`desktop-header-${language}`}>
+              <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700 text-xs hidden xl:flex">
                 <Heart className="h-3 w-3 mr-1" />
                 Health
               </Badge>
-              <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700 text-xs">
+              <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700 text-xs hidden xl:flex">
                 <Zap className="h-3 w-3 mr-1" />
                 AI
               </Badge>
@@ -398,9 +397,9 @@ const Index = () => {
               <DarkModeToggle isDark={isDarkMode} onToggle={() => setIsDarkMode(!isDarkMode)} />
               
               {user ? (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-1 xl:space-x-2">
                   {userName && (
-                    <span className="text-sm text-gray-600 dark:text-gray-300 max-w-24 truncate">
+                    <span className="text-xs xl:text-sm text-gray-600 dark:text-gray-300 max-w-16 xl:max-w-24 truncate hidden xl:block">
                       {t('welcome')}, {userName}
                     </span>
                   )}
@@ -409,18 +408,18 @@ const Index = () => {
                       variant="ghost"
                       size="sm"
                       onClick={handleClearMessages}
-                      className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                      className="p-1.5 xl:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
                     >
-                      <Trash2 className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+                      <Trash2 className="h-3 w-3 xl:h-4 xl:w-4 text-gray-600 dark:text-gray-300" />
                     </Button>
                   )}
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={handleSignOut}
-                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="p-1.5 xl:p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
                   >
-                    <LogOut className="h-4 w-4 text-gray-600 dark:text-gray-300" />
+                    <LogOut className="h-3 w-3 xl:h-4 xl:w-4 text-gray-600 dark:text-gray-300" />
                   </Button>
                 </div>
               ) : (
@@ -428,7 +427,7 @@ const Index = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => navigate('/auth')}
-                  className="text-xs px-3 py-1"
+                  className="text-xs px-2 xl:px-3 py-1 h-7 xl:h-8"
                 >
                   {t('signIn')}
                 </Button>
@@ -436,29 +435,29 @@ const Index = () => {
             </div>
             
             {/* Mobile menu trigger */}
-            <div className="lg:hidden">
+            <div className="lg:hidden shrink-0">
               <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="sm" className="p-2">
-                    <Menu className="h-5 w-5" />
+                  <Button variant="ghost" size="sm" className="p-1.5 sm:p-2 h-8 w-8 sm:h-9 sm:w-9">
+                    <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side={isRTL ? "left" : "right"} className="w-72 p-4">
-                  <div className="flex flex-col space-y-4">
+                <SheetContent side={isRTL ? "left" : "right"} className="w-64 sm:w-72 p-3 sm:p-4">
+                  <div className="flex flex-col space-y-3 sm:space-y-4">
                     <div className="flex items-center space-x-2">
-                      <div className="p-2 rounded-full overflow-hidden">
-                        <img src="/logo.png" alt="NutriMentor Logo" className="h-8 w-8" />
+                      <div className="p-1.5 sm:p-2 rounded-full overflow-hidden">
+                        <img src="/logo.png" alt="NutriMentor Logo" className="h-6 w-6 sm:h-8 sm:w-8" />
                       </div>
-                      <span className="font-semibold text-lg">{t('nutrimentor')}</span>
+                      <span className="font-semibold text-sm sm:text-lg">{t('nutrimentor')}</span>
                     </div>
                     
-                    <div className="space-y-3">
-                      <div className="flex items-center space-x-2">
-                        <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300">
+                    <div className="space-y-2 sm:space-y-3">
+                      <div className="flex items-center space-x-2 flex-wrap gap-1">
+                        <Badge variant="secondary" className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 text-xs">
                           <Heart className="h-3 w-3 mr-1" />
                           Health
                         </Badge>
-                        <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300">
+                        <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 text-xs">
                           <Zap className="h-3 w-3 mr-1" />
                           AI
                         </Badge>
@@ -472,7 +471,7 @@ const Index = () => {
                       {user && (
                         <div className="space-y-2">
                           {userName && (
-                            <p className="text-sm text-gray-600 dark:text-gray-300">
+                            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 truncate">
                               {t('welcome')}, {userName}
                             </p>
                           )}
@@ -484,9 +483,9 @@ const Index = () => {
                                 handleClearMessages();
                                 setMobileMenuOpen(false);
                               }}
-                              className="w-full justify-start"
+                              className="w-full justify-start text-xs sm:text-sm h-8 sm:h-9"
                             >
-                              <Trash2 className="h-4 w-4 mr-2" />
+                              <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                               {t('clearChat')}
                             </Button>
                           )}
@@ -497,9 +496,9 @@ const Index = () => {
                               handleSignOut();
                               setMobileMenuOpen(false);
                             }}
-                            className="w-full justify-start"
+                            className="w-full justify-start text-xs sm:text-sm h-8 sm:h-9"
                           >
-                            <LogOut className="h-4 w-4 mr-2" />
+                            <LogOut className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                             {t('signOut')}
                           </Button>
                         </div>
@@ -513,7 +512,7 @@ const Index = () => {
                             navigate('/auth');
                             setMobileMenuOpen(false);
                           }}
-                          className="w-full"
+                          className="w-full text-xs sm:text-sm h-8 sm:h-9"
                         >
                           {t('signIn')}
                         </Button>
@@ -527,25 +526,25 @@ const Index = () => {
         </div>
       </div>
 
-      {/* Main Content with Enhanced Tabs */}
+      {/* Main Content with Enhanced Tabs - Fully responsive */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
-          <TabsList className="w-full grid grid-cols-2 rounded-none border-b h-8 sm:h-9 bg-white/50 dark:bg-gray-800/50">
-            <TabsTrigger value="chat" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-1 sm:py-1.5`}>
-              <Bot className="h-4 w-4 sm:h-4 sm:w-4" />
-              <span>{t('chat')}</span>
+          <TabsList className="w-full grid grid-cols-2 rounded-none border-b h-10 sm:h-11 md:h-12 bg-white/50 dark:bg-gray-800/50">
+            <TabsTrigger value="chat" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm md:text-base py-1 sm:py-1.5 md:py-2`}>
+              <Bot className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+              <span className="hidden xs:inline">{t('chat')}</span>
             </TabsTrigger>
-            <TabsTrigger value="meals" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm py-1 sm:py-1.5`}>
-              <Utensils className="h-4 w-4 sm:h-4 sm:w-4" />
-              <span>{t('meals')}</span>
+            <TabsTrigger value="meals" className={`flex items-center ${isRTL ? 'space-x-reverse' : ''} space-x-1 sm:space-x-2 text-xs sm:text-sm md:text-base py-1 sm:py-1.5 md:py-2`}>
+              <Utensils className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
+              <span className="hidden xs:inline">{t('meals')}</span>
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="chat" className="flex-1 flex flex-col m-0 p-0 overflow-hidden">
-            {/* Enhanced Chat Messages */}
+            {/* Enhanced Chat Messages - Fully responsive */}
             <Card className="flex-1 border-0 rounded-none shadow-none bg-transparent overflow-hidden">
-              <ScrollArea className="h-full p-3 sm:p-4">
-                <div className="space-y-4 sm:space-y-6 max-w-4xl mx-auto">
+              <ScrollArea className="h-full p-2 sm:p-3 md:p-4 lg:p-6">
+                <div className="space-y-3 sm:space-y-4 md:space-y-6 max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto">
                   {messages.map((message) => {
                     const direction = getDirection(message.content);
                     const alignment = getAlignment(message.content, message.sender);
@@ -556,55 +555,55 @@ const Index = () => {
                         dir={direction}
                       >
                         <div
-                          className={`flex items-start space-x-2 sm:space-x-3 max-w-[85%] sm:max-w-[80%] ${
+                          className={`flex items-start space-x-1.5 sm:space-x-2 md:space-x-3 max-w-[90%] sm:max-w-[85%] md:max-w-[80%] lg:max-w-[75%] ${
                             message.sender === 'user'
                               ? (direction === 'rtl' ? 'flex-row-reverse space-x-reverse' : 'flex-row')
                               : (direction === 'rtl' ? 'flex-row' : 'flex-row-reverse space-x-reverse')
                           }`}
                         >
                           <div
-                            className={`p-2 sm:p-2.5 rounded-full shadow-lg flex-shrink-0 ${
+                            className={`p-1.5 sm:p-2 md:p-2.5 rounded-full shadow-lg flex-shrink-0 ${
                               message.sender === 'user'
                                 ? 'bg-gradient-to-r from-blue-500 to-purple-500'
                                 : 'bg-gradient-to-r from-green-500 to-blue-500'
                             }`}
                           >
                             {message.sender === 'user' ? (
-                              <User className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                              <User className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-white" />
                             ) : (
-                              <Bot className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                              <Bot className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-white" />
                             )}
                           </div>
                           <div
-                            className={`p-3 sm:p-4 rounded-2xl shadow-lg transition-all duration-200 hover:shadow-xl ${
+                            className={`p-2 sm:p-3 md:p-4 rounded-2xl shadow-lg transition-all duration-200 hover:shadow-xl ${
                               message.sender === 'user'
                                 ? 'bg-gradient-to-r from-blue-500 to-purple-500 text-white'
                                 : 'bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-100'
                             } ${direction === 'rtl' ? 'text-right' : 'text-left'}`}
                             dir={direction}
                           >
-                            <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap">
+                            <p className="text-xs sm:text-sm md:text-base leading-relaxed whitespace-pre-wrap">
                               {message.content}
                             </p>
                             {message.nutritionData && message.nutritionData.foods && (
-                              <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-green-50 dark:bg-green-900/30 rounded-xl border border-green-200 dark:border-green-700" dir={direction}>
-                                <h4 className={`font-semibold text-green-800 dark:text-green-300 mb-2 sm:mb-3 flex items-center text-sm sm:text-base ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
+                              <div className="mt-2 sm:mt-3 md:mt-4 p-2 sm:p-3 md:p-4 bg-green-50 dark:bg-green-900/30 rounded-xl border border-green-200 dark:border-green-700" dir={direction}>
+                                <h4 className={`font-semibold text-green-800 dark:text-green-300 mb-1.5 sm:mb-2 md:mb-3 flex items-center text-xs sm:text-sm md:text-base ${direction === 'rtl' ? 'text-right' : 'text-left'}`}>
                                   🍎 {t('nutritionFacts')}
                                 </h4>
                                 {message.nutritionData.foods.slice(0, 1).map((food: FoodItem, index: number) => (
-                                  <div key={index} className="text-sm sm:text-base text-green-700 dark:text-green-300">
-                                    <p className="font-medium mb-2">{food.food_name}</p>
-                                    <div className="grid grid-cols-2 gap-2 sm:gap-3 text-xs sm:text-sm">
-                                      <span className="flex items-center">🔥 {Math.round(food.nf_calories)} {t('calories')}</span>
-                                      <span className="flex items-center">💪 {Math.round(food.nf_protein)}g {t('protein')}</span>
-                                      <span className="flex items-center">🌾 {Math.round(food.nf_total_carbohydrate)}g {t('carbs')}</span>
-                                      <span className="flex items-center">🧈 {Math.round(food.nf_total_fat)}g {t('fat')}</span>
+                                  <div key={index} className="text-xs sm:text-sm md:text-base text-green-700 dark:text-green-300">
+                                    <p className="font-medium mb-1.5 sm:mb-2 truncate">{food.food_name}</p>
+                                    <div className="grid grid-cols-2 gap-1.5 sm:gap-2 md:gap-3 text-xs sm:text-sm">
+                                      <span className="flex items-center truncate">🔥 {Math.round(food.nf_calories)} {t('calories')}</span>
+                                      <span className="flex items-center truncate">💪 {Math.round(food.nf_protein)}g {t('protein')}</span>
+                                      <span className="flex items-center truncate">🌾 {Math.round(food.nf_total_carbohydrate)}g {t('carbs')}</span>
+                                      <span className="flex items-center truncate">🧈 {Math.round(food.nf_total_fat)}g {t('fat')}</span>
                                     </div>
                                   </div>
                                 ))}
                               </div>
                             )}
-                            <p className="text-xs opacity-70 mt-2 sm:mt-3">
+                            <p className="text-xs opacity-70 mt-1.5 sm:mt-2 md:mt-3">
                               {formatTime(message.timestamp)}
                             </p>
                           </div>
@@ -614,15 +613,15 @@ const Index = () => {
                   })}
                   {isLoading && (
                     <div className={`flex ${isRTL ? 'justify-end' : 'justify-start'}`} dir={isRTL ? 'rtl' : 'ltr'}>
-                      <div className={`flex items-start ${isRTL ? 'space-x-reverse' : ''} space-x-2 sm:space-x-3`}>
-                        <div className="p-2 sm:p-2.5 rounded-full bg-gradient-to-r from-green-500 to-blue-500 shadow-lg">
-                          <Bot className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                      <div className={`flex items-start ${isRTL ? 'space-x-reverse' : ''} space-x-1.5 sm:space-x-2 md:space-x-3`}>
+                        <div className="p-1.5 sm:p-2 md:p-2.5 rounded-full bg-gradient-to-r from-green-500 to-blue-500 shadow-lg">
+                          <Bot className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 text-white" />
                         </div>
-                        <div className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-3 sm:p-4 rounded-2xl shadow-lg">
+                        <div className="bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 p-2 sm:p-3 md:p-4 rounded-2xl shadow-lg">
                           <div className="flex space-x-1">
-                            <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" />
-                            <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                            <div className="w-2 h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" />
+                            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-gray-400 dark:bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
                           </div>
                         </div>
                       </div>
@@ -633,25 +632,25 @@ const Index = () => {
               </ScrollArea>
             </Card>
 
-            {/* Enhanced Chat Input */}
+            {/* Enhanced Chat Input - Fully responsive */}
             <Card className="border-0 rounded-none shadow-none bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm shrink-0 border-t border-gray-200 dark:border-gray-700">
-              <div className="p-3 sm:p-4 max-w-4xl mx-auto">
-                <div className={`flex ${isRTL ? 'space-x-reverse' : ''} space-x-2 sm:space-x-3`}>
+              <div className="p-2 sm:p-3 md:p-4 lg:p-6 max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-4xl xl:max-w-5xl mx-auto">
+                <div className={`flex ${isRTL ? 'space-x-reverse' : ''} space-x-1.5 sm:space-x-2 md:space-x-3`}>
                   <Input
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder={t('typeMessage')}
-                    className="flex-1 border-gray-200 dark:border-gray-600 focus:border-green-400 focus:ring-green-400 dark:bg-gray-700 dark:text-white h-11 sm:h-12 text-sm sm:text-base rounded-xl"
+                    className="flex-1 border-gray-200 dark:border-gray-600 focus:border-green-400 focus:ring-green-400 dark:bg-gray-700 dark:text-white h-9 sm:h-10 md:h-11 lg:h-12 text-xs sm:text-sm md:text-base rounded-xl"
                     disabled={isLoading}
                     dir={isHebrew(inputValue) ? 'rtl' : 'ltr'}
                   />
                   <Button
                     onClick={handleSendMessage}
                     disabled={!inputValue.trim() || isLoading}
-                    className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[44px] sm:min-w-[48px] h-11 sm:h-12 px-3 sm:px-4 rounded-xl"
+                    className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 min-w-[36px] sm:min-w-[40px] md:min-w-[44px] lg:min-w-[48px] h-9 sm:h-10 md:h-11 lg:h-12 px-2 sm:px-3 md:px-4 rounded-xl"
                   >
-                    <Send className="h-4 w-4 sm:h-5 sm:w-5" />
+                    <Send className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5" />
                   </Button>
                 </div>
               </div>
