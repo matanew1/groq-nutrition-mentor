@@ -105,6 +105,10 @@ const Index = () => {
     }
   };
 
+  const onNavigateToAuth = () => {
+    navigate('/auth');
+  };
+
   const handleSendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
 
@@ -207,7 +211,7 @@ const Index = () => {
       
       await addMessage({
         content: formattedResponse,
-        sender: 'assistant'
+        sender: 'bot'
       });
 
     } catch (error) {
@@ -216,7 +220,7 @@ const Index = () => {
         content: language === 'he' 
           ? "מצטער, אירעה שגיאה. אנא נסה שוב." 
           : "Sorry, there was an error. Please try again.",
-        sender: 'assistant'
+        sender: 'bot'
       });
     } finally {
       setIsLoading(false);
@@ -230,15 +234,18 @@ const Index = () => {
   return (
     <div className={`min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col ${isRTL ? 'font-hebrew' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
       <AppHeader
-        user={user}
-        userName={userName}
-        onSignOut={handleSignOut}
-        onClearMessages={handleClearMessages}
+        language={language}
+        isRTL={isRTL}
         isDarkMode={isDarkMode}
         setIsDarkMode={setIsDarkMode}
+        user={user}
+        userName={userName}
+        activeTab={activeTab}
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
-        isRTL={isRTL}
+        handleClearMessages={handleClearMessages}
+        handleSignOut={handleSignOut}
+        onNavigateToAuth={onNavigateToAuth}
         t={t}
       />
 
@@ -261,7 +268,6 @@ const Index = () => {
                 messages={messages}
                 isLoading={isLoading}
                 messagesEndRef={messagesEndRef}
-                isRTL={isRTL}
                 t={t}
               />
               
