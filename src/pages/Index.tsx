@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Utensils } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -148,4 +149,140 @@ const Index = () => {
       
       // Hebrew patterns for food queries - expanded
       const hebrewFoodPhrasePatterns = [
-        /(?:קלוריות|
+        /(?:קלוריות|תזונה|חלבון|פחמימות|שומן)\s+(?:של|ב|מ)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:כמה קלוריות|כמה חלבון|כמה פחמימות|ערך תזונתי)\s+(?:יש ב|יש ל|ב|של)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:מה|איך)\s+(?:הקלוריות|התזונה|החלבון|הפחמימות)\s+(?:של|ב)\s+(.+?)(?:$|\?|\.)/i,
+        /(?:אכלתי|שתיתי|אכלתם)\s+(.+?)(?:$|\?|\.|,)/i,
+      ];
+
+      let foodItem = null;
+      let nutritionData = null;
+
+      // Check English patterns first
+      for (const pattern of englishFoodPhrasePatterns) {
+        const match = currentInput.match(pattern);
+        if (match && match[1]) {
+          foodItem = match[1].trim();
+          console.log('English food item detected:', foodItem);
+          break;
+        }
+      }
+
+      // Check Hebrew patterns if no English match
+      if (!foodItem) {
+        for (const pattern of hebrewFoodPhrasePatterns) {
+          const match = currentInput.match(pattern);
+          if (match && match[1]) {
+            foodItem = match[1].trim();
+            console.log('Hebrew food item detected:', foodItem);
+            break;
+          }
+        }
+      }
+
+      // If we found a food item or it's a nutrition-related query, try to get nutrition data
+      if (foodItem || isNutritionQuery) {
+        try {
+          const searchTerm = foodItem || currentInput;
+          console.log('Searching nutrition for:', searchTerm);
+          nutritionData = await searchNutrition(searchTerm);
+          console.log('Nutrition data received:', nutritionData);
+        } catch (nutritionError) {
+          console.log('Nutrition API failed, will use general AI response:', nutritionError);
+        }
+      }
+
+      // Prepare context for the AI
+      let contextualPrompt = currentInput;
+      if (nutritionData && nutritionData.foods && nutritionData.foods.length > 0) {
+        const food = nutritionData.foods[0];
+        contextualPrompt = `User asked: "${currentInput}"\n\nNutrition data for ${food.food_name}:\n- Calories: ${food.nf_calories}\n- Protein: ${food.nf_protein}g\n- Carbs: ${food.nf_total_carbohydrate}g\n- Fat: ${food.nf_total_fat}g\n- Fiber: ${food.nf_dietary_fiber}g\n- Sugar: ${food.nf_sugars}g\n- Sodium: ${food.nf_sodium}mg\n\nPlease provide a helpful response about this food's nutrition in the same language the user used.`;
+      }
+
+      console.log('Sending to Groq API:', contextualPrompt);
+      const response = await callGroqAPI(contextualPrompt);
+      
+      // Add emojis to the response
+      const formattedResponse = addEmojisToMessage(response);
+      
+      await addMessage({
+        content: formattedResponse,
+        sender: 'assistant'
+      });
+
+    } catch (error) {
+      console.error('Error in handleSendMessage:', error);
+      await addMessage({
+        content: language === 'he' 
+          ? "מצטער, אירעה שגיאה. אנא נסה שוב." 
+          : "Sorry, there was an error. Please try again.",
+        sender: 'assistant'
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (authLoading || messagesLoading) {
+    return <LoadingSpinner text={t('loading')} />;
+  }
+
+  return (
+    <div className={`min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col ${isRTL ? 'font-hebrew' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+      <AppHeader
+        user={user}
+        userName={userName}
+        onSignOut={handleSignOut}
+        onClearMessages={handleClearMessages}
+        isDarkMode={isDarkMode}
+        setIsDarkMode={setIsDarkMode}
+        mobileMenuOpen={mobileMenuOpen}
+        setMobileMenuOpen={setMobileMenuOpen}
+        isRTL={isRTL}
+        t={t}
+      />
+
+      <main className="flex-1 flex flex-col overflow-hidden">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
+          <TabsList className="grid w-full grid-cols-2 max-w-xs sm:max-w-sm md:max-w-md mx-auto mt-2 sm:mt-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700">
+            <TabsTrigger value="chat" className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm">
+              <Bot className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span>{t('chat')}</span>
+            </TabsTrigger>
+            <TabsTrigger value="planner" className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm">
+              <Utensils className="h-3 w-3 sm:h-4 sm:w-4" />
+              <span>{t('mealPlanner')}</span>
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="chat" className="flex-1 flex flex-col overflow-hidden mt-2 sm:mt-4">
+            <div className="flex-1 flex flex-col min-h-0">
+              <ChatMessages
+                messages={messages}
+                isLoading={isLoading}
+                messagesEndRef={messagesEndRef}
+                isRTL={isRTL}
+                t={t}
+              />
+              
+              <ChatInput
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+                onSendMessage={handleSendMessage}
+                isLoading={isLoading}
+                isRTL={isRTL}
+                t={t}
+              />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="planner" className="flex-1 mt-2 sm:mt-4">
+            <MealPlannerTab />
+          </TabsContent>
+        </Tabs>
+      </main>
+    </div>
+  );
+};
+
+export default Index;
