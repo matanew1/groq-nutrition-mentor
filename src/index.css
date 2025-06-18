@@ -1,7 +1,21 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Mobile viewport adjustments for notches and navigation bars */
+:root {
+  --sat: env(safe-area-inset-top);
+  --sar: env(safe-area-inset-right);
+  --sab: env(safe-area-inset-bottom);
+  --sal: env(safe-area-inset-left);
+}
+
+body {
+  padding-top: var(--sat, 0);
+  padding-right: var(--sar, 0);
+  padding-bottom: var(--sab, 0);
+  padding-left: var(--sal, 0);
+}
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
 
@@ -259,6 +273,7 @@
 
   /* Fix for mobile browsers */
   @media screen and (max-width: 640px) {
+
     html,
     body {
       height: 100%;

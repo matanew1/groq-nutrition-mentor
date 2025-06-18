@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Bot, Utensils } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,6 +8,7 @@ import { addEmojisToMessage, isHebrew } from '@/utils/messageFormatter';
 import { useAuth } from '@/contexts/AuthContext';
 import { useMessages } from '@/hooks/useMessages';
 import { useSettings } from '@/hooks/useSettings';
+import { useScreenSize } from '@/hooks/use-screen-size';
 import { useNavigate } from 'react-router-dom';
 import MealPlannerTab from '@/components/MealPlannerTab';
 import AppHeader from '@/components/AppHeader';
@@ -28,9 +28,13 @@ const Index = () => {
   const { t, language, userName } = useSettings();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { isMobile, isTablet } = useScreenSize();
 
   // Check if current language is Hebrew for RTL layout
   const isRTL = language === 'he';
+  
+  // Simplified screen size check for component adjustments
+  const isSmallScreen = isMobile || isTablet;
 
   // Apply dark mode and RTL direction to document
   useEffect(() => {
@@ -232,7 +236,7 @@ const Index = () => {
   }
 
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col ${isRTL ? 'font-hebrew' : ''}`} dir={isRTL ? 'rtl' : 'ltr'}>
+    <div className={`min-h-screen max-h-screen bg-gradient-to-br from-green-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col ${isRTL ? 'font-hebrew' : ''} overflow-hidden`} dir={isRTL ? 'rtl' : 'ltr'}>
       <AppHeader
         language={language}
         isRTL={isRTL}
@@ -249,20 +253,20 @@ const Index = () => {
         t={t}
       />
 
-      <main className="flex-1 flex flex-col overflow-hidden">
+      <main className="flex-1 flex flex-col overflow-hidden mx-auto w-full max-w-full">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-          <TabsList className="grid w-full grid-cols-2 max-w-xs sm:max-w-sm md:max-w-md mx-auto mt-2 sm:mt-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700">
-            <TabsTrigger value="chat" className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm">
+          <TabsList className="grid w-full grid-cols-2 max-w-[280px] sm:max-w-sm md:max-w-md mx-auto mt-1 sm:mt-2 md:mt-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-lg">
+            <TabsTrigger value="chat" className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm py-1.5 sm:py-2">
               <Bot className="h-3 w-3 sm:h-4 sm:w-4" />
               <span>{t('chat')}</span>
             </TabsTrigger>
-            <TabsTrigger value="planner" className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm">
+            <TabsTrigger value="planner" className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm py-1.5 sm:py-2">
               <Utensils className="h-3 w-3 sm:h-4 sm:w-4" />
               <span>{t('mealPlanner')}</span>
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="chat" className="flex-1 flex flex-col overflow-hidden mt-2 sm:mt-4">
+          <TabsContent value="chat" className="flex-1 flex flex-col overflow-hidden mt-1 sm:mt-2 md:mt-4 px-1 sm:px-2 md:px-4">
             <div className="flex-1 flex flex-col min-h-0">
               <ChatMessages
                 messages={messages}
@@ -282,7 +286,7 @@ const Index = () => {
             </div>
           </TabsContent>
           
-          <TabsContent value="planner" className="flex-1 mt-2 sm:mt-4">
+          <TabsContent value="planner" className="flex-1 mt-1 sm:mt-2 md:mt-4 px-1 sm:px-2 md:px-4">
             <MealPlannerTab />
           </TabsContent>
         </Tabs>
