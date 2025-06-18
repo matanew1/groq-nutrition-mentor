@@ -1,0 +1,38 @@
+/* Fill height fixes for mobile */
+.full-height-mobile {
+    height: 100%;
+    height: -moz-available;
+    height: -webkit-fill-available;
+    height: fill-available;
+    min-height: 100%;
+    min-height: -moz-available;
+    min-height: -webkit-fill-available;
+    min-height: fill-available;
+}
+
+/* Fix top spacing */
+.no-top-space {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Fix bottom spacing */
+.no-bottom-space {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+/* Custom scrollbar with minimal size */
+.thin-scrollbar::-webkit-scrollbar {
+    width: 2px;
+    height: 2px;
+}
+
+.thin-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.thin-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(155, 155, 155, 0.3);
+    border-radius: 2px;
+}

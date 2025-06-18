@@ -254,8 +254,8 @@ const Index = () => {
       />
 
       <main className="flex-1 flex flex-col overflow-hidden mx-auto w-full max-w-full">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col">
-          <TabsList className="grid w-full grid-cols-2 max-w-[280px] sm:max-w-sm md:max-w-md mx-auto mt-1 sm:mt-2 md:mt-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-lg">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 ">
+          <TabsList className="grid w-full grid-cols-2 max-w-[280px] sm:max-w-sm md:max-w-md mx-auto mt-5 sm:mt-2 md:mt-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border border-gray-200 dark:border-gray-700 rounded-lg">
             <TabsTrigger value="chat" className="flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm py-1.5 sm:py-2">
               <Bot className="h-3 w-3 sm:h-4 sm:w-4" />
               <span>{t('chat')}</span>
@@ -266,7 +266,7 @@ const Index = () => {
             </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="chat" className="flex-1 flex flex-col overflow-hidden mt-1 sm:mt-2 md:mt-4 px-1 sm:px-2 md:px-4">
+          <TabsContent value="chat" className="flex-col overflow-hidden mt-7 sm:mt-2 md:mt-4 px-1 sm:px-2 md:px-4">
             <div className="flex-1 flex flex-col min-h-0">
               <ChatMessages
                 messages={messages}
@@ -286,7 +286,7 @@ const Index = () => {
             </div>
           </TabsContent>
           
-          <TabsContent value="planner" className="flex-1 mt-1 sm:mt-2 md:mt-4 px-1 sm:px-2 md:px-4">
+          <TabsContent value="planner" className="flex-1 mt-7 sm:mt-0 md:mt-0 px-1 sm:px-2 md:px-4">
             <MealPlannerTab />
           </TabsContent>
         </Tabs>
